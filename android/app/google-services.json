@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "831730691096",
+    "project_id": "fastrip25",
+    "storage_bucket": "fastrip25.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:831730691096:android:d7f384d4dff52e945ca76d",
+        "android_client_info": {
+          "package_name": "com.fastrip"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "831730691096-fhqqhpg57a9uft8g0e09n2t08jdtlc7i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fastrip",
+            "certificate_hash": "61290e39ea5f34de1053c8eb79a0543cb59960b4"
+          }
+        },
+        {
+          "client_id": "831730691096-vbe5ns48r2gsug1r3k3592klud08fdiu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fastrip",
+            "certificate_hash": "59627b3b7c76b8bc44a5be481f73cb4d8eec1acd"
+          }
+        },
+        {
+          "client_id": "831730691096-hsuqs4noja9rc5r3c0sbj050q5st4pmq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBGeYponlXJNSJvZapmJZTGeAWLnw0vHw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "831730691096-hsuqs4noja9rc5r3c0sbj050q5st4pmq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
