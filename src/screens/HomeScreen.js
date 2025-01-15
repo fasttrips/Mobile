@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Dimensions,
     Image,
@@ -10,6 +11,7 @@ import {
     Text,
     View,
 } from 'react-native';
+import { auth } from '../config/firebaseConfig';
 const { width } = Dimensions.get('window');
 const items = [
     {
@@ -22,8 +24,8 @@ const items = [
     {
         name: 'FastEats',
         image: <Image
-        source={require('../asset/food.png')}  // Local image
-        style={{ width: 40, height: 40 }}
+            source={require('../asset/food.png')}  // Local image
+            style={{ width: 40, height: 40 }}
         />,
     },
     {
@@ -74,40 +76,60 @@ const items2 = [
 ]
 
 const HomeScreen = () => {
+
+    const [user, setUser] = useState(null);
+
+    function onAuthStateChanged(user) {
+        setUser(user);
+    }
+
+    useEffect(() => {
+        const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+        return subscriber;
+    }, [onAuthStateChanged, user]);
+
+    if (!user) {
+        return (
+            <View>
+                <Text>Loading</Text>
+            </View>
+        );
+    }
+
     return (
         <SafeAreaView style={styles.backgroundStyle}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ alignItems: 'center' }}>
                 <View style={styles.backgroundDesign} />
                 <View style={{ margin: 20 }} />
                 <Text style={styles.textHeader}>
-                    Hi, hilyathul
+                    Hi, {user.displayName}
                 </Text>
-                <Text style={[styles.textTitle,{color: '#fff'} ]}>
+                <Text style={[styles.textTitle, { color: '#fff' }]}>
                     Kepulauan Riau, Tembesi
                 </Text>
                 <View style={{ margin: 25 }} />
                 <View style={styles.barTopup}>
-                    <View style={{ width: 50, height: 50, alignItems:'center',justifyContent:'center' }}>
+                    <View style={{ width: 50, height: 50, alignItems: 'center', justifyContent: 'center' }}>
                         <Image
                             source={require('../asset/wallet.png')}  // Local image
                             style={{ width: 30, height: 30 }}
                         />
                     </View>
-                    <View style={{ width: 150, height: 50, justifyContent:'center'}}>
+                    <View style={{ width: 150, height: 50, justifyContent: 'center' }}>
                         <Text style={styles.textDesc}>Rp 0</Text>
                         <Text style={styles.textDesc}>0 Point</Text>
                     </View>
-                    <View style={{ width: 50, height: 50, alignItems:'center',justifyContent:'center' }}>
+                    <View style={{ width: 50, height: 50, alignItems: 'center', justifyContent: 'center' }}>
                         <Image
                             source={require('../asset/topup.png')}  // Local image
-                            style={{ width: 20, height: 20, marginBottom:2, tintColor:'#37AFE1' }}
+                            style={{ width: 20, height: 20, marginBottom: 2, tintColor: '#37AFE1' }}
                         />
                         <Text style={styles.textDesc}>Bayar</Text>
                     </View>
-                    <View style={{ width: 50, height: 50, alignItems:'center',justifyContent:'center' }}>
+                    <View style={{ width: 50, height: 50, alignItems: 'center', justifyContent: 'center' }}>
                         <Image
                             source={require('../asset/plus.png')}  // Local image
-                            style={{ width: 20, height: 20, marginBottom:2, tintColor:'#37AFE1' }}
+                            style={{ width: 20, height: 20, marginBottom: 2, tintColor: '#37AFE1' }}
                         />
                         <Text style={styles.textDesc}>TopUp</Text>
                     </View>
@@ -140,10 +162,10 @@ const HomeScreen = () => {
                 </View>
                 <View style={{ margin: 20 }} />
                 <View style={styles.fastTripBar}>
-                    <Text style={[styles.textDesc,{color: '#ffffff'} ]}>
+                    <Text style={[styles.textDesc, { color: '#ffffff' }]}>
                         Yuk pakai FastTrip Plus Jauh Lebih Hemat
                     </Text>
-                    <Text style={[styles.textDesc,{color: '#ffffff'} ]}>
+                    <Text style={[styles.textDesc, { color: '#ffffff' }]}>
                         >
                     </Text>
                 </View>
@@ -206,7 +228,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     imageBackgrounds: { backgroundColor: '#37AFE150', padding: 10, borderRadius: 10 },
-    fastTripBar: {width:width-50, height:30, backgroundColor:'#37AFE1', borderRadius:10, justifyContent: 'space-between',alignItems:'center', flexDirection:'row', paddingLeft:20, paddingRight:20}
+    fastTripBar: { width: width - 50, height: 30, backgroundColor: '#37AFE1', borderRadius: 10, justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', paddingLeft: 20, paddingRight: 20 }
 });
 
 export default HomeScreen;

@@ -7,26 +7,12 @@ GoogleSignin.configure({
   webClientId: '831730691096-hsuqs4noja9rc5r3c0sbj050q5st4pmq.apps.googleusercontent.com', // Replace with your web client ID from Firebase
 });
 
-const LoginScreen = () => {
-  const [user, setUser] = useState(null);
-
-  const signInWithGoogle = async () => {
-    try {
-      const signInResult = await GoogleSignin.signIn();
-      const idToken = signInResult.data?.idToken;
-      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-      const userCredential = await auth().signInWithCredential(googleCredential);
-      setUser(userCredential.user);
-    } catch (error) {
-      Alert.alert('Error', error.message);
-    }
-  };
+const AccountScreen = () => {
 
   const signOut = async () => {
     try {
       await auth().signOut();
       await GoogleSignin.signOut();
-      setUser(null);
       Alert.alert('Logged Out', 'You have been logged out.');
     } catch (error) {
       Alert.alert('Error', error.message);
@@ -35,15 +21,8 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login with Google</Text>
-      {!user ? (
-        <Button title="Sign in with Google" onPress={signInWithGoogle} />
-      ) : (
-        <>
-          <Text style={styles.text}>Welcome, {user.displayName}</Text>
-          <Button title="Sign Out" onPress={signOut} />
-        </>
-      )}
+      <Text style={styles.title}></Text>
+      <Button title="Sign Out" onPress={signOut} />
     </View>
   );
 };
@@ -54,6 +33,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
+    backgroundColor:'white'
   },
   title: {
     fontSize: 24,
@@ -66,4 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default AccountScreen;

@@ -1,63 +1,32 @@
-/**
- * Sample React Native OrderScreen
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, { useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 
-import React from 'react';
-import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    useColorScheme,
-    View,
-} from 'react-native';
+const AccountScreen = () => {
 
-const OrderScreen = () => {
-    const isDarkMode = useColorScheme() === 'dark';
-    const backgroundStyle = {
-        backgroundColor: isDarkMode ? "#000000" : "#ffffff"
-    };
-
-    return (
-        <SafeAreaView style={backgroundStyle}>
-            <StatusBar
-                barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-                backgroundColor={backgroundStyle.backgroundColor}
-            />
-            <ScrollView
-                contentInsetAdjustmentBehavior="automatic"
-                style={backgroundStyle}>
-                <View
-                    style={{
-                        backgroundColor: isDarkMode ? "#000000" : "#ffffff"
-                    }}>
-                </View>
-            </ScrollView>
-        </SafeAreaView>
-    );
-}
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Coming Soon</Text>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    sectionContainer: {
-        marginTop: 32,
-        paddingHorizontal: 24,
-    },
-    sectionTitle: {
-        fontSize: 24,
-        fontWeight: '600',
-    },
-    sectionDescription: {
-        marginTop: 8,
-        fontSize: 18,
-        fontWeight: '400',
-    },
-    highlight: {
-        fontWeight: '700',
-    },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor:'white'
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  text: {
+    fontSize: 18,
+    marginBottom: 20,
+  },
 });
 
-export default OrderScreen;
+export default AccountScreen;

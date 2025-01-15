@@ -3,8 +3,9 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import { Image, StyleSheet } from 'react-native';
-import ChatScreen from '../screens/ChatScreen';
+import ChatScreen from '../screens/AccountScreen';
 import OrderScreen from '../screens/OrderScreen';
+import AccountScreen from '../screens/AccountScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -53,8 +54,8 @@ const MainNavigator = () => (
       }}
     />
     <Tab.Screen
-      name="Chat"
-      component={ChatScreen}
+      name="Akun"
+      component={AccountScreen}
       options={{
         tile: 'Home Page',
         headerShown: false,
@@ -63,7 +64,7 @@ const MainNavigator = () => (
           const size = focused ? 25 : 20;
           return (
             <Image
-              source={require('../asset/chat.png')}  // Local image
+              source={require('../asset/account.png')}  // Local image
               style={{ width: size, height: size }}
             />
           );
