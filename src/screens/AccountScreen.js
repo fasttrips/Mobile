@@ -13,7 +13,7 @@ const AccountScreen = () => {
     try {
       await auth().signOut();
       await GoogleSignin.signOut();
-      Alert.alert('Logged Out', 'You have been logged out.');
+      // Alert.alert('Logged Out', 'You have been logged out.');
     } catch (error) {
       Alert.alert('Error', error.message);
     }

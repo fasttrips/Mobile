@@ -10,6 +10,7 @@ import {
     StatusBar,
     StyleSheet,
     Text,
+    TouchableOpacity,
     View,
 } from 'react-native';
 import { auth } from '../config/firebaseConfig';
@@ -121,56 +122,66 @@ const HomeScreen = () => {
                         <Text style={styles.textDesc}>Rp 0</Text>
                         <Text style={styles.textDesc}>0 Point</Text>
                     </View>
-                    <View style={{ width: 50, height: 50, alignItems: 'center', justifyContent: 'center' }}>
-                        <Image
-                            source={require('../asset/topup.png')}  // Local image
-                            style={{ width: 20, height: 20, marginBottom: 2, tintColor: '#37AFE1' }}
-                        />
-                        <Text style={styles.textDesc}>Bayar</Text>
-                    </View>
-                    <View style={{ width: 50, height: 50, alignItems: 'center', justifyContent: 'center' }}>
-                        <Image
-                            source={require('../asset/plus.png')}  // Local image
-                            style={{ width: 20, height: 20, marginBottom: 2, tintColor: '#37AFE1' }}
-                        />
-                        <Text style={styles.textDesc}>TopUp</Text>
-                    </View>
+                    <TouchableOpacity>
+                        <View style={{ width: 50, height: 50, alignItems: 'center', justifyContent: 'center' }}>
+                            <Image
+                                source={require('../asset/topup.png')}  // Local image
+                                style={{ width: 20, height: 20, marginBottom: 2, tintColor: '#37AFE1' }}
+                            />
+                            <Text style={styles.textDesc}>Bayar</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <View style={{ width: 50, height: 50, alignItems: 'center', justifyContent: 'center' }}>
+                            <Image
+                                source={require('../asset/plus.png')}  // Local image
+                                style={{ width: 20, height: 20, marginBottom: 2, tintColor: '#37AFE1' }}
+                            />
+                            <Text style={styles.textDesc}>TopUp</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.barItems}>
                     {items.map((data, index) => {
                         return (
-                            <View key={index} style={styles.contentTopop}>
-                                <View style={styles.imageBackgrounds}>
-                                    {data.image}
+                            <TouchableOpacity key={index}>
+                                <View style={styles.contentTopop}>
+                                    <View style={styles.imageBackgrounds}>
+                                        {data.image}
+                                    </View>
+                                    <View style={{ margin: 2 }} />
+                                    <Text style={styles.textDesc}>{data.name}</Text>
                                 </View>
-                                <View style={{ margin: 2 }} />
-                                <Text style={styles.textDesc}>{data.name}</Text>
-                            </View>
+                            </TouchableOpacity>
                         );
                     })}
                 </View>
                 <View style={styles.barItems}>
                     {items2.map((data, index) => {
                         return (
-                            <View key={index} style={styles.contentTopop}>
-                                <View style={styles.imageBackgrounds}>
-                                    {data.image}
+                            <TouchableOpacity key={index}>
+                                <View  style={styles.contentTopop}>
+                                    <View style={styles.imageBackgrounds}>
+                                        {data.image}
+                                    </View>
+                                    <View style={{ margin: 2 }} />
+                                    <Text style={styles.textDesc}>{data.name}</Text>
                                 </View>
-                                <View style={{ margin: 2 }} />
-                                <Text style={styles.textDesc}>{data.name}</Text>
-                            </View>
+                            </TouchableOpacity>
                         );
                     })}
                 </View>
                 <View style={{ margin: 20 }} />
-                <View style={styles.fastTripBar}>
-                    <Text style={[styles.textDesc, { color: '#ffffff' }]}>
-                        Yuk pakai FastTrip Plus Jauh Lebih Hemat
-                    </Text>
-                    <Text style={[styles.textDesc, { color: '#ffffff' }]}>
+                <TouchableOpacity>
+                    <View style={styles.fastTripBar}>
+                        <Text style={[styles.textDesc, { color: '#ffffff' }]}>
+                            Yuk pakai FastTrip Plus Jauh Lebih Hemat
+                        </Text>
+                        <Text style={[styles.textDesc, { color: '#ffffff' }]}>
                         >
-                    </Text>
-                </View>
+                        </Text>
+                    </View>
+                </TouchableOpacity>
                 <View style={{ margin: 10 }} />
             </ScrollView>
         </SafeAreaView>
@@ -197,9 +208,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         backgroundColor: '#37AFE1',
         width: width,
-        height: 200,
-        borderBottomLeftRadius: 100,
-        borderBottomRightRadius: 100,
+        height: 180,
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 30,
     },
     barTopup: {
         width: width - 50,
