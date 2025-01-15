@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Alert, StyleSheet } from 'react-native';
+import { View, Text, Button, Alert, StyleSheet, Image, Dimensions, StatusBar, TouchableOpacity } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { auth } from '../config/firebaseConfig';
+
+const { width } = Dimensions.get('window');
+
 
 GoogleSignin.configure({
   webClientId: '831730691096-hsuqs4noja9rc5r3c0sbj050q5st4pmq.apps.googleusercontent.com', // Replace with your web client ID from Firebase
@@ -35,15 +38,23 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login with Google</Text>
-      {!user ? (
-        <Button title="Sign in with Google" onPress={signInWithGoogle} />
-      ) : (
-        <>
-          <Text style={styles.text}>Welcome, {user.displayName}</Text>
-          <Button title="Sign Out" onPress={signOut} />
-        </>
-      )}
+      <StatusBar backgroundColor="#37AFE1" barStyle="light-content" />
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('../asset/logo.png')} // Ganti dengan path logo Anda
+          style={styles.logo}
+        />
+        <Text style={styles.textDesc}>FastTrip</Text>
+        <Text style={styles.textDesc2}>Aplikasinya Putra Batam Satu Untuk Semua</Text>
+
+      </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity  onPress={signInWithGoogle}>
+        <View style={{ borderRadius: 20, width: width - 100, height: 50, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white' }}>
+          <Text>Lanjutkan Dengan Google</Text>
+        </View>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -51,18 +62,38 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-between', // Membagi ruang antara logo dan tombol
     alignItems: 'center',
-    padding: 20,
+    paddingVertical: 20, // Memberi ruang di atas dan bawah layar
+    backgroundColor: '#37AFE1'
   },
-  title: {
-    fontSize: 24,
+  textDesc: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontStyle: 'normal',
     fontWeight: 'bold',
-    marginBottom: 20,
+    color: 'white'
   },
-  text: {
-    fontSize: 18,
-    marginBottom: 20,
+  textDesc2: {
+    textAlign: 'center',
+    fontSize: 16,
+    fontStyle: 'italic',
+    color: 'white'
+  },
+  logoContainer: {
+    flexGrow: 1, // Membuat logo tetap di tengah
+    justifyContent: 'center',
+  },
+  logo: {
+    width: 300,
+    height: 300,
+  },
+  buttonContainer: {
+    width: '100%', // Tombol memenuhi lebar layar
+    paddingHorizontal: 20, // Jarak dari sisi layar
+    marginBottom: 20, // Jarak dari bawah layar
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 });
 

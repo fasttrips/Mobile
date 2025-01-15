@@ -7,6 +7,7 @@ import {
     Image,
     SafeAreaView,
     ScrollView,
+    StatusBar,
     StyleSheet,
     Text,
     View,
@@ -98,6 +99,7 @@ const HomeScreen = () => {
 
     return (
         <SafeAreaView style={styles.backgroundStyle}>
+            <StatusBar backgroundColor="#37AFE1" barStyle="light-content" />
             <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ alignItems: 'center' }}>
                 <View style={styles.backgroundDesign} />
                 <View style={{ margin: 20 }} />
