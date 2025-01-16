@@ -14,6 +14,7 @@ import {
     View,
 } from 'react-native';
 import { auth } from '../config/firebaseConfig';
+
 const { width } = Dimensions.get('window');
 const items = [
     {
@@ -22,6 +23,7 @@ const items = [
             source={require('../asset/car.png')}  // Local image
             style={{ width: 40, height: 40 }}
         />,
+        navigate: 'ChoiceScreen',
     },
     {
         name: 'FastEats',
@@ -29,6 +31,7 @@ const items = [
             source={require('../asset/food.png')}  // Local image
             style={{ width: 40, height: 40 }}
         />,
+        navigate: '',
     },
     {
         name: 'FastMove',
@@ -36,6 +39,7 @@ const items = [
             source={require('../asset/package.png')}  // Local image
             style={{ width: 40, height: 40 }}
         />,
+        navigate: '',
     },
     {
         name: 'FastRent',
@@ -43,8 +47,9 @@ const items = [
             source={require('../asset/rent.png')}  // Local image
             style={{ width: 40, height: 40 }}
         />,
+        navigate: '',
     },
-]
+];
 
 const items2 = [
     {
@@ -75,9 +80,9 @@ const items2 = [
             style={{ width: 40, height: 40 }}
         />,
     },
-]
+];
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
 
     const [user, setUser] = useState(null);
 
@@ -144,7 +149,7 @@ const HomeScreen = () => {
                 <View style={styles.barItems}>
                     {items.map((data, index) => {
                         return (
-                            <TouchableOpacity key={index}>
+                            <TouchableOpacity key={index} onPress={() => navigation.navigate(data.navigate)}>
                                 <View style={styles.contentTopop}>
                                     <View style={styles.imageBackgrounds}>
                                         {data.image}
@@ -160,7 +165,7 @@ const HomeScreen = () => {
                     {items2.map((data, index) => {
                         return (
                             <TouchableOpacity key={index}>
-                                <View  style={styles.contentTopop}>
+                                <View style={styles.contentTopop}>
                                     <View style={styles.imageBackgrounds}>
                                         {data.image}
                                     </View>
@@ -241,7 +246,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     imageBackgrounds: { backgroundColor: '#37AFE150', padding: 10, borderRadius: 10 },
-    fastTripBar: { width: width - 50, height: 30, backgroundColor: '#37AFE1', borderRadius: 10, justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', paddingLeft: 20, paddingRight: 20 }
+    fastTripBar: { width: width - 50, height: 30, backgroundColor: '#37AFE1', borderRadius: 10, justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row', paddingLeft: 20, paddingRight: 20 },
 });
 
 export default HomeScreen;

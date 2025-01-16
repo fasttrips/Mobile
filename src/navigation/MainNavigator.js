@@ -6,8 +6,24 @@ import { Image, StyleSheet } from 'react-native';
 import ChatScreen from '../screens/AccountScreen';
 import OrderScreen from '../screens/OrderScreen';
 import AccountScreen from '../screens/AccountScreen';
+import ChoiceScreen from '../screens/FastRide/ChoiceScreen';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+const HomeStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="Home" component={MainNavigator} />
+    <Stack.Screen name="ChoiceScreen" component={ChoiceScreen} options={{
+      title: 'FastRide',
+      headerStyle: { backgroundColor: '#37AFE1' },
+      headerTintColor: '#fff',
+      headerTitleStyle: { fontWeight: 'normal' },
+      headerShown: true,
+    }} />
+  </Stack.Navigator>
+);
 
 const MainNavigator = () => (
   <Tab.Navigator screenOptions={{
@@ -106,4 +122,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainNavigator;
+export default HomeStack;
