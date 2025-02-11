@@ -16,6 +16,13 @@ const { width, height } = Dimensions.get('window');
 const mapDUmmy = [
   {
     image: <Image
+      source={require('../../asset/helmet.png')}  // Local image
+      style={{ width: 50, height: 50 }}
+    />,
+    name: 'Motor',
+  },
+  {
+    image: <Image
       source={require('../../asset/car.png')}  // Local image
       style={{ width: 50, height: 50 }}
     />,
@@ -23,10 +30,10 @@ const mapDUmmy = [
   },
   {
     image: <Image
-      source={require('../../asset/helmet.png')}  // Local image
+      source={require('../../asset/car.png')}  // Local image
       style={{ width: 50, height: 50 }}
     />,
-    name: 'Motor',
+    name: 'Taxi',
   },
 ];
 
@@ -83,6 +90,13 @@ const ChoiceScreen = () => {
     longitude: 0,
   });
 
+  ////////////////
+  const [hargaMotor, sethargaMotor] = useState(0)
+  const [hargaMobil, sethargaMobil] = useState(0)
+  const [hargaTaxi, sethargaTaxi] = useState(0)
+
+
+
   // Request permissions on Android
   const requestPermissions = async () => {
     if (Platform.OS === 'android') {
@@ -108,6 +122,7 @@ const ChoiceScreen = () => {
         setDestinationLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
         getLocationName({ latitude: position.coords.latitude, longitude: position.coords.longitude });
         setRegionPick({ latitude: position.coords.latitude, longitude: position.coords.longitude })
+        setRegionDes({ latitude: position.coords.latitude, longitude: position.coords.longitude })
         setLoading(false)
       },
       (error) => {
@@ -116,8 +131,7 @@ const ChoiceScreen = () => {
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );
   };
-  Geocoder.init('AIzaSyBpcZDAU9DmCZqBGwpHpGxw7mcGq7Q75D8');
-
+  Geocoder.init(GOOGLE_API_KEY);
 
   const getLocationName = (latitude, longitude) => {
     Geocoder.from(latitude, longitude)
@@ -182,13 +196,83 @@ const ChoiceScreen = () => {
       // Mendapatkan jarak dan durasi perjalanan
       const distanceText = response.data.routes[0].legs[0].distance.text;
       const durationText = response.data.routes[0].legs[0].duration.text;
+      console.log(response.data.routes[0].legs[0].duration)
 
       setDistance(distanceText);  // Menyimpan jarak
       setDuration(durationText);  // Menyimpan durasi
+      hitungTarifGojek(1, (response.data.routes[0].legs[0].distance.value / 1000).toFixed(1))
+      hitungTarifGocar(1, (response.data.routes[0].legs[0].distance.value / 1000).toFixed(1))
+      hitungTarifTaksi('grabcar_taxi',(response.data.routes[0].legs[0].distance.value / 1000).toFixed(1), Math.round(response.data.routes[0].legs[0].duration.value / 60))
     } catch (error) {
       console.error("Error fetching route: ", error);
     }
   };
+
+  const hitungTarifGojek = (zona, jarakKm) => {
+    // Tarif berdasarkan zona
+    const tarif = {
+      1: { bawah: 2000, atas: 2500, minimal: 12000 },
+      2: { bawah: 2550, atas: 2800, minimal: 10200 },
+      3: { bawah: 2100, atas: 2600, minimal: 7000 }
+    };
+
+    // Periksa apakah zona valid
+    if (!tarif[zona]) {
+      return "Zona tidak valid";
+    }
+
+    // Hitung tarif bawah dan atas
+    let tarifBawah = jarakKm * tarif[zona].bawah;
+    let tarifAtas = jarakKm * tarif[zona].atas;
+
+    // Terapkan tarif minimal jika diperlukan
+    tarifBawah = Math.max(tarifBawah, tarif[zona].minimal);
+    tarifAtas = Math.max(tarifAtas, tarif[zona].minimal);
+    sethargaMotor(tarifAtas)
+    // console.log(`Estimasi tarif: Rp${tarifBawah.toLocaleString()} - Rp${tarifAtas.toLocaleString()}`)
+  }
+
+  const hitungTarifGocar = (zona, jarakKm) => {
+    // Tarif berdasarkan zona
+    const tarif = {
+      1: { bawah: 3400, atas: 4250, minimal: 25000 },
+      2: { bawah: 3500, atas: 5000, minimal: 15000 },
+      3: { bawah: 3100, atas: 3900, minimal: 10500 }
+    };
+
+    // Periksa apakah zona valid
+    if (!tarif[zona]) {
+      return "Zona tidak valid";
+    }
+
+    // Hitung tarif bawah dan atas
+    let tarifBawah = jarakKm * tarif[zona].bawah;
+    let tarifAtas = jarakKm * tarif[zona].atas;
+
+    // Terapkan tarif minimal jika diperlukan
+    tarifBawah = Math.max(tarifBawah, tarif[zona].minimal);
+    tarifAtas = Math.max(tarifAtas, tarif[zona].minimal);
+    sethargaMobil(tarifAtas)
+    // console.log(`Estimasi tarif: Rp${tarifBawah.toLocaleString()} - Rp${tarifAtas.toLocaleString()}`)
+  }
+
+  const hitungTarifTaksi = (tipe, jarakKm, waktuMenit) => {
+    // Tarif berdasarkan tipe taksi
+    const tarif = {
+      "bluebird_reguler": { bukaPintu: 7000, perKm: 4500, perMenit: 500 },
+      "bluebird_eksekutif": { bukaPintu: 15000, perKm: 7000, perMenit: 750 },
+      "grabcar_taxi": { bukaPintu: 8000, perKm: 5400, perMenit: 500 } // rata-rata GrabCar-Taxi
+    };
+
+    // Periksa tipe taksi yang valid
+    if (!tarif[tipe]) {
+      return "Tipe taksi tidak valid";
+    }
+
+    // Hitung total tarif
+    let totalTarif = tarif[tipe].bukaPintu + (jarakKm * tarif[tipe].perKm) + (waktuMenit * tarif[tipe].perMenit);
+    sethargaTaxi(totalTarif)
+  }
 
   useEffect(() => {
     getCurrentLocation();
@@ -255,9 +339,8 @@ const ChoiceScreen = () => {
 
   const mapRef = useRef(null);
 
-  if(loading)
-  {
-    return(
+  if (loading) {
+    return (
       <View style={styles.containerloading}>
         <Text>Sedang Menentukan Lokasi</Text>
       </View>
@@ -318,7 +401,15 @@ const ChoiceScreen = () => {
                   <TouchableOpacity key={index} style={{ justifyContent: 'center', alignItems: 'center', marginHorizontal: 10, width: 100, height: 100, backgroundColor: '#37AFE110', borderRadius: 10, borderColor: '#37AFE1', borderWidth: 1 }}>
                     {data.image}
                     <Text style={{ fontSize: 10 }}>{data.name}</Text>
-                    <Text>Rp 25.000</Text>
+                    {data.name === "Motor" &&
+                      <Text>Rp {hargaMotor.toLocaleString("id-ID")}</Text>
+                    }
+                    {data.name === "Mobil" &&
+                      <Text>Rp {hargaMobil.toLocaleString("id-ID")}</Text>
+                    }
+                    {data.name === "Taxi" &&
+                      <Text>Rp {hargaTaxi.toLocaleString("id-ID")}</Text>
+                    }
                   </TouchableOpacity>
                 );
               })}
@@ -483,7 +574,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: 'white',
-    justifyContent:'center'
+    justifyContent: 'center'
   },
   title: {
     fontSize: 24,

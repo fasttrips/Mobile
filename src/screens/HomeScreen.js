@@ -99,7 +99,7 @@ const HomeScreen = ({navigation}) => {
                     Hi, {user.displayName}
                 </Text>
                 <Text style={[styles.textTitle, { color: '#fff' }]}>
-                    Kepulauan Riau, Tembesi
+                    Selamat datang di Trasgo
                 </Text>
                 <View style={{ margin: 25 }} />
                 <View style={styles.barTopup}>
