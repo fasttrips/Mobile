@@ -18,7 +18,7 @@ import { auth } from '../config/firebaseConfig';
 const { width } = Dimensions.get('window');
 const items = [
     {
-        name: 'FastRide',
+        name: 'TrasRide',
         image: <Image
             source={require('../asset/car.png')}  // Local image
             style={{ width: 40, height: 40 }}
@@ -26,7 +26,15 @@ const items = [
         navigate: 'ChoiceScreen',
     },
     {
-        name: 'FastEats',
+        name: 'TrasRent',
+        image: <Image
+            source={require('../asset/rent.png')}  // Local image
+            style={{ width: 40, height: 40 }}
+        />,
+        navigate: '',
+    },
+    {
+        name: 'TrasFood',
         image: <Image
             source={require('../asset/food.png')}  // Local image
             style={{ width: 40, height: 40 }}
@@ -34,7 +42,17 @@ const items = [
         navigate: '',
     },
     {
-        name: 'FastMove',
+        name: 'TrasRelax',
+        image: <Image
+            source={require('../asset/massage.png')}  // Local image
+            style={{ width: 40, height: 40 }}
+        />,
+    },
+];
+
+const items2 = [
+    {
+        name: 'TrasMove',
         image: <Image
             source={require('../asset/package.png')}  // Local image
             style={{ width: 40, height: 40 }}
@@ -42,39 +60,7 @@ const items = [
         navigate: '',
     },
     {
-        name: 'FastRent',
-        image: <Image
-            source={require('../asset/rent.png')}  // Local image
-            style={{ width: 40, height: 40 }}
-        />,
-        navigate: '',
-    },
-];
-
-const items2 = [
-    {
-        name: 'MarketPlace',
-        image: <Image
-            source={require('../asset/marketplace.png')}  // Local image
-            style={{ width: 40, height: 40 }}
-        />,
-    },
-    {
-        name: 'Massage',
-        image: <Image
-            source={require('../asset/massage.png')}  // Local image
-            style={{ width: 40, height: 40 }}
-        />,
-    },
-    {
-        name: 'FastDaily',
-        image: <Image
-            source={require('../asset/daily.png')}  // Local image
-            style={{ width: 40, height: 40 }}
-        />,
-    },
-    {
-        name: 'FastShop',
+        name: 'TrasInn',
         image: <Image
             source={require('../asset/shop.png')}  // Local image
             style={{ width: 40, height: 40 }}
@@ -161,7 +147,7 @@ const HomeScreen = ({navigation}) => {
                         );
                     })}
                 </View>
-                <View style={styles.barItems}>
+                {/* <View style={styles.barItems}>
                     {items2.map((data, index) => {
                         return (
                             <TouchableOpacity key={index}>
@@ -175,15 +161,14 @@ const HomeScreen = ({navigation}) => {
                             </TouchableOpacity>
                         );
                     })}
-                </View>
+                </View> */}
                 <View style={{ margin: 20 }} />
                 <TouchableOpacity>
                     <View style={styles.fastTripBar}>
                         <Text style={[styles.textDesc, { color: '#ffffff' }]}>
-                            Yuk pakai FastTrip Plus Jauh Lebih Hemat
+                            Yuk pakai Trasgo Plus Jauh Lebih Hemat
                         </Text>
                         <Text style={[styles.textDesc, { color: '#ffffff' }]}>
-                        >
                         </Text>
                     </View>
                 </TouchableOpacity>

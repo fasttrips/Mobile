@@ -16,7 +16,7 @@ const HomeStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Home" component={MainNavigator} />
     <Stack.Screen name="ChoiceScreen" component={ChoiceScreen} options={{
-      title: 'FastRide',
+      title: 'Trasride',
       headerStyle: { backgroundColor: '#37AFE1' },
       headerTintColor: '#fff',
       headerTitleStyle: { fontWeight: 'normal' },

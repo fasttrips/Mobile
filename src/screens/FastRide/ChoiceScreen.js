@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity, ScrollView, Alert, PermissionsAndroid, Platform } from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import React, { useEffect, useRef, useState } from 'react';
+import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity, ScrollView, Alert, PermissionsAndroid, Platform, Modal, Pressable } from 'react-native';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import 'react-native-get-random-values';
 
-const { width } = Dimensions.get('window');
+const GOOGLE_API_KEY = 'AIzaSyBpcZDAU9DmCZqBGwpHpGxw7mcGq7Q75D8'; // Ganti dengan API Key Anda
+
+const { width, height } = Dimensions.get('window');
+
 
 const mapDUmmy = [
   {
@@ -36,6 +41,41 @@ const ChoiceScreen = () => {
 
   const [location, setLocation] = useState(null);
 
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const [modalDesVisible, setModalDesVisible] = useState(false);
+
+  const [region, setRegion] = useState({
+    latitude: 1.047237, // Default: Jakarta
+    longitude: 103.992613,
+    latitudeDelta: 0.05,
+    longitudeDelta: 0.05,
+  });
+
+  const [regionPick, setRegionPick] = useState({
+    latitude: 1.047237, // Default: Jakarta
+    longitude: 103.992613,
+    latitudeDelta: 0.05,
+    longitudeDelta: 0.05,
+  });
+
+  const [regionDes, setRegionDes] = useState({
+    latitude: 1.047237, // Default: Jakarta
+    longitude: 103.992613,
+    latitudeDelta: 0.05,
+    longitudeDelta: 0.05,
+  });
+
+  const [pickupLocation, setPickupLocation] = useState({
+    latitude: 1.047237,
+    longitude: 103.992613,
+  });
+
+  const [destinationLocation, setDestinationLocation] = useState({
+    latitude: 1.047237,
+    longitude: 103.992613,
+  });
+
   // Request permissions on Android
   const requestPermissions = async () => {
     if (Platform.OS === 'android') {
@@ -57,8 +97,7 @@ const ChoiceScreen = () => {
     Geolocation.getCurrentPosition(
       (position) => {
         setLocation(position.coords);
-        setlatitudeFrom(position.coords.latitude);
-        setlongitudeFrom(position.coords.longitude);
+        setPickupLocation({latitude:position.coords.latitude, longitude:position.coords.longitude});
       },
       (error) => {
         Alert.alert('Error', `Unable to get location: ${error.message}`);
@@ -71,11 +110,91 @@ const ChoiceScreen = () => {
     getCurrentLocation();
   }, []);
 
+  const handleLocationPickup = (data, details) => {
+    if (details && details.geometry) {
+      const { lat, lng } = details.geometry.location;
+      setRegionPick({
+        latitude: lat,
+        longitude: lng,
+        latitudeDelta: 0.05,
+        longitudeDelta: 0.05,
+      });
+      setPickupLocation({ latitude: lat, longitude: lng });
+      setfrom(data.description)
+      updateMap()
+      mapRef.current?.animateToRegion({
+        latitude: lat,
+        longitude: lng,
+        latitudeDelta: 0.05,
+        longitudeDelta: 0.05,
+      });
+    }
+  };
+
+  const handleLocationDestination = (data, details) => {
+    if (details && details.geometry) {
+      const { lat, lng } = details.geometry.location;
+      setRegionDes({
+        latitude: lat,
+        longitude: lng,
+        latitudeDelta: 0.05,
+        longitudeDelta: 0.05,
+      });
+      setDestinationLocation({ latitude: lat, longitude: lng });
+      setdestination(data.description)
+      updateMap()
+      mapRef.current?.animateToRegion({
+        latitude: lat,
+        longitude: lng,
+        latitudeDelta: 0.05,
+        longitudeDelta: 0.05,
+      });
+    }
+  };
+
+  const handleRegionDestinationComplete = (newRegion) => {
+    setDestinationLocation({
+      latitude: newRegion.latitude,
+      longitude: newRegion.longitude,
+    });
+    updateMap()
+  };
+
+  
+
+  const handleRegionFromComplete = (newRegion) => {
+    setPickupLocation({
+      latitude: newRegion.latitude,
+      longitude: newRegion.longitude,
+    });
+    updateMap()
+  };
+
+  const updateMap = () => {
+    setRegion({
+      latitude: pickupLocation.latitude,
+      longitude: pickupLocation.longitude,
+      latitudeDelta: 0.015,
+      longitudeDelta: 0.0121,
+    });
+    setPickupLocation({
+      latitude: pickupLocation.latitude, // Ganti dengan koordinat baru
+      longitude: pickupLocation.longitude,
+    });
+
+    setDestinationLocation({
+      latitude: destinationLocation.latitude, // Ganti dengan koordinat baru
+      longitude: destinationLocation.longitude,
+    });
+  };
+
+  const mapRef = useRef(null);
+
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, alignItems: 'center', marginTop: 20 }}>
         <View style={styles.backgroundChoice}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
             <View style={{ width: width - 40, marginBottom: 5, flexDirection: 'row' }}>
               <Image
                 source={require('../../asset/from.png')}  // Local image
@@ -85,7 +204,7 @@ const ChoiceScreen = () => {
             </View>
           </TouchableOpacity>
           <View style={{ width: width - 80, height: 1, backgroundColor: '#00000020', marginBottom: 10, marginTop: 10 }} />
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setModalDesVisible(true)}>
             <View style={{ width: width - 40, marginBottom: 5, flexDirection: 'row' }}>
               <Image
                 source={require('../../asset/des.png')}  // Local image
@@ -100,12 +219,15 @@ const ChoiceScreen = () => {
           provider={PROVIDER_GOOGLE} // remove if not using Google Maps
           style={styles.map}
           region={{
-            latitude: latitudeFrom,
-            longitude: longitudeFrom,
+            latitude: pickupLocation.latitude,
+            longitude: pickupLocation.longitude,
             latitudeDelta: 0.015,
             longitudeDelta: 0.0121,
           }}
-        />
+        >
+          <Marker coordinate={pickupLocation} pinColor='red' />
+          <Marker coordinate={destinationLocation} pinColor='green'/>
+        </MapView>
         <View style={{ margin: 10 }} />
         <View style={{ width: 30, height: 1, backgroundColor: 'black' }} />
         <View style={{ flex: 3, width: width - 40, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
@@ -134,6 +256,116 @@ const ChoiceScreen = () => {
         </TouchableOpacity>
         <View style={{ margin: 5 }} />
       </View>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <GooglePlacesAutocomplete
+              placeholder={from}
+              fetchDetails={true}
+              onPress={handleLocationPickup}
+              query={{
+                key: GOOGLE_API_KEY,
+                language: 'id', // Bahasa Indonesia
+              }}
+              styles={{
+                container: styles.autocompleteContainer,
+                textInput: styles.textInput,
+              }}
+            />
+            <MapView
+              provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+              style={{width:width,height:height, borderRadius:20}}
+              region={{
+                latitude: regionPick.latitude,
+                longitude: regionPick.longitude,
+                latitudeDelta: 0.015,
+                longitudeDelta: 0.0121,
+              }}
+              showsUserLocation={true}
+              showsMyLocationButton={false}
+              onRegionChangeComplete={handleRegionFromComplete}
+            >
+              <Marker coordinate={pickupLocation} />
+            </MapView>
+            <TouchableOpacity style={{ width: width, padding: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
+              <Image
+                source={require('../../asset/from.png')}  // Local image
+                style={{ width: 20, height: 20, marginRight: 10 }}
+              />
+              <Text>
+                Pilih Lewat Peta
+              </Text>
+            </TouchableOpacity>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => {setModalVisible(!modalVisible);updateMap()}}>
+              <Text style={styles.textStyle}>Kembali</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalDesVisible}
+        onRequestClose={() => {
+          setModalDesVisible(!modalDesVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <GooglePlacesAutocomplete
+              placeholder={destination}
+              fetchDetails={true}
+              onPress={handleLocationDestination}
+              query={{
+                key: GOOGLE_API_KEY,
+                language: 'id', // Bahasa Indonesia
+              }}
+              styles={{
+                container: styles.autocompleteContainer,
+                textInput: styles.textInput,
+              }}
+            />
+            <MapView
+              provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+              style={{width:width,height:height, borderRadius:20}}
+              region={{
+                latitude: regionDes.latitude,
+                longitude: regionDes.longitude,
+                latitudeDelta: 0.015,
+                longitudeDelta: 0.0121,
+              }}
+              showsUserLocation={true}
+              showsMyLocationButton={false}
+              onRegionChangeComplete={handleRegionDestinationComplete}
+            >
+              <Marker coordinate={destinationLocation} />
+            </MapView>
+            <TouchableOpacity style={{ width: width, padding: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
+              <Image
+                source={require('../../asset/from.png')}  // Local image
+                style={{ width: 20, height: 20, marginRight: 10 }}
+              />
+              <Text>
+                Pilih Lewat Peta
+              </Text>
+            </TouchableOpacity>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => {setModalDesVisible(!modalDesVisible);updateMap()}}>
+              <Text style={styles.textStyle}>Kembali</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -180,6 +412,65 @@ const styles = StyleSheet.create({
   },
   textPayment: { color: 'black', fontWeight: 'bold' },
   textPayment2: { color: 'red', fontWeight: '200' },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#00000090'
+  },
+  modalView: {
+    width: width,
+    height: height,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+    width: width - 40
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+    width: width - 40,
+    zIndex: 1,
+    position:'absolute',
+    marginTop:height-80
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  autocompleteContainer: {
+    width: width - 40,
+    zIndex: 9999,
+    position:'absolute'
+  },
+  textInput: {
+    height: 50,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    fontSize: 16,
+    marginTop:30,
+    borderRadius: 10, borderColor: 'red', borderWidth: 1
+  },
 
 });
 

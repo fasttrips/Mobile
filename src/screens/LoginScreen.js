@@ -44,7 +44,7 @@ const LoginScreen = () => {
           source={require('../asset/logo.png')} // Ganti dengan path logo Anda
           style={styles.logo}
         />
-        <Text style={styles.textDesc}>FastTrip</Text>
+        <Text style={styles.textDesc}>Trasgo</Text>
         <Text style={styles.textDesc2}>Aplikasinya Putra Batam Satu Untuk Semua</Text>
 
       </View>
