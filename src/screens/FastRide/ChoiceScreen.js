@@ -6,10 +6,9 @@ import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplet
 import 'react-native-get-random-values';
 import Geocoder from 'react-native-geocoding';
 import axios from 'axios';
-import { dispatchCommand } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 
-const GOOGLE_API_KEY = 'AIzaSyD9n1PJCk66-22M35zuRsc22WrwbH9Td1A'; // Ganti dengan API Key Anda
+const GOOGLE_API_KEY = 'AIzaSyBpcZDAU9DmCZqBGwpHpGxw7mcGq7Q75D8'; // Ganti dengan API Key Anda
 
 const { width, height } = Dimensions.get('window');
 
@@ -205,7 +204,6 @@ const ChoiceScreen = () => {
       // Mendapatkan jarak dan durasi perjalanan
       const distanceText = response.data.routes[0].legs[0].distance.text;
       const durationText = response.data.routes[0].legs[0].duration.text;
-      console.log(response.data.routes[0].legs[0].duration)
 
       setDistance(distanceText);  // Menyimpan jarak
       setDuration(durationText);  // Menyimpan durasi
