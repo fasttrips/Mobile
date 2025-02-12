@@ -1,14 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity, ScrollView, Alert, PermissionsAndroid, Platform, Modal, Pressable } from 'react-native';
-import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Circle, Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import 'react-native-get-random-values';
 import Geocoder from 'react-native-geocoding';
 import axios from 'axios';
 import { dispatchCommand } from 'react-native-reanimated';
+import { useNavigation } from '@react-navigation/native';
 
-const GOOGLE_API_KEY = 'AIzaSyBpcZDAU9DmCZqBGwpHpGxw7mcGq7Q75D8'; // Ganti dengan API Key Anda
+const GOOGLE_API_KEY = 'AIzaSyD9n1PJCk66-22M35zuRsc22WrwbH9Td1A'; // Ganti dengan API Key Anda
 
 const { width, height } = Dimensions.get('window');
 
@@ -40,10 +41,12 @@ const mapDUmmy = [
 
 const ChoiceScreen = () => {
 
+  const navigation = useNavigation();
+  const [showCircle, setShowCircle] = useState(false);
+
   const [distance, setDistance] = useState(null);  // Menyimpan jarak
   const [duration, setDuration] = useState(null);
   const [loading, setLoading] = useState(true);
-
 
   const [from, setfrom] = useState('Pilih Penjemputan');
   const [destination, setdestination] = useState('Pilih Pengantaran');
@@ -94,6 +97,11 @@ const ChoiceScreen = () => {
   const [hargaMotor, sethargaMotor] = useState(0)
   const [hargaMobil, sethargaMobil] = useState(0)
   const [hargaTaxi, sethargaTaxi] = useState(0)
+  const [pilihan, setpilihan] = useState({
+    harga: 0,
+    type: "",
+  })
+
 
 
 
@@ -126,9 +134,10 @@ const ChoiceScreen = () => {
         setLoading(false)
       },
       (error) => {
-        Alert.alert('Error', `Unable to get location: ${error.message}`);
+        Alert.alert('Error', `Tidak dapat menentukan lokasi, pastikan GPS anda berfungsi dengan baik`);
+        navigation.goBack()
       },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+      { enableHighAccuracy: true, timeout: 25000, maximumAge: 10000 }
     );
   };
   Geocoder.init(GOOGLE_API_KEY);
@@ -202,7 +211,7 @@ const ChoiceScreen = () => {
       setDuration(durationText);  // Menyimpan durasi
       hitungTarifGojek(1, (response.data.routes[0].legs[0].distance.value / 1000).toFixed(1))
       hitungTarifGocar(1, (response.data.routes[0].legs[0].distance.value / 1000).toFixed(1))
-      hitungTarifTaksi('grabcar_taxi',(response.data.routes[0].legs[0].distance.value / 1000).toFixed(1), Math.round(response.data.routes[0].legs[0].duration.value / 60))
+      hitungTarifTaksi('grabcar_taxi', (response.data.routes[0].legs[0].distance.value / 1000).toFixed(1), Math.round(response.data.routes[0].legs[0].duration.value / 60))
     } catch (error) {
       console.error("Error fetching route: ", error);
     }
@@ -321,21 +330,33 @@ const ChoiceScreen = () => {
     }
   };
 
+
+  ///moving maps destination
   const handleRegionDestinationComplete = (newRegion) => {
+    setShowCircle(false);
     setDestinationLocation({
       latitude: newRegion.latitude,
       longitude: newRegion.longitude,
     });
   };
+  const handleRegionDestinationChange = (newRegion) => {
+    setShowCircle(true);
+  };
+  ///
 
 
-
+  ///moving maps from
   const handleRegionFromComplete = (newRegion) => {
+    setShowCircle(false);
     setPickupLocation({
       latitude: newRegion.latitude,
       longitude: newRegion.longitude,
     });
   };
+  const handleRegionFromChange = (newRegion) => {
+    setShowCircle(true);
+  };
+  ///
 
   const mapRef = useRef(null);
 
@@ -398,7 +419,36 @@ const ChoiceScreen = () => {
             <View style={{ flex: 3, width: width - 40, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
               {mapDUmmy.map((data, index) => {
                 return (
-                  <TouchableOpacity key={index} style={{ justifyContent: 'center', alignItems: 'center', marginHorizontal: 10, width: 100, height: 100, backgroundColor: '#37AFE110', borderRadius: 10, borderColor: '#37AFE1', borderWidth: 1 }}>
+                  <TouchableOpacity key={index}
+                    onPress={() => {
+                      const hargaChoice = () => {
+                        switch (data.name) {
+                          case "Motor":
+                            return hargaMotor.toLocaleString("id-ID");
+                          case "Mobil":
+                            return hargaMobil.toLocaleString("id-ID");
+                          case "Taxi":
+                            return hargaTaxi.toLocaleString("id-ID");
+                          default:
+                            return 0;
+                        }
+                      };
+                      setpilihan({
+                        harga: hargaChoice(),
+                        type: data.name
+                      })
+                    }}
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginHorizontal: 10,
+                      width: 100,
+                      height: 100,
+                      backgroundColor: pilihan.type === data.name ? '#37AFE110' : '#fff',
+                      borderRadius: 10,
+                      borderColor: pilihan.type === data.name ? '#37AFE1' : '#00000020',
+                      borderWidth: 1
+                    }}>
                     {data.image}
                     <Text style={{ fontSize: 10 }}>{data.name}</Text>
                     {data.name === "Motor" &&
@@ -441,10 +491,14 @@ const ChoiceScreen = () => {
               <Text style={styles.textPayment}>Tunai </Text>
               <Text style={styles.textPayment2}>Saldo : Rp 8.500</Text>
             </View>
-            <Text style={styles.textPayment}>IDR 25.000</Text>
+            <Text style={styles.textPayment}>IDR {pilihan.harga}</Text>
           </TouchableOpacity>
           <View style={{ margin: 5 }} />
-          <TouchableOpacity style={styles.buttonConfirm}>
+          <TouchableOpacity style={[
+            styles.buttonConfirm,
+            pilihan.type === "" && { backgroundColor: '#ccc' } // Change color when disabled
+          ]}
+            disabled={pilihan.type === ""}>
             <Text style={styles.textButton}>Pesan Sekarang</Text>
           </TouchableOpacity>
           <View style={{ margin: 5 }} />
@@ -485,18 +539,13 @@ const ChoiceScreen = () => {
               showsUserLocation={true}
               showsMyLocationButton={false}
               onRegionChangeComplete={handleRegionFromComplete}
+              onRegionChangeStart={handleRegionFromChange}
             >
-              <Marker coordinate={pickupLocation} />
+              {!showCircle && (
+                <Marker coordinate={pickupLocation} pinColor='red'/>
+              )}
             </MapView>
-            <TouchableOpacity style={{ width: width, padding: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
-              <Image
-                source={require('../../asset/from.png')}  // Local image
-                style={{ width: 20, height: 20, marginRight: 10 }}
-              />
-              <Text>
-                Pilih Lewat Peta
-              </Text>
-            </TouchableOpacity>
+            {showCircle && <View style={styles.blueCircle} />}
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => { setModalVisible(!modalVisible); getLocationName({ latitude: pickupLocation.latitude, longitude: pickupLocation.longitude }); fetchRoute() }}>
@@ -540,18 +589,13 @@ const ChoiceScreen = () => {
               showsUserLocation={true}
               showsMyLocationButton={false}
               onRegionChangeComplete={handleRegionDestinationComplete}
+              onRegionChange={handleRegionDestinationChange}
             >
-              <Marker coordinate={destinationLocation} />
+              {!showCircle && (
+                <Marker coordinate={destinationLocation} pinColor='green'/>
+              )}
             </MapView>
-            <TouchableOpacity style={{ width: width, padding: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center' }}>
-              <Image
-                source={require('../../asset/from.png')}  // Local image
-                style={{ width: 20, height: 20, marginRight: 10 }}
-              />
-              <Text>
-                Pilih Lewat Peta
-              </Text>
-            </TouchableOpacity>
+            {showCircle && <View style={styles.blueCircle} />}
             <Pressable
               style={[styles.button, styles.buttonClose]}
               onPress={() => { setModalDesVisible(!modalDesVisible); getLocationDesName({ latitude: destinationLocation.latitude, longitude: destinationLocation.longitude }); fetchRoute() }}>
@@ -670,6 +714,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 30,
     borderRadius: 10, borderColor: 'red', borderWidth: 1
+  },
+  blueCircle: {
+    position: 'absolute',
+    top: '50%', // Posisi tengah vertikal
+    left: '50%', // Posisi tengah horizontal
+    width: 10, // Ukuran bulatan
+    height: 10,
+    backgroundColor: 'blue', // Warna biru transparan
+    borderRadius: 5, // Supaya jadi bulatan
+    transform: [{ translateX: -5 }, { translateY: -5 }], // Geser agar benar-benar di tengah
   },
 
 });
