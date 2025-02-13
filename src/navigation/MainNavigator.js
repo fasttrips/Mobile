@@ -6,7 +6,10 @@ import { Image, StyleSheet } from 'react-native';
 import ChatScreen from '../screens/AccountScreen';
 import OrderScreen from '../screens/OrderScreen';
 import AccountScreen from '../screens/AccountScreen';
-import ChoiceScreen from '../screens/FastRide/ChoiceScreen';
+import TrasRelax from '../screens/FastRelax/ChoiceScreen';
+import TrasFood from '../screens/FastFood/ChoiceScreen';
+import TrasRent from '../screens/FastRent/ChoiceScreen';
+import TrasRide from '../screens/FastRide/ChoiceScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Tab = createBottomTabNavigator();
@@ -15,11 +18,60 @@ const Stack = createNativeStackNavigator();
 const HomeStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Home" component={MainNavigator} />
-    <Stack.Screen name="ChoiceScreen" component={ChoiceScreen} options={{
+    <Stack.Screen name="TrasRide" component={TrasRide} options={{
       title: 'Trasride',
-      headerStyle: { backgroundColor: '#37AFE1' },
+      headerStyle: { 
+        backgroundColor: '#37AFE1', 
+        elevation: 0, // Menghilangkan shadow di Android
+        shadowOpacity: 0, // Menghilangkan shadow di iOS
+        alignItems: 'center',
+      },
+      headerTitleAlign: 'center',
       headerTintColor: '#fff',
-      headerTitleStyle: { fontWeight: 'normal' },
+      headerShadowVisible: false,
+      headerTitleStyle: { fontWeight: 'normal',fontFamily:'Montserrat-Regular' },
+      headerShown: true,
+    }} />
+    <Stack.Screen name="TrasRent" component={TrasRent} options={{
+      title: 'Trasrent',
+      headerStyle: { 
+        backgroundColor: '#37AFE1', 
+        elevation: 0, // Menghilangkan shadow di Android
+        shadowOpacity: 0, // Menghilangkan shadow di iOS
+        alignItems: 'center',
+      },
+      headerTitleAlign: 'center',
+      headerTintColor: '#fff',
+      headerShadowVisible: false,
+      headerTitleStyle: { fontWeight: 'normal',fontFamily:'Montserrat-Regular' },
+      headerShown: true,
+    }} />
+    <Stack.Screen name="TrasFood" component={TrasFood} options={{
+      title: 'Trasfood',
+      headerStyle: { 
+        backgroundColor: '#37AFE1', 
+        elevation: 0, // Menghilangkan shadow di Android
+        shadowOpacity: 0, // Menghilangkan shadow di iOS
+        alignItems: 'center',
+      },
+      headerTitleAlign: 'center',
+      headerTintColor: '#fff',
+      headerShadowVisible: false,
+      headerTitleStyle: { fontWeight: 'normal',fontFamily:'Montserrat-Regular' },
+      headerShown: true,
+    }} />
+    <Stack.Screen name="TrasRelax" component={TrasRelax} options={{
+      title: 'Trasrelax',
+      headerStyle: { 
+        backgroundColor: '#37AFE1', 
+        elevation: 0, // Menghilangkan shadow di Android
+        shadowOpacity: 0, // Menghilangkan shadow di iOS
+        alignItems: 'center',
+      },
+      headerTitleAlign: 'center',
+      headerTintColor: '#fff',
+      headerShadowVisible: false,
+      headerTitleStyle: { fontWeight: 'normal',fontFamily:'Montserrat-Regular' },
       headerShown: true,
     }} />
   </Stack.Navigator>
@@ -40,12 +92,13 @@ const MainNavigator = () => (
         tile: 'Home Page',
         headerShown: false,
         color: '#fff',
+        fontFamily:'Montserrat-Regular',
         tabBarIcon: ({ focused }) => {
-          const size = focused ? 25 : 20;
+          const size = focused ? 60 : 50;
           return (
             <Image
-              source={require('../asset/fast.png')}  // Local image
-              style={{ width: size, height: size }}
+              source={require('../asset/logo.png')}  // Local image
+              style={{ width: size, height: size, tintColor:'#37AFE1' }}
             />
           );
         },
@@ -58,6 +111,7 @@ const MainNavigator = () => (
         tile: 'Home Page',
         headerShown: false,
         color: '#fff',
+        fontFamily:'Montserrat-Regular',
         tabBarIcon: ({ focused }) => {
           const size = focused ? 25 : 20;
           return (
@@ -76,6 +130,7 @@ const MainNavigator = () => (
         tile: 'Home Page',
         headerShown: false,
         color: '#fff',
+        fontFamily:'Montserrat-Regular',
         tabBarIcon: ({ focused }) => {
           const size = focused ? 25 : 20;
           return (
@@ -119,6 +174,7 @@ const styles = StyleSheet.create({
   tabBarIconStyle: {
     justifyContent: 'center',  // Center the icon vertically within the tab
     alignItems: 'center',  // Center the icon horizontally within the tab
+    fontFamily:'Montserrat-Regular'
   },
 });
 

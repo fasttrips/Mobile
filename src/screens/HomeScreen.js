@@ -23,7 +23,7 @@ const items = [
             source={require('../asset/car.png')}  // Local image
             style={{ width: 40, height: 40 }}
         />,
-        navigate: 'ChoiceScreen',
+        navigate: 'TrasRide',
     },
     {
         name: 'TrasRent',
@@ -31,7 +31,7 @@ const items = [
             source={require('../asset/rent.png')}  // Local image
             style={{ width: 40, height: 40 }}
         />,
-        navigate: '',
+        navigate: 'TrasRent',
     },
     {
         name: 'TrasFood',
@@ -39,10 +39,11 @@ const items = [
             source={require('../asset/food.png')}  // Local image
             style={{ width: 40, height: 40 }}
         />,
-        navigate: '',
+        navigate: 'TrasFood',
     },
     {
         name: 'TrasRelax',
+        navigate: 'TrasRelax',
         image: <Image
             source={require('../asset/massage.png')}  // Local image
             style={{ width: 40, height: 40 }}
@@ -165,10 +166,10 @@ const HomeScreen = ({navigation}) => {
                 <View style={{ margin: 20 }} />
                 <TouchableOpacity>
                     <View style={styles.fastTripBar}>
-                        <Text style={[styles.textDesc, { color: '#ffffff' }]}>
+                        <Text style={[styles.textDesc, { color: '#ffffff',fontFamily:'Montserrat-Regular' }]}>
                             Yuk pakai Trasgo Plus Jauh Lebih Hemat
                         </Text>
-                        <Text style={[styles.textDesc, { color: '#ffffff' }]}>
+                        <Text style={[styles.textDesc, { color: '#ffffff', fontFamily:'Montserrat-Regular' }]}>
                         </Text>
                     </View>
                 </TouchableOpacity>
@@ -186,14 +187,14 @@ const styles = StyleSheet.create({
         width: width - 50,
         fontSize: 20,
         color: '#fff',
-        fontFamily: 'sans-serif',
+        fontFamily:'Montserrat-Regular'
     },
     textTitle: {
         width: width - 50,
         fontSize: 16,
-        fontFamily: 'sans-serif',
+        fontFamily:'Montserrat-Regular'
     },
-    textDesc: { fontSize: 12 },
+    textDesc: { fontSize: 12,fontFamily:'Montserrat-Regular' },
     backgroundDesign: {
         position: 'absolute',
         backgroundColor: '#37AFE1',

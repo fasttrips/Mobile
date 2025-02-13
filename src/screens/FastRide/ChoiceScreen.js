@@ -7,6 +7,7 @@ import 'react-native-get-random-values';
 import Geocoder from 'react-native-geocoding';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
 
 const GOOGLE_API_KEY = 'AIzaSyBpcZDAU9DmCZqBGwpHpGxw7mcGq7Q75D8'; // Ganti dengan API Key Anda
 
@@ -47,26 +48,17 @@ const ChoiceScreen = () => {
   const [duration, setDuration] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const [from, setfrom] = useState('Pilih Penjemputan');
-  const [destination, setdestination] = useState('Pilih Pengantaran');
+  const [from, setfrom] = useState('Cari lokasi asal');
+  const [destination, setdestination] = useState('Cari lokasi tujuan');
 
-  const maxLength = 30;
+  const maxLength = 40;
   const truncatedFromText = from.length > maxLength ? from.substring(0, maxLength) + "..." : from;
   const truncatedDesText = destination.length > maxLength ? destination.substring(0, maxLength) + "..." : destination;
   const [coordinates, setCoordinates] = useState([]);
 
-  const [location, setLocation] = useState(null);
-
   const [modalVisible, setModalVisible] = useState(false);
 
   const [modalDesVisible, setModalDesVisible] = useState(false);
-
-  const [region, setRegion] = useState({
-    latitude: 1.047237, // Default: Jakarta
-    longitude: 103.992613,
-    latitudeDelta: 0.05,
-    longitudeDelta: 0.05,
-  });
 
   const [regionPick, setRegionPick] = useState({
     latitude: 1.047237, // Default: Jakarta
@@ -101,9 +93,6 @@ const ChoiceScreen = () => {
     type: "",
   })
 
-
-
-
   // Request permissions on Android
   const requestPermissions = async () => {
     if (Platform.OS === 'android') {
@@ -124,7 +113,6 @@ const ChoiceScreen = () => {
 
     Geolocation.getCurrentPosition(
       (position) => {
-        setLocation(position.coords);
         setPickupLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
         setDestinationLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude });
         getLocationName({ latitude: position.coords.latitude, longitude: position.coords.longitude });
@@ -139,11 +127,14 @@ const ChoiceScreen = () => {
       { enableHighAccuracy: true, timeout: 25000, maximumAge: 10000 }
     );
   };
+
+  ////dapatkan nama dari google
   Geocoder.init(GOOGLE_API_KEY);
 
   const getLocationName = (latitude, longitude) => {
     Geocoder.from(latitude, longitude)
       .then(json => {
+        console.log(json)
         const address = json.results[0].formatted_address;
         setfrom(address); // Menyimpan alamat ke state
       })
@@ -158,6 +149,8 @@ const ChoiceScreen = () => {
       })
       .catch(error => console.warn(error));
   };
+
+  ////
 
   const decodePolyline = (encoded) => {
     let points = [];
@@ -361,13 +354,18 @@ const ChoiceScreen = () => {
   if (loading) {
     return (
       <View style={styles.containerloading}>
-        <Text>Sedang Menentukan Lokasi</Text>
+        <LottieView width={width - 100} height={width - 100} source={require('../../asset/animation/search.json')} autoPlay loop />
+        <Text style={{ fontFamily: 'Montserrat-Regular' }}>Menentukan Lokasi Anda</Text>
       </View>
     )
   }
 
   return (
     <View style={styles.container}>
+      {
+        destination === "Cari lokasi tujuan" &&
+        <View style={styles.backgroundDesign} />
+      }
       <View style={{ flex: 1, alignItems: 'center', marginTop: 20 }}>
         <View style={styles.backgroundChoice}>
           <TouchableOpacity onPress={() => setModalVisible(true)}>
@@ -376,7 +374,7 @@ const ChoiceScreen = () => {
                 source={require('../../asset/from.png')}  // Local image
                 style={{ width: 20, height: 20, marginRight: 10 }}
               />
-              <Text>{truncatedFromText}</Text>
+              <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 13 }}>{truncatedFromText}</Text>
             </View>
           </TouchableOpacity>
           <View style={{ width: width - 80, height: 1, backgroundColor: '#00000020', marginBottom: 10, marginTop: 10 }} />
@@ -386,13 +384,17 @@ const ChoiceScreen = () => {
                 source={require('../../asset/des.png')}  // Local image
                 style={{ width: 20, height: 20, marginRight: 10 }}
               />
-              <Text>{truncatedDesText}</Text>
+              <Text style={{ fontFamily: 'Montserrat-Regular', fontSize: 13 }}>{truncatedDesText}</Text>
             </View>
           </TouchableOpacity>
         </View>
+        {
+          destination === "Cari lokasi tujuan" &&
+          <Text style={{ fontFamily: 'Montserrat-Medium', fontSize: 13, color: '#fff', marginTop: 20 }}>Yuk cari lokasi tujuan kamu</Text>
+        }
         <View style={{ margin: 10 }} />
         {
-          destination !== "Pilih Pengantaran" &&
+          destination !== "Cari lokasi tujuan" &&
           <>
             <MapView
               provider={PROVIDER_GOOGLE} // remove if not using Google Maps
@@ -445,18 +447,19 @@ const ChoiceScreen = () => {
                       backgroundColor: pilihan.type === data.name ? '#37AFE110' : '#fff',
                       borderRadius: 10,
                       borderColor: pilihan.type === data.name ? '#37AFE1' : '#00000020',
-                      borderWidth: 1
+                      borderWidth: 1,
+                      fontFamily: 'Montserrat-Regular'
                     }}>
                     {data.image}
                     <Text style={{ fontSize: 10 }}>{data.name}</Text>
                     {data.name === "Motor" &&
-                      <Text>Rp {hargaMotor.toLocaleString("id-ID")}</Text>
+                      <Text style={{ fontFamily: 'Montserrat-Regular' }}>Rp {hargaMotor.toLocaleString("id-ID")}</Text>
                     }
                     {data.name === "Mobil" &&
-                      <Text>Rp {hargaMobil.toLocaleString("id-ID")}</Text>
+                      <Text style={{ fontFamily: 'Montserrat-Regular' }}>Rp {hargaMobil.toLocaleString("id-ID")}</Text>
                     }
                     {data.name === "Taxi" &&
-                      <Text>Rp {hargaTaxi.toLocaleString("id-ID")}</Text>
+                      <Text style={{ fontFamily: 'Montserrat-Regular' }}>Rp {hargaTaxi.toLocaleString("id-ID")}</Text>
                     }
                   </TouchableOpacity>
                 );
@@ -467,7 +470,7 @@ const ChoiceScreen = () => {
           </>
         }
         {
-          destination === "Pilih Pengantaran" &&
+          destination === "Cari lokasi tujuan" &&
           <>
             <View
               style={styles.map}
@@ -482,7 +485,7 @@ const ChoiceScreen = () => {
 
       </View>
       {
-        destination !== "Pilih Pengantaran" &&
+        destination !== "Cari lokasi tujuan" &&
         <View style={{ backgroundColor: '#37AFE110', width: width, alignItems: 'center', justifyContent: 'center', padding: 20 }}>
           <TouchableOpacity style={styles.buttonPayment}>
             <View>
@@ -540,7 +543,7 @@ const ChoiceScreen = () => {
               onRegionChangeStart={handleRegionFromChange}
             >
               {!showCircle && (
-                <Marker coordinate={pickupLocation} pinColor='red'/>
+                <Marker coordinate={pickupLocation} pinColor='red' />
               )}
             </MapView>
             {showCircle && <View style={styles.blueCircle} />}
@@ -590,7 +593,7 @@ const ChoiceScreen = () => {
               onRegionChange={handleRegionDestinationChange}
             >
               {!showCircle && (
-                <Marker coordinate={destinationLocation} pinColor='green'/>
+                <Marker coordinate={destinationLocation} pinColor='green' />
               )}
             </MapView>
             {showCircle && <View style={styles.blueCircle} />}
@@ -622,6 +625,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    fontFamily: 'Montserrat-Regular'
   },
   backgroundChoice: {
     flex: 1,
@@ -636,7 +640,7 @@ const styles = StyleSheet.create({
     margin: 1,
   },
   buttonConfirm: { width: width - 40, height: 50, backgroundColor: '#37AFE1', justifyContent: 'center', alignItems: 'center', borderRadius: 20, elevation: 1 },
-  textButton: { color: 'white', fontWeight: 'bold' },
+  textButton: { color: 'white', fontWeight: 'normal', fontFamily: 'Montserrat-Medium' },
   containerMaps: {
     height: 200,
     width: width,
@@ -652,8 +656,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
   },
-  textPayment: { color: 'black', fontWeight: 'bold' },
-  textPayment2: { color: 'red', fontWeight: '200' },
+  textPayment: { color: 'black', fontFamily: 'Montserrat-Medium' },
+  textPayment2: { color: 'red', fontWeight: '200', fontFamily: 'Montserrat-Regular' },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -694,10 +698,12 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: 'Montserrat-Regular'
   },
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+    fontFamily: 'Montserrat-Regular'
   },
   autocompleteContainer: {
     width: width - 40,
@@ -711,7 +717,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontSize: 16,
     marginTop: 30,
-    borderRadius: 10, borderColor: 'red', borderWidth: 1
+    borderRadius: 10, borderColor: 'red', borderWidth: 1,
+    fontFamily: 'Montserrat-Regular'
   },
   blueCircle: {
     position: 'absolute',
@@ -722,6 +729,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue', // Warna biru transparan
     borderRadius: 5, // Supaya jadi bulatan
     transform: [{ translateX: -5 }, { translateY: -5 }], // Geser agar benar-benar di tengah
+  },
+  backgroundDesign: {
+    position: 'absolute',
+    backgroundColor: '#37AFE1',
+    width: width,
+    height: 180,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
 
 });
