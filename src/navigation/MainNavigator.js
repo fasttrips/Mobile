@@ -152,20 +152,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tabBarStyle: {
-    position: 'absolute', // Make it floating
-    left: 20, // Adjust the distance from the left
-    right: 20, // Adjust the distance from the right
-    elevation: 5, // Add shadow for Android
-    backgroundColor: '#FFF', // Background color
-    borderRadius: 20, // Rounded corners
-    height: 60, // Height of the tab bar
-    margin: 30,
-    shadowColor: '#000', // Shadow for iOS
-    shadowOpacity: 0.1, // Shadow opacity for iOS
-    shadowOffset: { width: 0, height: 10 }, // Shadow offset for iOS
-    shadowRadius: 10, // Shadow blur for iOS
-    justifyContent: 'space-between', // Center the tab bar content vertically
-    alignItems: 'center', // Center the tab bar content horizontally
+    height: 60,
   },
   image: {
     width: 30, // Specify width
