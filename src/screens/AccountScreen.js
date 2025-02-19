@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, Button, Alert, StyleSheet } from 'react-native';
+import { View, Text, Button, Alert, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { auth } from '../config/firebaseConfig';
-
-GoogleSignin.configure({
-  webClientId: '831730691096-hsuqs4noja9rc5r3c0sbj050q5st4pmq.apps.googleusercontent.com', // Replace with your web client ID from Firebase
-});
+const { width } = Dimensions.get('window');
 
 const AccountScreen = () => {
 
@@ -21,8 +18,14 @@ const AccountScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}></Text>
-      <Button title="Sign Out" onPress={signOut} />
+      <Text style={styles.title}>Akun</Text>
+      <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1, backgroundColor: 'white' }}>
+        <TouchableOpacity onPress={signOut}>
+          <View style={{ borderRadius: 20, width: width - 100, height: 50, justifyContent: 'center', alignItems: 'center', backgroundColor: '#37AFE1' }}>
+            <Text style={{ fontFamily: 'Montserrat-Regular', color: 'white' }}>Keluar</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -30,15 +33,16 @@ const AccountScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor:'white'
+    backgroundColor: 'white'
   },
   title: {
+    color: '#fff',
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 20,
+    backgroundColor: '#37AFE1',
+    width: width,
+    padding: 20,
+    fontFamily: 'Montserrat-Regular'
   },
   text: {
     fontSize: 18,

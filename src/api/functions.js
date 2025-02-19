@@ -17,6 +17,21 @@ const getUser = async () => {
     }
 };
 
+const getDriver = async (user) => {
+    try {
+        const doc = await firestore().collection('mitra').doc(user).get();
+
+        if (doc.exists) {
+            const userData = { id: doc.id, ...doc.data() };
+            return userData;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        return null;
+    }
+};
+
 const getBanner = async () => {
     try {
         const snapshot = await firestore().collection('banner').get();
@@ -67,5 +82,6 @@ const getOrder = async () => {
 export {
     getUser,
     getBanner,
-    getOrder
+    getOrder,
+    getDriver
 }

@@ -262,7 +262,7 @@ const ChoiceScreen = ({ navigation }) => {
         potonganDriver: pilihan.type === "Motor" ? 2000 : 3500,
         payment: "Tunai",
         createdAt: new Date(),
-        updateAt: new Date()
+        updateAt: new Date(),
       });
       navigation.navigate('Home', { screen: 'Order' });
     } catch (error) {
