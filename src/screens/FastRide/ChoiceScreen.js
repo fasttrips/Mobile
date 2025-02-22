@@ -101,8 +101,8 @@ const ChoiceScreen = ({ navigation }) => {
         setLoading(false);
       },
       (error) => {
-        Alert.alert('Error', `Tidak dapat menentukan lokasi, pastikan GPS anda berfungsi dengan baik`);
-        navigation.goBack();
+        Alert.alert('Error', `Tidak dapat menentukan lokasi, kamu bisa pilih secara manual`);
+        // navigation.goBack();
       },
       { enableHighAccuracy: true, timeout: 25000, maximumAge: 10000 }
     );
