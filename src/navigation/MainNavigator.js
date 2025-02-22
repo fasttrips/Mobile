@@ -105,7 +105,7 @@ const MainNavigator = () => (
       }}
     />
     <Tab.Screen
-      name="Order"
+      name="Aktifitas"
       component={OrderScreen}
       options={{
         tile: 'Home Page',
@@ -116,7 +116,7 @@ const MainNavigator = () => (
           const size = focused ? 25 : 20;
           return (
             <Image
-              source={require('../asset/order.png')}  // Local image
+              source={require('../asset/package.png')}  // Local image
               style={{ width: size, height: size }}
             />
           );

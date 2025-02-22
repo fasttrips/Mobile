@@ -51,6 +51,25 @@ const getBanner = async () => {
     }
 };
 
+const getBannerNews = async () => {
+    try {
+        const snapshot = await firestore().collection('bannerNews').get();
+
+        if (!snapshot.empty) {
+            const userData = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            return userData;
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        return [];
+    }
+};
+
 const getOrder = async () => {
     const user = auth().currentUser;
     
@@ -83,5 +102,6 @@ export {
     getUser,
     getBanner,
     getOrder,
-    getDriver
+    getDriver,
+    getBannerNews
 }

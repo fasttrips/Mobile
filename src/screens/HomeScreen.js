@@ -7,6 +7,7 @@ import {
     Dimensions,
     FlatList,
     Image,
+    Linking,
     PermissionsAndroid,
     SafeAreaView,
     ScrollView,
@@ -19,7 +20,7 @@ import {
 import { auth } from '../config/firebaseConfig';
 import messaging from '@react-native-firebase/messaging';
 import firestore from '@react-native-firebase/firestore';
-import { getBanner, getUser } from '../api/functions';
+import { getBanner, getBannerNews, getUser } from '../api/functions';
 import LottieView from 'lottie-react-native';
 
 const { width } = Dimensions.get('window');
@@ -51,11 +52,11 @@ const items = [
         navigate: 'TrasFood',
         status: false
     },
-    
+
     {
         name: 'TrasHotel',
         image: <Image
-            source={require('../asset/shop.png')}  // Local image
+            source={require('../asset/resort.png')}  // Local image
             style={{ width: 40, height: 40 }}
         />,
         status: false
@@ -81,7 +82,25 @@ const items2 = [
         />,
         status: false
     },
-    
+    {
+        name: 'TrasMart',
+        navigate: 'TrasMart',
+        image: <Image
+            source={require('../asset/shop.png')}  // Local image
+            style={{ width: 40, height: 40 }}
+        />,
+        status: false
+    },
+    {
+        name: 'TrasPay',
+        navigate: 'TrasPay',
+        image: <Image
+            source={require('../asset/daily.png')}  // Local image
+            style={{ width: 40, height: 40 }}
+        />,
+        status: false
+    },
+
 ];
 
 async function requestUserPermission() {
@@ -128,12 +147,24 @@ const HomeScreen = ({ navigation }) => {
 
     const [user, setUser] = useState(null);
     const [banner, setBanner] = useState([]);
+    const [bannerNews, setBannerNews] = useState([]);
+
 
 
     const fetchBannerData = async () => {
         await getBanner().then(bannerData => {
             if (bannerData) {
                 setBanner(bannerData)
+            } else {
+                console.log('No user data found');
+            }
+        })
+    }
+
+    const fetchBannerNewsData = async () => {
+        await getBannerNews().then(bannerData => {
+            if (bannerData) {
+                setBannerNews(bannerData)
             } else {
                 console.log('No user data found');
             }
@@ -156,6 +187,7 @@ const HomeScreen = ({ navigation }) => {
         }
         fetchUserData();
         fetchBannerData();
+        fetchBannerNewsData();
 
         // Dapatkan token perangkat untuk notifikasi
         messaging().getToken().then(token => console.log('FCM Token:', token));
@@ -180,7 +212,7 @@ const HomeScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.backgroundStyle}>
             <StatusBar backgroundColor="#37AFE1" barStyle="light-content" />
-            <ScrollView contentInsetAdjustmentBehavior="automatic" contentContainerStyle={{ alignItems: 'center' }}>
+            <ScrollView style={{ flex: 1 }} contentContainerStyle={{ alignItems: 'center', flexGrow: 1 }}>
                 <View style={styles.backgroundDesign} />
                 <View style={{ margin: 20 }} />
                 <Text style={styles.textHeader}>
@@ -264,7 +296,7 @@ const HomeScreen = ({ navigation }) => {
                         );
                     })}
                 </View>
-                <View style={{ margin: 20 }} />
+                <View style={{ margin: 10 }} />
                 <TouchableOpacity onPress={() => Alert.alert("Info", "Fitur ini segera hadir")}>
                     <View style={styles.fastTripBar}>
                         <Text style={[styles.textDesc, { color: '#ffffff', fontFamily: 'Montserrat-Regular' }]}>
@@ -275,17 +307,42 @@ const HomeScreen = ({ navigation }) => {
                     </View>
                 </TouchableOpacity>
                 <View style={{ margin: 10 }} />
-                <View style={{paddingHorizontal:20}}>
-                    <FlatList
-                        data={banner}
-                        keyExtractor={(item) => item.id}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        renderItem={({ item }) => (
+                <FlatList
+                    style={{ marginHorizontal: 20 }}
+                    data={banner}
+                    keyExtractor={(item) => item.id}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity onPress={()=>{
+                            Linking.openURL(item.url).catch(err => console.error("Failed to open URL:", err));
+                        }}>
                             <Image source={{ uri: item.image }} style={styles.image} />
-                        )}
-                    />
-                </View>
+                        </TouchableOpacity>
+                    )}
+                />
+                <Text style={[{ color: '#000000', fontFamily: 'Montserrat-normal', textAlign: 'left', width: width - 45 }]}>
+                    Berita Terkini
+                </Text>
+                <View style={{ margin: 10 }} />
+                <FlatList
+                    style={{ marginHorizontal: 20 }}
+                    data={bannerNews}
+                    keyExtractor={(item) => item.id}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={({ item }) => (
+                        <TouchableOpacity onPress={()=>{
+                            Linking.openURL(item.url).catch(err => console.error("Failed to open URL:", err));
+                        }}>
+                            <Image source={{ uri: item.image }} style={styles.image} />
+                            <View style={{top:80,left:5, position:'absolute',backgroundColor: '#00000050', fontFamily: 'Montserrat-Bold', textAlign: 'left', width: 230,height:60,borderBottomRightRadius:10,borderBottomLeftRadius:10 }}/>
+                            <Text style={[{top:80,left:20, position:'absolute',color: '#ffffff', fontFamily: 'Montserrat-Bold', textAlign: 'left', width: 220 }]}>
+                                {item.title}
+                            </Text>
+                        </TouchableOpacity>
+                    )}
+                />
             </ScrollView>
         </SafeAreaView>
     );
