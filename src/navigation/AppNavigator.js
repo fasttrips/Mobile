@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import AuthNavigator from './AuthNavigator';
 import MainNavigator from './MainNavigator';
 import { auth } from '../config/firebaseConfig';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const AppNavigator = () => {
@@ -14,20 +15,18 @@ const AppNavigator = () => {
 
 
   // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) { setInitializing(false); }
-  }
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    if (user) {
+  async function onAuthStateChanged() {
+    const user = await AsyncStorage.getItem('uid');
+    if (user !== null) {
       setisLoggedIn(true);
     } else {
       setisLoggedIn(false);
     }
-    return subscriber;
-  }, [onAuthStateChanged, user]);
+  }
+  
+  useEffect(() => {
+    const intervalId = setInterval(onAuthStateChanged, 500);
+  }, []);
 
   return (
     // <SafeAreaView>

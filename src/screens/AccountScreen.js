@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import { View, Text, Button, Alert, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { auth } from '../config/firebaseConfig';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const { width } = Dimensions.get('window');
 
 const AccountScreen = () => {
 
   const signOut = async () => {
     try {
-      await auth().signOut();
+      // await auth().signOut();
       await GoogleSignin.signOut();
+      await AsyncStorage.removeItem('uid');
       // Alert.alert('Logged Out', 'You have been logged out.');
     } catch (error) {
       Alert.alert('Error', error.message);
