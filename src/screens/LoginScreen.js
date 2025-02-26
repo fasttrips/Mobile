@@ -9,79 +9,34 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width } = Dimensions.get('window');
+// const endpoint = "http://192.168.35.46:8080/api/v1"
+const endpoint = "https://apis.trasgo.life/api/v1"
+
 
 GoogleSignin.configure({
   webClientId: '831730691096-hsuqs4noja9rc5r3c0sbj050q5st4pmq.apps.googleusercontent.com', // Replace with your web client ID from Firebase
 });
 
 const LoginScreen = () => {
-  const [user, setUser] = useState(null);
-
-  // const signInWithGoogle = async () => {
-  //   try {
-  //     const signInResult = await GoogleSignin.signIn();
-  //     const idToken = signInResult.data?.idToken;
-  //     console.log(idToken)
-  //     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-  //     const userCredential = await auth().signInWithCredential(googleCredential);
-
-  //     const { uid, displayName, phoneNumber, email } = userCredential.user;
-  //     // Ambil FCM Token
-  //     const fcmToken = await messaging().getToken();
-
-  //     // Cek apakah pengguna sudah ada di Firestore
-  //     const userDoc = await firestore().collection('users').doc(uid).get();
-
-  //     if (!userDoc.exists) {
-  //       // Jika user belum ada, buat data baru
-  //       await firestore().collection('users').doc(uid).set({
-  //         fullname: displayName || '',
-  //         phonenumber: phoneNumber || '',
-  //         balance: 0,
-  //         point: 0,
-  //         uid: uid,
-  //         alamat: '',
-  //         nomorrekening: '',
-  //         fcmToken: fcmToken
-  //       });
-
-  //     } else {
-  //       await firestore().collection('users').doc(uid).update({
-  //         fcmToken: fcmToken
-  //       });
-  //       setUser(userCredential.user);
-  //     }
-  //   } catch (error) {
-  //     Alert.alert('Error', error.message);
-  //   }
-  // };
-
+  const [loading, setLoading] = useState(false);
   const signInWithGoogle = async () => {
-
-
     try {
       const signInResult = await GoogleSignin.signIn();
       const idToken = signInResult.data?.idToken;
       const fcmToken = await messaging().getToken();
-      console.log(fcmToken)
 
       const body = {
         "token": idToken,
         "username": "string"
       }
 
-      await axios.post('https://apis.trasgo.life/api/v1/auth/googleSign', body)
-        .then(response => {
-          const result = response.data;
-          AsyncStorage.setItem('authToken', result.accessToken);
-          AsyncStorage.setItem('uid', result.id);
-          return response
-        })
-        .catch(error => {
-          console.error("Error sending data: ", error);
-        });
-
+      const getData = await axios.post(`${endpoint}/auth/googleSign`, body)
+      const result = getData.data;
+      AsyncStorage.setItem('authToken', result.accessToken);
+      AsyncStorage.setItem('uid', result.id);
+      console.log(getData.data)
     } catch (error) {
+      console.error("Error sending data: ", error);
 
     }
   }
