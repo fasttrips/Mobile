@@ -8,10 +8,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const AppNavigator = () => {
-  
+  // Set an initializing state whilst Firebase connects
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
   const [isLoggedIn, setisLoggedIn] = useState(false);
 
-  
+  // Handle user state changes
   async function onAuthStateChanged() {
     const user = await AsyncStorage.getItem('uid');
     if (user !== null) {
