@@ -1,0 +1,8 @@
+{
+    "loginScreen": {
+      "title": "Login Screen",
+      "emailLabel": "Email",
+      "placeholderEmail": "Enter your email",
+      "loginButton": "Login"
+    }
+  }

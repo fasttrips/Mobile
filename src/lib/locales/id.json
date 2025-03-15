@@ -1,0 +1,8 @@
+{
+    "loginScreen": {
+      "title": "Layar Masuk",
+      "emailLabel": "Email",
+      "placeholderEmail": "Masukkan email",
+      "loginButton": "Masuk"
+    }
+  }

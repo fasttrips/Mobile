@@ -1,0 +1,61 @@
+export const COLORS = {
+  primary: '#37AFE1',
+  secondary: '#FF6347',
+  background: '#F5F5F5',
+  text: '#333333',
+  // Add other colors here
+};
+
+export const FONT_SIZES = {
+  small: 12,
+  medium: 16,
+  large: 20,
+  // Add other font sizes here
+};
+
+export const SPACING = {
+  small: 5,
+  medium: 13,
+  large: 20,
+  // Add other spacing values here
+};
+
+export const BORDER_RADIUS = {
+  small: 4,
+  medium: 8,
+  large: 12,
+  // Add other border radius values here
+};
+
+export const FONT_FAMILIES = {
+  regular: 'Montserrat-Regular',
+  // Add other font families here
+};
+
+export const FONT_STYLES = {
+  fontprimary: 'Montserrat-Regular',
+};
+
+export const COMPONENT_STYLES = {
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    padding: SPACING.medium,
+  },
+  scrollView: {
+    flexGrow: 1,
+    backgroundColor: COLORS.background,
+  },
+  textSmall:{
+    fontSize: FONT_SIZES.small,
+    fontFamily: FONT_FAMILIES.regular
+  },
+  textMedium:{
+    fontSize: FONT_SIZES.medium,
+    fontFamily: FONT_FAMILIES.regular
+  },
+  textLarge:{
+    fontSize: FONT_SIZES.large,
+    fontFamily: FONT_FAMILIES.regular
+  }
+};

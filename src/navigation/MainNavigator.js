@@ -33,7 +33,7 @@ const MainNavigator = () => (
           const size = focused ? 60 : 50;
           return (
             <Image
-              source={require('../asset/logo.png')}  // Local image
+              source={require('../assets/logo.png')}  // Local image
               style={{ width: size, height: size, tintColor:'#37AFE1' }}
             />
           );
