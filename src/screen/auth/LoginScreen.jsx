@@ -1,73 +1,82 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Dimensions, StatusBar, ScrollView, Text } from 'react-native';
+import { View, StyleSheet, Dimensions, StatusBar, ScrollView, Text, Image } from 'react-native';
 import { COLORS, COMPONENT_STYLES } from '../../lib/constants';
-import ButtonComponent from '../../component/ButtonComponent';
-import TextInputComponent from '../../component/TextInputComponent';
 import { useTranslation } from 'react-i18next';
 import { setLocale } from '../../lib/translations';
-import DropdownComponent from '../../component/DropdownComponent';
+import ButtonComponent from '../../component/ButtonComponent';
+import TextInputComponent from '../../component/TextInputComponent';
+import DropdownFlagComponent from '../../component/DropdownFlagComponent';
 
 const { width } = Dimensions.get('window');
 
 const LoginScreen = () => {
   const { t } = useTranslation();
-  const [email, setEmail] = useState(''); // email should be a string
+  const [selectedLanguage, setSelectedLanguage] = useState('id');
+  const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
-  const [selectedLanguage, setSelectedLanguage] = useState('en');
-
-  // handle login press (to be implemented)
-  const handleLoginPress = () => {
-    if (!email) {
-      setError(t('loginScreen.emailError'));
-    } else {
-      setError('');
-      // You can add further login logic here
-      console.log('Login pressed with email:', email);
-    }
-  };
+  const [flag, setflag] = useState('🇮🇩 +62');
 
   // Update the locale when selectedLanguage changes
   useEffect(() => {
     setLocale(selectedLanguage);
   }, [selectedLanguage]);
 
+  // handle login press (to be implemented)
+  const handleLoginPress = () => {
+    if (!phone) {
+      setError(t('loginScreen.emptyPhone'));
+    } else {
+      setError('');
+      const string = flag+phone;
+      const phoneNumber = string.replace(/[^\d+]/g, '');
+      console.log('Login pressed with phone:', phoneNumber);
+    }
+  };
+
   const languageItems = [
-    { label: 'English', value: 'en' },
-    { label: 'Indonesian', value: 'id' },
+    { label: 'Indonesian', value: '+62', flag: "🇮🇩" },
+    { label: 'Singapore', value: '+65', flag: "🇸🇬" },
+    { label: 'Malaysia', value: '+60', flag: "🇲🇾" },
   ];
 
   return (
     <View style={COMPONENT_STYLES.container}>
       <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
-      <ScrollView contentContainerStyle={COMPONENT_STYLES.scrollView}>
-        <View style={{ paddingHorizontal: 50 }}>
-          <DropdownComponent
-            label={t('loginScreen.placeholderEmail')}
-            items={languageItems}
-            value={selectedLanguage}
-            onValueChange={setSelectedLanguage}
-            placeholder={{ label: t('loginScreen.placeholderEmail'), value: null }}
+      <View style={{ alignItems: 'center' }}>
+        <Image source={require('../../assets/logo2.png')} style={{ width: 200, height: 200 }} />
+        <Image source={require('../../assets/opening.png')} style={{ width: width - 100, height: 290 }} />
+      </View>
+      <View style={{ flex: 1 }} />
+      <Text style={[COMPONENT_STYLES.textLarge, { fontWeight: '600' }]}>{t('loginScreen.welcome')}</Text>
+      <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>{t('loginScreen.welcomeSub')}</Text>
+      <View style={COMPONENT_STYLES.spacer} />
+      <Text style={[COMPONENT_STYLES.textMedium, { fontWeight: '600' }]}>{t('loginScreen.phoneLabel')}</Text>
+      <View style={{ flexDirection: 'row' }}>
+        <DropdownFlagComponent
+          // label={t('loginScreen.placeholderEmail')}
+          items={languageItems}
+          value={flag}
+          onValueChange={setflag}
+        />
+        <View style={{ flex: 1 }} >
+          <TextInputComponent
+            // label={t('loginScreen.phoneLabel')}
+            placeholder={t('loginScreen.placeholderPhone')}
+            value={phone}
+            onChangeText={setPhone}
+            keyboardType="phone-pad"
+            errorMessage={error}
           />
         </View>
-
-        <Text style={COMPONENT_STYLES.textLarge}>
-          {t('loginScreen.title')}
-        </Text>
-
-        <TextInputComponent
-          label={t('loginScreen.emailLabel')}
-          placeholder={t('loginScreen.placeholderEmail')}
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          errorMessage={error}
-        />
-
-        <ButtonComponent
-          title={t('loginScreen.loginButton')}
-          onPress={handleLoginPress}
-        />
-      </ScrollView>
+      </View>
+      <View style={COMPONENT_STYLES.spacer} />
+      <ButtonComponent
+        title={t('loginScreen.loginButton')}
+        onPress={handleLoginPress}
+      />
+      <View style={COMPONENT_STYLES.spacer} />
+      <View style={COMPONENT_STYLES.spacer} />
+      <View style={COMPONENT_STYLES.spacer} />
     </View>
   );
 };

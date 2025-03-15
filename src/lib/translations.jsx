@@ -4,10 +4,14 @@ import { initReactI18next } from 'react-i18next';
 import {getLocales} from 'react-native-localize';
 import en from './locales/en.json';
 import id from './locales/id.json';
+import cn from './locales/cn.json';
+
 
 const resources = {
   en: { translation: en },
   id: { translation: id },
+  cn: { translation: cn }
+
 };
 
 const fallback = { languageTag: 'en', isRTL: false };

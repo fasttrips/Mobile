@@ -3,20 +3,19 @@ import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList } from 'react
 import { COLORS, FONT_SIZES, SPACING, BORDER_RADIUS, FONT_FAMILIES } from '../lib/constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const DropdownComponent = ({ label, items, value, onValueChange, placeholder, iconName = 'chevron-down', style, ...props }) => {
+const DropdownFlagComponent = ({ label, items, value, onValueChange, placeholder, iconName, style, ...props }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const handleSelectItem = (item) => {
-    onValueChange(item.value);
+    onValueChange(item.flag + item.value);
     setModalVisible(false);
   };
 
   return (
     <View style={[styles.container, style]}>
-      {label && <Text style={styles.label}>{label}</Text>}
       <TouchableOpacity style={styles.dropdown} onPress={() => setModalVisible(true)}>
         <Text style={styles.dropdownText}>
-          {value ? items.find(item => item.value === value)?.label : placeholder?.label}
+          {value}
         </Text>
         {iconName && (
         <Ionicons name={iconName} size={24} color={COLORS.text} />
@@ -48,7 +47,7 @@ const DropdownComponent = ({ label, items, value, onValueChange, placeholder, ic
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: SPACING.large,
+    marginTop: SPACING.medium,
   },
   label: {
     fontSize: FONT_SIZES.small,
@@ -57,17 +56,18 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.small,
   },
   dropdown: {
-    flexDirection: 'row',
+    flexDirection: 'center',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderWidth: 1,
-    borderColor: COLORS.primary,
-    borderRadius: BORDER_RADIUS.medium,
-    padding: SPACING.small,
+    borderRadius: BORDER_RADIUS.large,
+    paddingHorizontal: SPACING.medium,
+    paddingVertical: SPACING.small,
+    marginHorizontal:10,
+    backgroundColor:COLORS.backgroundSecondary
   },
   dropdownText: {
     fontSize: FONT_SIZES.medium,
-    color: COLORS.text,
+    color: COLORS.textLight,
     fontFamily: FONT_FAMILIES.regular,
   },
   modalContainer: {
@@ -94,4 +94,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DropdownComponent;
+export default DropdownFlagComponent;

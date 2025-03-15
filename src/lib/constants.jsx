@@ -2,7 +2,13 @@ export const COLORS = {
   primary: '#37AFE1',
   secondary: '#FF6347',
   background: '#F5F5F5',
-  text: '#333333',
+  backgroundSecondary: '#00000050',
+  textLight: '#FFFFFF',
+  textDark: '#000000',
+  textDarkShadow: '#00000070',
+  error: '#FF6347',
+  success: '#32CD32',
+  warning: '#FFA500',
   // Add other colors here
 };
 
@@ -56,6 +62,10 @@ export const COMPONENT_STYLES = {
   },
   textLarge:{
     fontSize: FONT_SIZES.large,
-    fontFamily: FONT_FAMILIES.regular
-  }
+    fontFamily: FONT_FAMILIES.regular,
+    color: COLORS.textDark,
+  },
+  spacer: {
+    margin: SPACING.small,
+  },
 };

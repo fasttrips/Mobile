@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList, TextInput } from 'react-native';
 import { COLORS, FONT_SIZES, SPACING, BORDER_RADIUS, FONT_FAMILIES } from '../lib/constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const DropdownComponent = ({ label, items, value, onValueChange, placeholder, iconName = 'chevron-down', style, ...props }) => {
+const DropdownSearchComponent = ({ label, items, value, onValueChange, placeholder, iconName, style, ...props }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleSelectItem = (item) => {
     onValueChange(item.value);
     setModalVisible(false);
   };
+
+  const filteredItems = items.filter(item => item.label.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
     <View style={[styles.container, style]}>
@@ -19,7 +22,7 @@ const DropdownComponent = ({ label, items, value, onValueChange, placeholder, ic
           {value ? items.find(item => item.value === value)?.label : placeholder?.label}
         </Text>
         {iconName && (
-        <Ionicons name={iconName} size={24} color={COLORS.text} />
+          <Ionicons name={iconName} size={24} color={COLORS.text} />
         )}
       </TouchableOpacity>
       <Modal
@@ -30,8 +33,14 @@ const DropdownComponent = ({ label, items, value, onValueChange, placeholder, ic
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search..."
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
             <FlatList
-              data={items}
+              data={filteredItems}
               keyExtractor={(item) => item.value}
               renderItem={({ item }) => (
                 <TouchableOpacity style={styles.item} onPress={() => handleSelectItem(item)}>
@@ -51,7 +60,7 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.large,
   },
   label: {
-    fontSize: FONT_SIZES.small,
+    fontSize: FONT_SIZES.medium,
     color: COLORS.text,
     fontFamily: FONT_FAMILIES.regular,
     marginBottom: SPACING.small,
@@ -72,15 +81,25 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    height: 50,
   },
   modalContent: {
-    width: '80%',
+    width: '100%',
+    height: '50%',
     backgroundColor: COLORS.background,
     borderRadius: BORDER_RADIUS.medium,
     padding: SPACING.medium,
+  },
+  searchInput: {
+    borderWidth: 1,
+    borderColor: COLORS.primary,
+    borderRadius: BORDER_RADIUS.small,
+    padding: SPACING.small,
+    marginBottom: SPACING.small,
+    fontSize: FONT_SIZES.medium,
+    color: COLORS.text,
+    fontFamily: FONT_FAMILIES.regular,
   },
   item: {
     padding: SPACING.medium,
@@ -94,4 +113,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DropdownComponent;
+export default DropdownSearchComponent;

@@ -1,0 +1,14 @@
+{
+  "loginScreen": {
+    "title": "登录界面",
+    "emailLabel": "电子邮件",
+    "placeholderEmail": "输入您的电子邮件",
+    "phoneLabel": "电话号码",
+    "placeholderPhone": "输入您的电话号码",
+    "loginButton": "登录",
+    "welcome": "欢迎来到 Trasgo",
+    "welcomeSub": "通过几个简单的步骤登录或注册",
+    "emptyPhone": "电话号码不能为空",
+    "emptyEmail": "电子邮件不能为空"
+  }
+}

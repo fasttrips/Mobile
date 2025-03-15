@@ -10,7 +10,7 @@ const TextInputComponent = ({
   onChangeText, 
   iconName, 
   iconSize = 24, 
-  iconColor = COLORS.text, 
+  iconColor = COLORS.textDark, 
   errorMessage, 
   style, 
   ...props 
@@ -27,7 +27,7 @@ const TextInputComponent = ({
           placeholder={placeholder}
           value={value}
           onChangeText={onChangeText}
-          placeholderTextColor={COLORS.text}
+          placeholderTextColor={COLORS.textDarkShadow}
           {...props}
         />
       </View>
@@ -41,18 +41,17 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.large,
   },
   label: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.text,
+    fontSize: FONT_SIZES.medium,
+    color: COLORS.textDarkShadow
+    ,
     fontFamily: FONT_FAMILIES.regular,
     marginBottom: SPACING.small,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
+    borderBottomWidth: 1,
     borderColor: COLORS.primary,
-    borderRadius: BORDER_RADIUS.medium,
-    padding: SPACING.small,
   },
   icon: {
     marginRight: SPACING.small,
@@ -60,14 +59,14 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: FONT_SIZES.medium,
-    color: COLORS.text,
+    color: COLORS.textDarkShadow,
     fontFamily: FONT_FAMILIES.regular,
   },
   error: {
     fontSize: FONT_SIZES.small,
     color: 'red',
     marginTop: SPACING.small,
-  },
+  }
 });
 
 export default TextInputComponent;

@@ -1,8 +1,14 @@
 {
-    "loginScreen": {
-      "title": "Login Screen",
-      "emailLabel": "Email",
-      "placeholderEmail": "Enter your email",
-      "loginButton": "Login"
-    }
+  "loginScreen": {
+    "title": "Login Screen",
+    "emailLabel": "Email",
+    "placeholderEmail": "Enter your email",
+    "phoneLabel": "Phone Number",
+    "placeholderPhone": "Enter your phone number",
+    "loginButton": "Next",
+    "welcome": "Welcome to Trasgo",
+    "welcomeSub": "Sign in or register in a few easy steps",
+    "emptyPhone": "Phone number cannot be empty",
+    "emptyEmail": "Email cannot be empty"
   }
+}

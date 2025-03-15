@@ -14,9 +14,7 @@ const App = () => {
 
     return (
         <SafeAreaView style={backgroundStyle}>
-            <I18nextProvider i18n={i18n}>
-                <AppNavigator />
-            </I18nextProvider>
+            <AppNavigator />
         </SafeAreaView>
     );
 };

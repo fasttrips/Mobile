@@ -1,8 +1,14 @@
 {
-    "loginScreen": {
-      "title": "Layar Masuk",
-      "emailLabel": "Email",
-      "placeholderEmail": "Masukkan email",
-      "loginButton": "Masuk"
-    }
+  "loginScreen": {
+    "title": "Layar Masuk",
+    "emailLabel": "Email",
+    "placeholderEmail": "Masukkan email Anda",
+    "phoneLabel": "Nomor Telepon",
+    "placeholderPhone": "Masukkan nomor telepon Anda",
+    "loginButton": "Masuk",
+    "welcome": "Selamat Datang di Trasgo",
+    "welcomeSub": "Masuk atau daftar dalam beberapa langkah mudah",
+    "emptyPhone": "Nomor telepon tidak boleh kosong",
+    "emptyEmail": "Email tidak boleh kosong"
   }
+}
