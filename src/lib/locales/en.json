@@ -7,9 +7,13 @@
     "placeholderPhone": "Enter your phone number",
     "loginButton": "Login",
     "welcome": "Welcome to Trasgo",
-    "welcomeSub": "Login or sign up in a few easy steps",
+    "welcomeSub": "Sign in or register in a few easy steps",
     "emptyPhone": "Phone number cannot be empty",
-    "emptyEmail": "Email cannot be empty"
+    "emptyEmail": "Email cannot be empty",
+    "otpbutton": "Send OTP",
+    "otpTitle": "How would you like to receive the OTP?",
+    "otpDesc": "Trasgo will send you an OTP code to sign in/register.",
+    "otpDesc2": "Choose the app where you want to receive the OTP code"
   },
   "verifikasiScreen": {
     "header": "Verification",
@@ -19,6 +23,10 @@
     "kirimulang": "Resend",
     "verifikasiButton": "Confirm",
     "emptyPhone": "Phone number cannot be empty",
-    "emptyEmail": "Email cannot be empty"
+    "emptyEmail": "Email cannot be empty",
+    "otpTitle": "How would you like to receive the OTP?"
+  },
+  "button": {
+    "batal": "Cancel"
   }
 }

@@ -2519,6 +2519,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@legendapp/motion@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "@legendapp/motion@npm:2.4.0"
+  dependencies:
+    "@legendapp/tools": "npm:2.0.1"
+  peerDependencies:
+    nativewind: "*"
+    react: ">=16"
+    react-native: "*"
+  checksum: 10c0/db159d76a627373f7a0bf4e63dab13bdbcf5db39621f603a9d81687b98bf26c5787d318af18f90ed4d5f4a0f7ffd7e9d965fd42d5be2525e5d436c9421fe2843
+  languageName: node
+  linkType: hard
+
+"@legendapp/tools@npm:2.0.1":
+  version: 2.0.1
+  resolution: "@legendapp/tools@npm:2.0.1"
+  peerDependencies:
+    react: ">=16"
+  peerDependenciesMeta:
+    react:
+      optional: true
+  checksum: 10c0/98e1a898dd9f1ed597a7bdc228c29fb6bde0224b396ba7e0ea031ea3e4b7e08be81e8da055a46bf0229e6eafc97537ff3ad9c9ce0a65077ca33841a2ab1fcf60
+  languageName: node
+  linkType: hard
+
 "@nicolo-ribaudo/eslint-scope-5-internals@npm:5.1.1-v1":
   version: 5.1.1-v1
   resolution: "@nicolo-ribaudo/eslint-scope-5-internals@npm:5.1.1-v1"
@@ -3711,6 +3736,7 @@ __metadata:
     "@babel/core": "npm:^7.25.2"
     "@babel/preset-env": "npm:^7.25.3"
     "@babel/runtime": "npm:^7.25.0"
+    "@legendapp/motion": "npm:^2.4.0"
     "@react-native-async-storage/async-storage": "npm:^2.1.1"
     "@react-native-community/cli": "npm:15.0.1"
     "@react-native-community/cli-platform-android": "npm:15.0.1"

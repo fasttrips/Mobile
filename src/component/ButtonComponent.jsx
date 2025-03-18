@@ -15,12 +15,31 @@ const ButtonComponent = ({ title, onPress, iconName, iconSize = 24, iconColor = 
   );
 };
 
+const ButtonSecondaryComponent = ({ title, onPress, iconName, iconSize = 24, iconColor = COLORS.text, style }) => {
+  return (
+    <TouchableOpacity style={[styles.buttonSecondary, style]} onPress={onPress}>
+      {iconName && (
+        <Ionicons name={iconName} size={iconSize} color={iconColor} style={styles.icon} />
+      )}
+      <Text style={styles.buttonText}>{title}</Text>
+    </TouchableOpacity>
+  );
+};
+
 const styles = StyleSheet.create({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: COLORS.primary,
+    padding: SPACING.medium,
+    borderRadius: BORDER_RADIUS.medium
+  },
+  buttonSecondary: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.backgroundSecondary,
     padding: SPACING.medium,
     borderRadius: BORDER_RADIUS.medium
   },
@@ -34,4 +53,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ButtonComponent;
+export{
+  ButtonComponent,
+  ButtonSecondaryComponent
+}

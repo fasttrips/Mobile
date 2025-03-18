@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from '../screen/auth/LoginScreen';
 import { I18nextProvider, useTranslation } from 'react-i18next';
 import i18n from '../lib/translations';
-import RegisterScreen from '../screen/auth/RegisterScreen';
 import VerifikasiScreen from '../screen/auth/VerifikasiScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { TouchableOpacity } from 'react-native';

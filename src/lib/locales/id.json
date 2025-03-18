@@ -2,14 +2,18 @@
   "loginScreen": {
     "title": "Layar Masuk",
     "emailLabel": "Email",
-    "placeholderEmail": "Masukkan email Anda",
+    "placeholderEmail": "Masukkan email",
     "phoneLabel": "Nomor Telepon",
-    "placeholderPhone": "Masukkan nomor telepon Anda",
+    "placeholderPhone": "Masukkan nomor telepon",
     "loginButton": "Masuk",
     "welcome": "Selamat Datang di Trasgo",
     "welcomeSub": "Masuk atau daftar dalam beberapa langkah mudah",
     "emptyPhone": "Nomor telepon tidak boleh kosong",
-    "emptyEmail": "Email tidak boleh kosong"
+    "emptyEmail": "Email tidak boleh kosong",
+    "otpbutton":"Kirim OTP",
+    "otpTitle":"Bagaimana kamu ingin menerima OTP?",
+    "otpDesc":"Trasgo akan mengirimkan anda kode OTP untuk masuk/mendaftar.",
+    "otpDesc2":"Pilih aplikasi dimana anda ingin menerima kode OTPnya"
   },
   "verifikasiScreen": {
     "header":"Verifikasi",
@@ -19,6 +23,10 @@
     "kirimulang": "Kirim Ulang",
     "verifikasiButton": "Konfirmasi",
     "emptyPhone": "Nomor telepon tidak boleh kosong",
-    "emptyEmail": "Email tidak boleh kosong"
+    "emptyEmail": "Email tidak boleh kosong",
+    "otpTitle":"Bagaimana kamu ingin menerima OTP?"
+  },
+  "button":{
+    "batal":"Batal"
   }
 }

@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { COMPONENT_STYLES } from '../lib/constants';
 
 const RadioButtonGroup = ({ options, selectedValue, onSelect }) => {
   return (
@@ -10,10 +12,14 @@ const RadioButtonGroup = ({ options, selectedValue, onSelect }) => {
           style={styles.radioButton} 
           onPress={() => onSelect(option)}
         >
+          <View style={{flex:1, flexDirection:'row'}}>
+            <Ionicons name={option.ico} size={24} color={'black'} style={styles.icon} />
+            <View style={COMPONENT_STYLES.spacer} />
+            <Text style={COMPONENT_STYLES.textMedium}>{option.label}</Text>
+          </View>
           <View style={[styles.outerCircle, selectedValue === option.value && styles.selectedOuterCircle]}>
             {selectedValue === option.value && <View style={styles.innerCircle} />}
           </View>
-          <Text style={styles.optionText}>{option.label}</Text>
         </TouchableOpacity>
       ))}
     </View>
@@ -28,7 +34,7 @@ const styles = StyleSheet.create({
   radioButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 5,
+    marginVertical: 10
   },
   outerCircle: {
     width: 20,
