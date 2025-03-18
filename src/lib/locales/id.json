@@ -10,5 +10,15 @@
     "welcomeSub": "Masuk atau daftar dalam beberapa langkah mudah",
     "emptyPhone": "Nomor telepon tidak boleh kosong",
     "emptyEmail": "Email tidak boleh kosong"
+  },
+  "verifikasiScreen": {
+    "header":"Verifikasi",
+    "title": "Masukkan kode verifikasi yang sudah kami kirimkan ke ponsel anda",
+    "kodeverifikasi": "Kode Verifikasi",
+    "placeholderkode": "Masukkan kode verifikasi",
+    "kirimulang": "Kirim Ulang",
+    "verifikasiButton": "Konfirmasi",
+    "emptyPhone": "Nomor telepon tidak boleh kosong",
+    "emptyEmail": "Email tidak boleh kosong"
   }
 }

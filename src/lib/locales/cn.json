@@ -2,12 +2,22 @@
   "loginScreen": {
     "title": "登录界面",
     "emailLabel": "电子邮件",
-    "placeholderEmail": "输入您的电子邮件",
+    "placeholderEmail": "请输入您的电子邮件",
     "phoneLabel": "电话号码",
-    "placeholderPhone": "输入您的电话号码",
+    "placeholderPhone": "请输入您的电话号码",
     "loginButton": "登录",
-    "welcome": "欢迎来到 Trasgo",
-    "welcomeSub": "通过几个简单的步骤登录或注册",
+    "welcome": "欢迎来到Trasgo",
+    "welcomeSub": "轻松的几步即可登录或注册",
+    "emptyPhone": "电话号码不能为空",
+    "emptyEmail": "电子邮件不能为空"
+  },
+  "verifikasiScreen": {
+    "header": "验证",
+    "title": "请输入我们发送到您手机的验证码",
+    "kodeverifikasi": "验证码",
+    "placeholderkode": "请输入验证码",
+    "kirimulang": "重新发送",
+    "verifikasiButton": "确认",
     "emptyPhone": "电话号码不能为空",
     "emptyEmail": "电子邮件不能为空"
   }

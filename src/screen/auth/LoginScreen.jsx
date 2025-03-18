@@ -2,46 +2,69 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions, StatusBar, ScrollView, Text, Image } from 'react-native';
 import { COLORS, COMPONENT_STYLES } from '../../lib/constants';
 import { useTranslation } from 'react-i18next';
-import { setLocale } from '../../lib/translations';
 import ButtonComponent from '../../component/ButtonComponent';
 import TextInputComponent from '../../component/TextInputComponent';
 import DropdownFlagComponent from '../../component/DropdownFlagComponent';
+import DropdownLanguangeComponent from '../../component/DropdownLanguangeComponent';
+import { getData } from '../../lib/transFunctions';
 
 const { width } = Dimensions.get('window');
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const { t } = useTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState('id');
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
   const [flag, setflag] = useState('🇮🇩 +62');
 
-  // Update the locale when selectedLanguage changes
+  
   useEffect(() => {
-    setLocale(selectedLanguage);
+    async function fetchData() {
+      const response = await getData();
+      setSelectedLanguage(response)
+    }
+    fetchData()
   }, [selectedLanguage]);
 
   // handle login press (to be implemented)
   const handleLoginPress = () => {
     if (!phone) {
       setError(t('loginScreen.emptyPhone'));
+      navigation.navigate("Verifikasi")
+
     } else {
       setError('');
-      const string = flag+phone;
+      const string = flag + phone;
       const phoneNumber = string.replace(/[^\d+]/g, '');
-      console.log('Login pressed with phone:', phoneNumber);
+      navigation.navigate("Verifikasi")
     }
   };
 
-  const languageItems = [
+  const flagItems = [
     { label: 'Indonesian', value: '+62', flag: "🇮🇩" },
     { label: 'Singapore', value: '+65', flag: "🇸🇬" },
     { label: 'Malaysia', value: '+60', flag: "🇲🇾" },
   ];
 
+  const languageItems = [
+    { label: 'Bahasa Indonesia', value: 'id' },
+    { label: 'English', value: 'en' },
+    { label: '普通话', value: 'cn' },
+  ];
+
   return (
     <View style={COMPONENT_STYLES.container}>
       <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
+      <View style={{flexDirection:'row'}}>
+        <View style={{flex:1}}/>
+        <DropdownLanguangeComponent
+          // label={t('loginScreen.placeholderEmail')}
+          items={languageItems}
+          value={languageItems.find((e)=> e.value === selectedLanguage).label}
+          iconName={"caret-down-outline"}
+          onValueChange={setSelectedLanguage}
+        />
+      </View>
       <View style={{ alignItems: 'center' }}>
         <Image source={require('../../assets/logo2.png')} style={{ width: 200, height: 200 }} />
         <Image source={require('../../assets/opening.png')} style={{ width: width - 100, height: 290 }} />
@@ -54,7 +77,7 @@ const LoginScreen = () => {
       <View style={{ flexDirection: 'row' }}>
         <DropdownFlagComponent
           // label={t('loginScreen.placeholderEmail')}
-          items={languageItems}
+          items={flagItems}
           value={flag}
           onValueChange={setflag}
         />
