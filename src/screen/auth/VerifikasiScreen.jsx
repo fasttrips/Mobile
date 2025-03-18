@@ -46,7 +46,6 @@ const VerifikasiScreen = () => {
       setError('');
       const string = flag + form.phone;
       const phoneNumber = string.replace(/[^\d+]/g, '');
-      console.log('Login pressed with phone:', phoneNumber);
     }
   };
 

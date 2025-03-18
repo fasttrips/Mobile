@@ -5,6 +5,8 @@ import { I18nextProvider, useTranslation } from 'react-i18next';
 import i18n from '../lib/translations';
 import RegisterScreen from '../screen/auth/RegisterScreen';
 import VerifikasiScreen from '../screen/auth/VerifikasiScreen';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { TouchableOpacity } from 'react-native';
 
 
 const Stack = createNativeStackNavigator();
@@ -21,15 +23,20 @@ export default function App() {
       <Stack.Screen
         name="Verifikasi"
         component={VerifikasiScreen}
-        options={{
-          title: t('verifikasiScreen.header'), 
-          headerShown: true, 
+        options={({ navigation }) => ({
+          title: t('verifikasiScreen.header'),
+          headerShown: true,
           headerStyle: {
             elevation: 0, // Remove elevation on Android
             shadowOpacity: 0, // Remove shadow on iOS
           },
           headerShadowVisible: false,
-        }}
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons name="chevron-back-outline" size={32} color="black" style={{marginRight:20}}/>
+            </TouchableOpacity>
+          ),
+        })}
       />
     </Stack.Navigator>
   );
