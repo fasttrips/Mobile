@@ -61,14 +61,8 @@ const VerifikasiScreen = () => {
   }, [timer]);
 
   // handle login press (to be implemented)
-  const handleRegisterPress = () => {
-    if (!form.phone) {
-      setError(t('verifikasiScreen.emptyPhone'));
-    } else {
-      setError('');
-      const string = flag + form.phone;
-      const phoneNumber = string.replace(/[^\d+]/g, '');
-    }
+  const handleRegisterPress = async () => {
+    const user = await AsyncStorage.setItem('accessTokens', "asd");
   };
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -78,7 +72,7 @@ const VerifikasiScreen = () => {
 
   const handleResendPress = async () => {
     // Reset the timer to 20 minutes
-    setTimer(1200);
+    setTimer(60);
     await AsyncStorage.setItem('verificationTimer', '60');
     // Add your resend OTP logic here
   };
@@ -86,41 +80,44 @@ const VerifikasiScreen = () => {
   return (
     <View style={COMPONENT_STYLES.container}>
       <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
-      <View style={COMPONENT_STYLES.spacer} />
-      <View style={COMPONENT_STYLES.spacer} />
-      <Text style={COMPONENT_STYLES.textLarge}>{t('verifikasiScreen.title')}</Text>
-      <View style={COMPONENT_STYLES.spacer} />
-      <View style={COMPONENT_STYLES.spacer} />
-      <View style={COMPONENT_STYLES.spacer} />
-      <View style={COMPONENT_STYLES.spacer} />
-      <TextInputStandardComponent
-        label={t('verifikasiScreen.kodeverifikasi')}
-        placeholder={t('verifikasiScreen.placeholderkode')}
-        value={form.phone}
-        onChangeText={(value) => handleInputChange('phone', value)}
-        keyboardType="numeric"
-        errorMessage={error}
-      />
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Text style={[COMPONENT_STYLES.textMedium, { fontWeight: 'bold' }]}>{formatTime(timer)}</Text>
-        <TouchableOpacity
-          onPress={handleResendPress}
-          disabled={timer > 0}
-          style={{ opacity: timer > 0 ? 0.5 : 1 }}
-        >
-          <Text style={[COMPONENT_STYLES.textMedium, { fontWeight: 'bold' }]}>{t('verifikasiScreen.kirimulang')}</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={COMPONENT_STYLES.spacer} />
-      <View style={COMPONENT_STYLES.spacer} />
-      <View style={COMPONENT_STYLES.spacer} />
-      <ButtonComponent
-        title={t('verifikasiScreen.verifikasiButton')}
-        onPress={handleRegisterPress}
-      />
-      <View style={COMPONENT_STYLES.spacer} />
-      <View style={COMPONENT_STYLES.spacer} />
-      <View style={COMPONENT_STYLES.spacer} />
+      <ScrollView contentContainerStyle={[COMPONENT_STYLES.scrollView]}>
+
+        <View style={COMPONENT_STYLES.spacer} />
+        <View style={COMPONENT_STYLES.spacer} />
+        <Text style={COMPONENT_STYLES.textLarge}>{t('verifikasiScreen.title')}</Text>
+        <View style={COMPONENT_STYLES.spacer} />
+        <View style={COMPONENT_STYLES.spacer} />
+        <View style={COMPONENT_STYLES.spacer} />
+        <View style={COMPONENT_STYLES.spacer} />
+        <TextInputStandardComponent
+          label={t('verifikasiScreen.kodeverifikasi')}
+          placeholder={t('verifikasiScreen.placeholderkode')}
+          value={form.phone}
+          onChangeText={(value) => handleInputChange('phone', value)}
+          keyboardType="numeric"
+          errorMessage={error}
+        />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text style={[COMPONENT_STYLES.textMedium, { fontWeight: 'bold' }]}>{timer === 0 ? "" : formatTime(timer)}</Text>
+          <TouchableOpacity
+            onPress={handleResendPress}
+            disabled={timer > 0}
+            style={{ opacity: timer > 0 ? 0.5 : 1 }}
+          >
+            <Text style={[COMPONENT_STYLES.textMedium, { fontWeight: 'bold' }]}>{t('verifikasiScreen.kirimulang')}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={COMPONENT_STYLES.spacer} />
+        <View style={COMPONENT_STYLES.spacer} />
+        <View style={COMPONENT_STYLES.spacer} />
+        <ButtonComponent
+          title={t('verifikasiScreen.verifikasiButton')}
+          onPress={handleRegisterPress}
+        />
+        <View style={COMPONENT_STYLES.spacer} />
+        <View style={COMPONENT_STYLES.spacer} />
+        <View style={COMPONENT_STYLES.spacer} />
+      </ScrollView>
     </View>
   );
 };

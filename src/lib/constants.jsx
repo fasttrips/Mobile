@@ -33,6 +33,13 @@ export const BORDER_RADIUS = {
   // Add other border radius values here
 };
 
+export const SHADOW_CARD = {
+  small: 4,
+  medium: 8,
+  large: 12,
+  // Add other border radius values here
+};
+
 export const FONT_FAMILIES = {
   regular: 'Montserrat-Regular',
   // Add other font families here
@@ -46,11 +53,11 @@ export const COMPONENT_STYLES = {
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
-    padding: SPACING.medium,
   },
   scrollView: {
     flexGrow: 1,
     backgroundColor: COLORS.background,
+    padding: SPACING.medium,
   },
   textSmall:{
     fontSize: FONT_SIZES.small,
