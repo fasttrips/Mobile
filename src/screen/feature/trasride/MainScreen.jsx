@@ -48,7 +48,7 @@ const options = [
 const GOOGLE_API_KEY = 'AIzaSyDXQXYXToGvd4HQoP5XHYwwQBAbvnpaLNQ';
 const { width } = Dimensions.get('window');
 
-const TrasrideScreen = ({ route }) => {
+const TrasrideScreen = ({ route, navigation }) => {
     //param from home
     const mapRef = useRef(null);
     const { latitude, longitude } = route.params;
@@ -80,13 +80,10 @@ const TrasrideScreen = ({ route }) => {
     });
 
     const [selectedValue, setSelectedValue] = useState(options[0].value);
-
     const [modalSearchBarShow, setmodalSearchBarShow] = useState(true);
     const [modalRideShow, setmodalRideShow] = useState(false);
     const [rideModal, setrideModal] = useState(true);
     const [modalPaymentShow, setmodalPaymentShow] = useState(true);
-
-
 
     useEffect(() => {
         setPickupLocation({
@@ -141,6 +138,7 @@ const TrasrideScreen = ({ route }) => {
             />
             {rideModal &&
                 <ModalRideComponent
+                    navigation={()=> navigation.goBack()}
                     modalRideShow={modalRideShow}
                     setmodalRideShow={setmodalRideShow}
                     options={options}
