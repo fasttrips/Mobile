@@ -1,0 +1,91 @@
+import { Motion } from "@legendapp/motion"
+import { COMPONENT_STYLES } from "../../../../lib/constants"
+import { TouchableOpacity, Text, StyleSheet, Dimensions, View, Modal, PanResponder } from 'react-native';
+import DropdownSearchComponent from "../../../../component/DropdownSearchComponent";
+import { useEffect } from "react";
+
+
+const ModalSearch = ({
+    modalSearchBarShow,
+    setmodalSearchBarShow,
+    listPlace,
+    listPlace2,
+    originChoice,
+    setoriginChoice,
+    destinationChoice,
+    setdestinationChoice }) => {
+
+    useEffect(() => {
+        if (modalSearchBarShow) {
+            const timer = setTimeout(() => {
+                setmodalSearchBarShow(true);
+            }, 100); // 0.5 seconds delay
+            return () => clearTimeout(timer); // Clean up the timer if the modal visibility changes before the timeout
+        } else {
+            setmodalSearchBarShow(false); // Reset animation when modal is closed
+        }
+    }, [modalSearchBarShow]);
+
+    return (
+        <Motion.View
+            initial={{ y: 0 }}
+            animate={{ x: 0, y: modalSearchBarShow ? 0 * 100 : -4 * 100 }} // Use the animateModal state for triggering animation
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ y: 20 }}
+            transition={{ type: 'spring' }}
+            style={styles.modalAnimateTop}
+        >
+            <View style={styles.modalComponentTop} >
+                <View style={COMPONENT_STYLES.spacer} />
+                <View style={COMPONENT_STYLES.spacer} />
+                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={{ flex: 1 }}>
+                        <DropdownSearchComponent
+                            items={listPlace}
+                            value={originChoice}
+                            iconNameDes={"caret-up-circle-outline"}
+                            iconName={"locate-outline"}
+                            onValueChange={setoriginChoice}
+                        />
+                    </View>
+                </View>
+                <View style={COMPONENT_STYLES.spacer} />
+                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={{ flex: 1 }}>
+                        <DropdownSearchComponent
+                            items={listPlace2}
+                            value={destinationChoice}
+                            iconNameDes={"location-outline"}
+                            onValueChange={setdestinationChoice}
+                        />
+                    </View>
+                </View>
+            </View>
+        </Motion.View>
+    )
+}
+
+const styles = StyleSheet.create({
+    map: {
+        flex: 1
+    },
+    modalAnimateTop: {
+        position: 'absolute',
+        top: 10, // Position it at the bottom
+        left: 10,
+        right: 10,
+    },
+    modalComponentTop: {
+        backgroundColor: 'white',
+        borderWidth: 0.5,
+        borderColor: '#00000030',
+        borderRadius: 10,
+        paddingHorizontal: 20,
+        paddingBottom: 20,
+        elevation: 1
+    }
+});
+
+export {
+    ModalSearch
+}

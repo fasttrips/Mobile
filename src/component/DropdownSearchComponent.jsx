@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList, TextInput } from 'react-native';
-import { COLORS, FONT_SIZES, SPACING, BORDER_RADIUS, FONT_FAMILIES } from '../lib/constants';
+import { COLORS, FONT_SIZES, SPACING, BORDER_RADIUS, FONT_FAMILIES, COMPONENT_STYLES } from '../lib/constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const DropdownSearchComponent = ({ label, items, value, onValueChange, placeholder, iconName, style, ...props }) => {
+const DropdownSearchComponent = ({ label, items, value, onValueChange, placeholder, iconName, iconNameDes, style, ...props }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -18,9 +18,14 @@ const DropdownSearchComponent = ({ label, items, value, onValueChange, placehold
     <View style={[styles.container, style]}>
       {label && <Text style={styles.label}>{label}</Text>}
       <TouchableOpacity style={styles.dropdown} onPress={() => setModalVisible(true)}>
+        {iconNameDes && (
+          <Ionicons name={iconNameDes} size={24} color={COLORS.text} />
+        )}
+        <View style={COMPONENT_STYLES.spacer} />
         <Text style={styles.dropdownText}>
           {value ? items.find(item => item.value === value)?.label : placeholder?.label}
         </Text>
+        <View style={{ flex: 1 }}></View>
         {iconName && (
           <Ionicons name={iconName} size={24} color={COLORS.text} />
         )}
@@ -67,7 +72,6 @@ const styles = StyleSheet.create({
   dropdown: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     borderWidth: 1,
     borderColor: COLORS.primary,
     borderRadius: BORDER_RADIUS.medium,
@@ -82,8 +86,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     height: 50,
-    justifyContent:'center',
-    padding:20
+    justifyContent: 'center',
+    padding: 20
   },
   modalContent: {
     width: '100%',

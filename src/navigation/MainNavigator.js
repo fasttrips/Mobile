@@ -21,7 +21,7 @@ const HomeStack = () => (
         component={TrasrideScreen}
         options={({ navigation }) => ({
           title: 'TrasRide',
-          headerShown: true,
+          headerShown: false,
           headerStyle: {
             elevation: 0, // Remove elevation on Android
             shadowOpacity: 0, // Remove shadow on iOS
