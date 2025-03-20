@@ -5,6 +5,9 @@ import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import { ModalSearch } from './component/SearchComponent';
 import { ModalRideComponent } from './component/ListRideComponent';
 import { ModalPaymentComponent } from './component/PaymentComponent';
+import { ButtonComponent } from '../../../component/ButtonComponent';
+import LottieView from 'lottie-react-native';
+import { Motion } from '@legendapp/motion';
 
 const options = [
     {
@@ -46,7 +49,7 @@ const options = [
 ];
 
 const GOOGLE_API_KEY = 'AIzaSyDXQXYXToGvd4HQoP5XHYwwQBAbvnpaLNQ';
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 const TrasrideScreen = ({ route, navigation }) => {
     //param from home
@@ -84,6 +87,8 @@ const TrasrideScreen = ({ route, navigation }) => {
     const [modalRideShow, setmodalRideShow] = useState(false);
     const [rideModal, setrideModal] = useState(true);
     const [modalPaymentShow, setmodalPaymentShow] = useState(true);
+    const [mencariDriver, setmencariDriver] = useState(false);
+
 
     useEffect(() => {
         setPickupLocation({
@@ -103,6 +108,15 @@ const TrasrideScreen = ({ route, navigation }) => {
         setmodalRideShow(false)
         setrideModal(false)
         setmodalPaymentShow(false)
+        setmencariDriver(true)
+    }
+
+    const batalMencari = () => {
+        setmodalSearchBarShow(true)
+        setmodalRideShow(false)
+        setrideModal(true)
+        setmodalPaymentShow(true)
+        setmencariDriver(false)
     }
 
     return (
@@ -125,7 +139,16 @@ const TrasrideScreen = ({ route, navigation }) => {
                 <Marker coordinate={destinationLocation} pinColor='green' title='Destination' />
                 <Polyline coordinates={coordinates} strokeColor="#37AFE1" strokeWidth={4} />
             </MapView>
-            {/* <ModalChoice isVisible={modalChoice} setModalVisible={setmodalChoice} navigasi={() => console.log("test")} /> */}
+            {mencariDriver &&
+                <>
+                    <View style={styles.modalAnimateBottom}>
+                        <ButtonComponent style={{backgroundColor:COLORS.secondary}} title={"Batal Mencari"} onPress={() => batalMencari()} />
+                    </View>
+                    <View style={styles.modalAnimateCenter}>
+                        <Text style={[COMPONENT_STYLES.textLarge, { textAlign: 'center' }]}>Sedang Mencari Driver Terdekat</Text>
+                    </View>
+                </>
+            }
             <ModalSearch
                 listPlace={listPlace}
                 listPlace2={listPlace2}
@@ -138,7 +161,7 @@ const TrasrideScreen = ({ route, navigation }) => {
             />
             {rideModal &&
                 <ModalRideComponent
-                    navigation={()=> navigation.goBack()}
+                    navigation={() => navigation.goBack()}
                     modalRideShow={modalRideShow}
                     setmodalRideShow={setmodalRideShow}
                     options={options}
@@ -164,6 +187,22 @@ const styles = StyleSheet.create({
         top: 10, // Position it at the bottom
         left: 10,
         right: 10,
+    },
+    modalAnimateBottom: {
+        position: 'absolute',
+        bottom: 10, // Position it at the bottom
+        left: 10,
+        right: 10,
+    },
+    modalAnimateCenter: {
+        position: 'absolute',
+        top: height / 2, // Position it at the bottom
+        left: 10,
+        right: 10,
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 20,
+        elevation: 5
     },
     modalComponentTop: {
         backgroundColor: 'white',
