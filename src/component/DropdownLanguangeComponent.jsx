@@ -50,7 +50,7 @@ const DropdownLanguangeComponent = ({ label, items, value, onValueChange, placeh
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: SPACING.medium,
+    // marginTop: SPACING.medium,
   },
   label: {
     fontSize: FONT_SIZES.small,

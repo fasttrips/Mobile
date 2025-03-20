@@ -1,35 +1,74 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions, StatusBar, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
-import { BORDER_RADIUS, COLORS, COMPONENT_STYLES, SHADOW_CARD } from '../../lib/constants';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Dimensions, StatusBar, ScrollView, Text, Image, TouchableOpacity, Alert, Platform, PermissionsAndroid } from 'react-native';
+import { BORDER_RADIUS, COLORS, COMPONENT_STYLES } from '../../lib/constants';
+import { requestPermissions } from '../../lib/mapFunctions';
+import Geolocation from '@react-native-community/geolocation';
 
 
 const { width } = Dimensions.get('window');
 
-const HomeScreen = () => {
-  const [loading, setLoading] = useState(false);
+const menu = [
+  {
+    items: "TrasRide",
+    image: require("../../assets/trasride.png"),
+    image2: require("../../assets/shape1.png"),
+    navigate: 'TrasRide',
+    status: true
+  },
+  {
+    items: "TrasFood",
+    image: require("../../assets/trasfood.png"),
+    image2: require("../../assets/shape1.png"),
+    navigate: 'TrasFood',
+    status: true
+  },
+  {
+    items: "TrasRent",
+    image: require("../../assets/trasrent.png"),
+    image2: require("../../assets/shape1.png"),
+    navigate: 'TrasRent',
+    status: true
+  },
+  {
+    items: "TrasMove",
+    image: require("../../assets/trasmove.png"),
+    image2: require("../../assets/shape1.png"),
+    navigate: 'TrasMove',
+    status: true
+  },
+]
 
-  const menu = [
-    {
-      items: "TrasRide",
-      image: require("../../assets/trasride.png"),
-      image2: require("../../assets/shape1.png")
-    },
-    {
-      items: "TrasFood",
-      image: require("../../assets/trasfood.png"),
-      image2: require("../../assets/shape1.png")
-    },
-    {
-      items: "TrasRent",
-      image: require("../../assets/trasrent.png"),
-      image2: require("../../assets/shape1.png")
-    },
-    {
-      items: "TrasMove",
-      image: require("../../assets/trasmove.png"),
-      image2: require("../../assets/shape1.png")
-    },
-  ]
+const HomeScreen = ({ navigation }) => {
+  const [loading, setLoading] = useState(false);
+  const [pickupLocation, setPickupLocation] = useState({
+    latitude: 0,
+    longitude: 0,
+  });
+
+  const getCurrentLocation = async () => {
+    const hasPermission = await requestPermissions();
+    if (!hasPermission) {
+      Alert.alert('Permission Denied', 'Location permission is required to use this feature.');
+      return;
+    }
+
+    Geolocation.getCurrentPosition(
+      (position) => {
+        const data = { latitude: position.coords.latitude, longitude: position.coords.longitude };
+        console.log(data)
+        setPickupLocation(data)
+      },
+      (error) => {
+        Alert.alert('Error', `Tidak dapat menentukan lokasi, kamu bisa pilih secara manual`);
+      },
+      { enableHighAccuracy: true, timeout: 25000, maximumAge: 10000 }
+    );
+  };
+
+  useEffect(() => {
+    getCurrentLocation();
+  }, []);
+
   return (
     <View style={[COMPONENT_STYLES.container, { padding: 0 }]}>
       <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
@@ -43,17 +82,27 @@ const HomeScreen = () => {
         <View style={styles.balanceBar}>
           <View>
             <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: 600 }]}>TrasPoint</Text>
-            <Text style={[COMPONENT_STYLES.textMedium, { fontWeight: 600}]}>0 PTS</Text>
+            <Text style={[COMPONENT_STYLES.textMedium, { fontWeight: 600 }]}>0 PTS</Text>
           </View>
-          <View style={{alignItems:'center'}}>
+          <View style={{ alignItems: 'center' }}>
             <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: 600 }]}>Level</Text>
-            <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: 600}]}>Pemula</Text>
+            <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: 600 }]}>Pemula</Text>
           </View>
         </View>
         <View style={styles.menuContainer}>
           {menu.map((item, index) => {
             return (
-              <TouchableOpacity key={index} style={styles.menuItem}>
+              <TouchableOpacity key={index} style={styles.menuItem}
+                onPress={() => {
+                  if (item.status === false) {
+                    Alert.alert("Info", "Feature ini segera hadir")
+                  } else {
+                    navigation.navigate(item.navigate,{
+                      latitude: pickupLocation.latitude,
+                      longitude: pickupLocation.longitude
+                    })
+                  }
+                }}>
                 <View style={styles.shape} />
                 <Image source={item.image} style={{ width: 50, height: 50 }} />
                 <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: 600 }]}>{item.items}</Text>
@@ -98,14 +147,14 @@ const styles = StyleSheet.create({
     top: 28
   },
   balanceBar: {
-    backgroundColor:'#fff', 
-    marginTop: 140, 
-    borderRadius: BORDER_RADIUS.medium, 
-    height:70,
-    elevation:5,
-    justifyContent:'space-between',
-    alignItems:'center',
-    flexDirection:'row',
+    backgroundColor: '#fff',
+    marginTop: 140,
+    borderRadius: BORDER_RADIUS.medium,
+    height: 70,
+    elevation: 5,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
     padding: 20
   }
 });

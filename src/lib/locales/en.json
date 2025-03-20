@@ -27,6 +27,10 @@
     "otpTitle": "How would you like to receive the OTP?"
   },
   "button": {
-    "batal": "Cancel"
+    "batal": "Cancel",
+    "pesan": "Booking Now"
+  },
+  "modalChoice":{
+    "PilihKendaraan":"Choice"
   }
 }

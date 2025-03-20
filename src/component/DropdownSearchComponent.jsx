@@ -57,7 +57,6 @@ const DropdownSearchComponent = ({ label, items, value, onValueChange, placehold
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: SPACING.large,
   },
   label: {
     fontSize: FONT_SIZES.medium,
@@ -75,7 +74,7 @@ const styles = StyleSheet.create({
     padding: SPACING.small,
   },
   dropdownText: {
-    fontSize: FONT_SIZES.medium,
+    fontSize: FONT_SIZES.small,
     color: COLORS.text,
     fontFamily: FONT_FAMILIES.regular,
   },
@@ -83,6 +82,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     height: 50,
+    justifyContent:'center',
+    padding:20
   },
   modalContent: {
     width: '100%',

@@ -1,16 +1,93 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screen/home/HomeScreen';
+import TrasrideScreen from '../screen/feature/trasride/MainScreen';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import TrasfoodScreen from '../screen/feature/trasfood/MainScreen';
+import TrasrentScreen from '../screen/feature/trasrent/MainScreen';
+import TrasmoveScreen from '../screen/feature/trasmove/MainScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const HomeStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="Home" component={MainNavigator} />
+  <Stack.Navigator initialRouteName="Home">
+    <Stack.Screen name="Home" component={MainNavigator} options={{ title: 'Home', headerShown: false }}/>
+    <Stack.Screen
+        name="TrasRide"
+        component={TrasrideScreen}
+        options={({ navigation }) => ({
+          title: 'TrasRide',
+          headerShown: true,
+          headerStyle: {
+            elevation: 0, // Remove elevation on Android
+            shadowOpacity: 0, // Remove shadow on iOS
+          },
+          headerShadowVisible: false,
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons name="chevron-back-outline" size={32} color="black" style={{marginRight:20}}/>
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="TrasFood"
+        component={TrasfoodScreen}
+        options={({ navigation }) => ({
+          title: 'TrasFood',
+          headerShown: true,
+          headerStyle: {
+            elevation: 0, // Remove elevation on Android
+            shadowOpacity: 0, // Remove shadow on iOS
+          },
+          headerShadowVisible: false,
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons name="chevron-back-outline" size={32} color="black" style={{marginRight:20}}/>
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="TrasRent"
+        component={TrasrentScreen}
+        options={({ navigation }) => ({
+          title: 'TrasRent',
+          headerShown: true,
+          headerStyle: {
+            elevation: 0, // Remove elevation on Android
+            shadowOpacity: 0, // Remove shadow on iOS
+          },
+          headerShadowVisible: false,
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons name="chevron-back-outline" size={32} color="black" style={{marginRight:20}}/>
+            </TouchableOpacity>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="TrasMove"
+        component={TrasmoveScreen}
+        options={({ navigation }) => ({
+          title: 'TrasMove',
+          headerShown: true,
+          headerStyle: {
+            elevation: 0, // Remove elevation on Android
+            shadowOpacity: 0, // Remove shadow on iOS
+          },
+          headerShadowVisible: false,
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons name="chevron-back-outline" size={32} color="black" style={{marginRight:20}}/>
+            </TouchableOpacity>
+          ),
+        })}
+      />
   </Stack.Navigator>
 );
 
