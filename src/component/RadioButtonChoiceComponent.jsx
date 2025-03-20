@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { COLORS, COMPONENT_STYLES } from '../lib/constants';
+import { COMPONENT_STYLES } from '../lib/constants';
 
 const RadioButtonChoiceGroup = ({ options, selectedValue, onSelect }) => {
   return (

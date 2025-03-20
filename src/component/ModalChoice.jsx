@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, Text, StyleSheet, Dimensions, View, Modal, PanResponder } from 'react-native';
 import { COLORS, FONT_SIZES, SPACING, BORDER_RADIUS, FONT_FAMILIES, COMPONENT_STYLES } from '../lib/constants';
-import { Motion } from "@legendapp/motion"
-import { ButtonComponent, ButtonSecondaryComponent } from './ButtonComponent';
+import { Motion } from "@legendapp/motion";
+import { ButtonComponent } from './ButtonComponent';
 import { useTranslation } from 'react-i18next';
 import RadioButtonChoiceGroup from './RadioButtonChoiceComponent';
-import DropdownComponent from './DropdownComponent';
 import DropdownLanguangeComponent from './DropdownLanguangeComponent';
 import DropdownSearchComponent from './DropdownSearchComponent';
 
@@ -87,33 +86,45 @@ const ModalChoice = ({ value, isVisible, setModalVisible, navigasi }) => {
   const cancelButton = () => {
     setAnimateModal(false);
     const timer = setTimeout(() => {
-      setModalVisible(false)
+      setModalVisible(false);
     }, 200); // 0.5 seconds delay
     return () => clearTimeout(timer);
-  }
+  };
 
   const handleSelect = (option) => {
     setSelectedValue(option.value);
   };
 
   const handleNavigasi = () => {
-    cancelButton()
+    cancelButton();
     const timer = setTimeout(() => {
-      navigasi()
+      navigasi();
     }, 200); // 0.5 seconds delay
     return () => clearTimeout(timer);
-  }
+  };
 
   const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: (evt, gestureState) => true, // Always respond to touch events
-    onMoveShouldSetPanResponder: (evt, gestureState) => true, // Respond when the gesture moves
+    onStartShouldSetPanResponder: (evt, gestureState) => false, // Do not respond to touch events initially
+    onMoveShouldSetPanResponder: (evt, gestureState) => {
+      // Only respond to vertical movements that exceed a certain threshold
+      const { dy } = gestureState;
+      return Math.abs(dy) > 10;
+    },
     onPanResponderMove: (evt, gestureState) => {
       // Gesture state contains the movement of the touch (in px)
       const { dy } = gestureState;  // dy is the vertical movement of the touch
       if (dy > 50) {
-        setanimateChoice(false)
+        setanimateChoice(false);
       } else if (dy < -50) {
-        setanimateChoice(true)
+        setanimateChoice(true);
+      }
+    },
+    onPanResponderRelease: (evt, gestureState) => {
+      const { dy } = gestureState;
+      if (dy > 50) {
+        setanimateChoice(false);
+      } else if (dy < -50) {
+        setanimateChoice(true);
       }
     },
   });
@@ -188,7 +199,7 @@ const ModalChoice = ({ value, isVisible, setModalVisible, navigasi }) => {
               <View style={{ flex: 1 }}>
                 <ButtonComponent
                   title={t('button.pesan')}
-                  onPress={cancelButton}
+                  onPress={handleNavigasi}
                 />
               </View>
             </View>

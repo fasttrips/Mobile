@@ -15,7 +15,7 @@ const AppNavigator = () => {
 
 
   async function onAuthStateChanged() {
-    const user = await AsyncStorage.getItem('accessToken');
+    const user = await AsyncStorage.getItem('accessTokens');
     if (user !== null) {
       setload(false)
       setisLoggedIn(true);
