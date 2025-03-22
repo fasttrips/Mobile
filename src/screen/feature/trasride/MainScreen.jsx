@@ -196,7 +196,9 @@ const TrasrideScreen = ({ navigation }) => {
             >
                 <Marker coordinate={pickupLocation} pinColor='red' title='Origin' />
                 <Marker coordinate={destinationLocation} pinColor='green' title='Destination' />
-                <Polyline coordinates={coordinates} strokeColor="#37AFE1" strokeWidth={4} />
+                {destinationLocation.latitude !== 0 &&
+                    <Polyline coordinates={[pickupLocation,destinationLocation]} strokeColor="#37AFE1" strokeWidth={4} />
+                }
             </MapView>
             {mencariDriver &&
                 <>

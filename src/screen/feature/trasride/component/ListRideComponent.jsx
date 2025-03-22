@@ -58,6 +58,7 @@ const ModalRideComponent = ({
 
     const handleSelect = (option) => {
         setSelectedValue(option);
+        setmodalRideShow(false)
       };
 
     return (

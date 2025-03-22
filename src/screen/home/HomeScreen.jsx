@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Dimensions, StatusBar, ScrollView, Text, Image, TouchableOpacity, Alert, Platform, PermissionsAndroid } from 'react-native';
+import { View, StyleSheet, Dimensions, StatusBar, ScrollView, Text, Image, TouchableOpacity, Alert, Platform, PermissionsAndroid, FlatList } from 'react-native';
 import { BORDER_RADIUS, COLORS, COMPONENT_STYLES } from '../../lib/constants';
 import { requestPermissions } from '../../lib/mapFunctions';
 import Geolocation from '@react-native-community/geolocation';
@@ -38,6 +38,19 @@ const menu = [
   },
 ]
 
+const bannerNews = [
+  {
+    id: 0,
+    items: "TrasRide",
+    image: "https://abigold.co.id/wp-content/uploads/2025/03/1.png",
+  },
+  {
+    id: 1,
+    items: "TrasRide",
+    image: "https://abigold.co.id/wp-content/uploads/2025/03/2.png",
+  },
+]
+
 const HomeScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [pickupLocation, setPickupLocation] = useState({
@@ -56,6 +69,7 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     getCurrentLocation();
   }, []);
+
 
   return (
     <View style={[COMPONENT_STYLES.container, { padding: 0 }]}>
@@ -85,11 +99,11 @@ const HomeScreen = ({ navigation }) => {
                   if (item.status === false) {
                     Alert.alert("Info", "Feature ini segera hadir")
                   } else {
-                    navigation.navigate(item.navigate,{
+                    navigation.navigate(item.navigate, {
                       latitude: 0,
                       longitude: 0
                     }
-                  )
+                    )
                   }
                 }}>
                 <View style={styles.shape} />
@@ -102,12 +116,29 @@ const HomeScreen = ({ navigation }) => {
         <View style={COMPONENT_STYLES.spacer} />
         <View style={COMPONENT_STYLES.spacer} />
         <Text style={[COMPONENT_STYLES.textMedium]}>Informasi buat kamu</Text>
+        <View style={COMPONENT_STYLES.spacer} />
+        <FlatList
+          data={bannerNews}
+          keyExtractor={(item) => item.id}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <Image source={{ uri: item.image }} style={styles.image} />
+          )}
+        />
       </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  image: {
+    width: 250,
+    height: 140,
+    borderRadius: 10, // Membuat gambar bulat
+    marginRight: 10, // Jarak antar gambar
+    padding:5
+},
   imageBack: { width: width, height: 350, position: 'absolute' },
   menuContainer: {
     flexDirection: 'row',

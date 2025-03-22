@@ -5,10 +5,13 @@ import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screen/home/HomeScreen';
 import TrasrideScreen from '../screen/feature/trasride/MainScreen';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import TrasfoodScreen from '../screen/feature/trasfood/MainScreen';
 import TrasrentScreen from '../screen/feature/trasrent/MainScreen';
 import TrasmoveScreen from '../screen/feature/trasmove/MainScreen';
+import AktifitasScreen from '../screen/home/AktifitasScreen';
+import AkunScreen from '../screen/home/AkunScreen';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { COLORS } from '../lib/constants';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -102,17 +105,55 @@ const MainNavigator = () => (
       name="Beranda"
       component={HomeScreen}
       options={{
+        tabBarActiveTintColor: '#37AFE1',  // Active text color (when focused)
+        tabBarInactiveTintColor: '#00000050',
         tile: 'Home Page',
+        tabBarLabelPosition: "beside-icon",
         headerShown: false,
         color: '#fff',
         fontFamily:'Montserrat-Regular',
         tabBarIcon: ({ focused }) => {
-          const size = focused ? 60 : 50;
+          const size = focused ? '#37AFE1' : '#00000030';
           return (
-            <Image
-              source={require('../assets/logo.png')}  // Local image
-              style={{ width: size, height: size, tintColor:'#37AFE1' }}
-            />
+            <Ionicons name="car-outline" size={24} color={size}/>
+          );
+        },
+      }}
+    />
+    <Tab.Screen
+      name="Aktifitas"
+      component={AktifitasScreen}
+      options={{
+        tabBarActiveTintColor: '#37AFE1',  // Active text color (when focused)
+        tabBarInactiveTintColor: '#00000050',
+        tile: 'Aktifitas',
+        tabBarLabelPosition: "beside-icon",
+        headerShown: false,
+        color: '#fff',
+        fontFamily:'Montserrat-Regular',
+        tabBarIcon: ({ focused }) => {
+          const size = focused ? '#37AFE1' : '#00000030';
+          return (
+            <Ionicons name="flash-outline" size={24} color={size}/>
+          );
+        },
+      }}
+    />
+    <Tab.Screen
+      name="Akun"
+      component={AkunScreen}
+      options={{
+        tabBarActiveTintColor: '#37AFE1',  // Active text color (when focused)
+        tabBarInactiveTintColor: '#00000050',
+        tabBarLabelPosition: "beside-icon",
+        tile: 'Akun',
+        headerShown: false,
+        color: '#fff',
+        fontFamily:'Montserrat-Regular',
+        tabBarIcon: ({ focused }) => {
+          const size = focused ? '#37AFE1' : '#00000030';
+          return (
+            <Ionicons name="person-outline" size={18} color={size}/>
           );
         },
       }}

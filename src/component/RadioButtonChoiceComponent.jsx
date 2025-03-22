@@ -3,9 +3,12 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { COMPONENT_STYLES } from '../lib/constants';
 
 const RadioButtonChoiceGroup = ({ options, selectedValue, onSelect }) => {
+
+  const sortedOptions = options.sort((a, b) => (a === selectedValue ? -1 : b === selectedValue ? 1 : 0));
+
   return (
     <View style={styles.radioGroup}>
-      {options.map((option, index) => (
+      {sortedOptions.map((option, index) => (
         <TouchableOpacity
           key={index}
           style={[styles.radioButton,{
