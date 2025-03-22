@@ -24,7 +24,8 @@ const promo = [
 const ModalPaymentComponent = ({
     modalPaymentShow,
     setmodalPaymentShow,
-    navigasi
+    navigasi,
+    selectedValue
 }) => {
 
     const { t } = useTranslation();
@@ -84,6 +85,7 @@ const ModalPaymentComponent = ({
                             value={kodePromo.value}
                             iconName={"pricetags-outline"}
                             onValueChange={setkodePromo}
+                            trigger={(a)=> ""}
                         />
                     </View>
                 </View>
@@ -92,7 +94,7 @@ const ModalPaymentComponent = ({
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={{ flex: 1 }}>
                         <ButtonComponent
-                            title={t('button.pesan')}
+                            title={t('button.pesan') + " Rp " +(selectedValue.price - selectedValue.discount).toLocaleString('id')}
                             onPress={handleNavigasi}
                         />
                     </View>

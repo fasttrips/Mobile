@@ -9,10 +9,10 @@ const RadioButtonChoiceGroup = ({ options, selectedValue, onSelect }) => {
         <TouchableOpacity
           key={index}
           style={[styles.radioButton,{
-            backgroundColor: selectedValue === option.value ? "#37AFE110" : "#FFFFFF",
+            backgroundColor: selectedValue === option ? "#37AFE110" : "#FFFFFF",
             borderWidth:1,
             borderRadius:10,
-            borderColor: selectedValue === option.value ? "#37AFE1" : "#00000020",
+            borderColor: selectedValue === option ? "#37AFE1" : "#00000020",
             padding:20,
           }]}
           onPress={() => onSelect(option)}

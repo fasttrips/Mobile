@@ -94,7 +94,7 @@ const TrasrideScreen = ({ navigation }) => {
     });
     const [coordinates, setCoordinates] = useState([]);
 
-    const [selectedValue, setSelectedValue] = useState(options[0].value);
+    const [selectedValue, setSelectedValue] = useState(options[0]);
     const [modalSearchBarShow, setmodalSearchBarShow] = useState(true);
     const [modalRideShow, setmodalRideShow] = useState(false);
     const [rideModal, setrideModal] = useState(true);
@@ -114,6 +114,14 @@ const TrasrideScreen = ({ navigation }) => {
         setrideModal(false)
         setmodalPaymentShow(false)
         setmencariDriver(true)
+        const paddingMap = { top: 100, right: 100, bottom: 200, left: 100 }; // Adjust padding as needed
+        mapRef.current.fitToCoordinates(
+            [{ latitude: pickupLocation.latitude, longitude: pickupLocation.longitude } ].filter(Boolean),
+            {
+                edgePadding: paddingMap, // Set padding for map zoom level
+                animated: true, // Animate the map transition
+            }
+        );
     }
 
     const batalMencari = () => {
@@ -122,6 +130,14 @@ const TrasrideScreen = ({ navigation }) => {
         setrideModal(true)
         setmodalPaymentShow(true)
         setmencariDriver(false)
+        const paddingMap = { top: 100, right: 100, bottom: 300, left: 100 }; // Adjust padding as needed
+        mapRef.current.fitToCoordinates(
+            [{ latitude: pickupLocation.latitude, longitude: pickupLocation.longitude }, destinationLocation].filter(Boolean),
+            {
+                edgePadding: paddingMap, // Set padding for map zoom level
+                animated: true, // Animate the map transition
+            }
+        );
     }
 
     const handleUserLocationChange = (event) => {
@@ -165,7 +181,7 @@ const TrasrideScreen = ({ navigation }) => {
             <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
             <MapView
                 ref={mapRef}
-                provider={PROVIDER_GOOGLE}
+                // provider={PROVIDER_GOOGLE}
                 style={styles.map}
                 region={{
                     latitude: pickupLocation.latitude,
@@ -220,6 +236,7 @@ const TrasrideScreen = ({ navigation }) => {
                         navigasi={() => bookingNow()}
                         modalPaymentShow={modalPaymentShow}
                         setmodalPaymentShow={setmodalPaymentShow}
+                        selectedValue={selectedValue}
                     />
                 </>
             }

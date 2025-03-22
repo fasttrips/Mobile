@@ -57,7 +57,7 @@ const ModalRideComponent = ({
     });
 
     const handleSelect = (option) => {
-        setSelectedValue(option.value);
+        setSelectedValue(option);
       };
 
     return (
