@@ -8,6 +8,7 @@ import { ModalPaymentComponent } from './component/PaymentComponent';
 import { ButtonComponent } from '../../../component/ButtonComponent';
 import LottieView from 'lottie-react-native';
 import { Motion } from '@legendapp/motion';
+import { LoadingSearchComponent } from './component/LoadingSearchComponent';
 
 const options = [
     {
@@ -116,7 +117,7 @@ const TrasrideScreen = ({ navigation }) => {
         setmencariDriver(true)
         const paddingMap = { top: 100, right: 100, bottom: 200, left: 100 }; // Adjust padding as needed
         mapRef.current.fitToCoordinates(
-            [{ latitude: pickupLocation.latitude, longitude: pickupLocation.longitude } ].filter(Boolean),
+            [{ latitude: pickupLocation.latitude, longitude: pickupLocation.longitude }].filter(Boolean),
             {
                 edgePadding: paddingMap, // Set padding for map zoom level
                 animated: true, // Animate the map transition
@@ -148,7 +149,6 @@ const TrasrideScreen = ({ navigation }) => {
         }
     };
 
-    const [markers, setMarkers] = useState([]);
     const paddingMap = { top: 100, right: 100, bottom: 300, left: 100 }
 
     const buttonPickup = (a) => {
@@ -200,12 +200,11 @@ const TrasrideScreen = ({ navigation }) => {
             </MapView>
             {mencariDriver &&
                 <>
+                    <View style={styles.modalAnimatebackground} />
                     <View style={styles.modalAnimateBottom}>
                         <ButtonComponent style={{ backgroundColor: COLORS.secondary }} title={"Batal Mencari"} onPress={() => batalMencari()} />
                     </View>
-                    <View style={styles.modalAnimateCenter}>
-                        <Text style={[COMPONENT_STYLES.textLarge, { textAlign: 'center' }]}>Sedang Mencari Driver Terdekat</Text>
-                    </View>
+                    <LoadingSearchComponent />
                 </>
             }
             <ModalSearch
@@ -259,12 +258,19 @@ const styles = StyleSheet.create({
         bottom: 10, // Position it at the bottom
         left: 10,
         right: 10,
+
+    },
+    modalAnimatebackground: {
+        position: 'absolute',
+        backgroundColor: '#00000090',
+        width: width,
+        height: height
     },
     modalAnimateCenter: {
         position: 'absolute',
-        top: height / 2, // Position it at the bottom
-        left: 10,
-        right: 10,
+        top: height / 3, // Position it at the bottom
+        left: 50,
+        right: 50,
         backgroundColor: 'white',
         padding: 20,
         borderRadius: 20,
