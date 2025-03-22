@@ -2,47 +2,53 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Dimensions, StatusBar, ScrollView, Text, Image, TouchableOpacity, Alert, Platform, PermissionsAndroid } from 'react-native';
 import { BORDER_RADIUS, COLORS, COMPONENT_STYLES } from '../../lib/constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import ModalInfo from '../../component/ModalInfo';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTranslation } from 'react-i18next';
 
 
 
 const { width } = Dimensions.get('window');
 
-const menu = [
-  {
-    name: "My Profile",
-    iconName: "person-circle-outline"
-  },
-  {
-    name: "Referal dan Hadiah",
-    iconName: "people-circle-outline"
-  },
-  {
-    name: "Saved Address",
-    iconName: "map-outline"
-  },
-  {
-    name: "Term & Conditions",
-    iconName: "newspaper-outline"
-  },
-  {
-    name: "Support",
-    iconName: "mail-outline"
-  },
-  {
-    name: "LogOut",
-    iconName: "log-out-outline"
-  }
-]
-
-
 const AkunScreen = ({ navigation }) => {
+  const { t } = useTranslation();
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const menu = [
+    {
+      name: t('menuAkun.profile'),
+      iconName: "person-circle-outline"
+    },
+    {
+      name: t('menuAkun.referal'),
+      iconName: "people-circle-outline"
+    },
+    {
+      name: t('menuAkun.alamat'),
+      iconName: "map-outline"
+    },
+    {
+      name: t('menuAkun.term'),
+      iconName: "newspaper-outline"
+    },
+    {
+      name: t('menuAkun.supportt'),
+      iconName: "mail-outline"
+    },
+    {
+      name: t('menuAkun.keluar'),
+      iconName: "log-out-outline",
+      action: ()=> setModalVisible(true)
+    }
+  ]
 
   return (
     <View style={[COMPONENT_STYLES.container, { padding: 0 }]}>
       <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
       <View style={{ backgroundColor: 'white', height: 50 }}>
         <Text style={[COMPONENT_STYLES.textLarge, { position: 'absolute', bottom: 0, marginLeft: 15 }]}>
-          Akun
+          {t('menuAkun.title')}
         </Text>
       </View>
       <ScrollView contentContainerStyle={[COMPONENT_STYLES.scrollView]}>
@@ -77,7 +83,7 @@ const AkunScreen = ({ navigation }) => {
         <View style={COMPONENT_STYLES.spacer} />
         {menu.map((data, index) => {
           return (
-            <TouchableOpacity key={index} style={{ alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row', padding: 10, borderRadius: 10 }}>
+            <TouchableOpacity onPress={data.action} key={index} style={{ alignItems: 'center', justifyContent: 'space-around', flexDirection: 'row', paddingVertical: 10, borderRadius: 10 }}>
               <View>
                 <View style={{ padding: 10, backgroundColor: 'white', flex: 1, borderRadius: 10, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' }}>
                   <Ionicons name={data.iconName} size={24} color="black" />
@@ -92,6 +98,7 @@ const AkunScreen = ({ navigation }) => {
           )
         })}
       </ScrollView>
+      <ModalInfo title={t('modalKeluarApp.title')} desc={t('modalKeluarApp.desc')} isVisible={modalVisible} setModalVisible={setModalVisible} actions={async () => await AsyncStorage.removeItem('accessTokens')} />
     </View>
   );
 };

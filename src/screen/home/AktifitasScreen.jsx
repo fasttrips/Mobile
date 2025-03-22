@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Dimensions, StatusBar, ScrollView, Text, Image, TouchableOpacity, Alert, Platform, PermissionsAndroid } from 'react-native';
 import { BORDER_RADIUS, COLORS, COMPONENT_STYLES } from '../../lib/constants';
+import { useTranslation } from 'react-i18next';
 
 
 const { width } = Dimensions.get('window');
 
 const AktifitasScreen = ({ navigation }) => {
+  const { t } = useTranslation();
 
   return (
     <View style={[COMPONENT_STYLES.container, { padding: 0 }]}>
       <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
       <View style={{ backgroundColor: 'white', height: 50 }}>
         <Text style={[COMPONENT_STYLES.textLarge, { position: 'absolute', bottom: 0, marginLeft: 15 }]}>
-          Aktifitas
+          {t('menuAktifitas.title')}
         </Text>
       </View>
       <ScrollView contentContainerStyle={[COMPONENT_STYLES.scrollView]}>

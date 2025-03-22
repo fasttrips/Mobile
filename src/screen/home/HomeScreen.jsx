@@ -3,6 +3,7 @@ import { View, StyleSheet, Dimensions, StatusBar, ScrollView, Text, Image, Touch
 import { BORDER_RADIUS, COLORS, COMPONENT_STYLES } from '../../lib/constants';
 import { requestPermissions } from '../../lib/mapFunctions';
 import Geolocation from '@react-native-community/geolocation';
+import { useTranslation } from 'react-i18next';
 
 
 const { width } = Dimensions.get('window');
@@ -52,6 +53,8 @@ const bannerNews = [
 ]
 
 const HomeScreen = ({ navigation }) => {
+  const { t } = useTranslation();
+
   const [loading, setLoading] = useState(false);
   const [pickupLocation, setPickupLocation] = useState({
     latitude: 0,
@@ -79,7 +82,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={{ alignItems: 'center' }}>
           <Image source={require("../../assets/logo3.png")} style={{ width: 100, height: 100 }} />
         </View>
-        <Text style={[COMPONENT_STYLES.textLarge, { color: 'white' }]}>Selamat Datang</Text>
+        <Text style={[COMPONENT_STYLES.textLarge, { color: 'white' }]}>{t("menuHome.selamat")}</Text>
         <Text style={[COMPONENT_STYLES.textLarge, { color: 'white' }]}>Hilyathul Wahid</Text>
         <View style={styles.balanceBar}>
           <View>
@@ -115,7 +118,7 @@ const HomeScreen = ({ navigation }) => {
         </View>
         <View style={COMPONENT_STYLES.spacer} />
         <View style={COMPONENT_STYLES.spacer} />
-        <Text style={[COMPONENT_STYLES.textMedium]}>Informasi buat kamu</Text>
+        <Text style={[COMPONENT_STYLES.textMedium]}>{t("menuHome.inform")}</Text>
         <View style={COMPONENT_STYLES.spacer} />
         <FlatList
           data={bannerNews}

@@ -28,9 +28,36 @@
   },
   "button": {
     "batal": "Cancel",
-    "pesan": "Booking Now"
+    "pesan": "Book Now",
+    "keluar": "Log Out"
   },
-  "modalChoice":{
-    "PilihKendaraan":"Choice"
+  "modalChoice": {
+    "PilihKendaraan": "Choice"
+  },
+  "modalKeluarApp": {
+    "title": "Log Out of App",
+    "desc": "You can log in again later to use the Trasgo app"
+  },
+  "menuAkun": {
+    "title": "Account",
+    "profile": "My Profile",
+    "referal": "Referral and Rewards",
+    "alamat": "Saved Addresses",
+    "term": "Terms & Conditions",
+    "supportt": "Support",
+    "keluar": "Log Out"
+  },
+  "menuHome": {
+    "selamat": "Welcome",
+    "inform": "Information for you"
+  },
+  "menuAktifitas": {
+    "title": "Activities",
+    "profile": "My Profile"
+  },
+  "menuBottom": {
+    "beranda": "Home",
+    "action": "Activities",
+    "akun": "Account"
   }
 }

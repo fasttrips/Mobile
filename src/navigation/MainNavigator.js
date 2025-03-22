@@ -12,154 +12,159 @@ import AktifitasScreen from '../screen/home/AktifitasScreen';
 import AkunScreen from '../screen/home/AkunScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { COLORS } from '../lib/constants';
+import { useTranslation } from 'react-i18next';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const HomeStack = () => (
   <Stack.Navigator initialRouteName="Home">
-    <Stack.Screen name="Home" component={MainNavigator} options={{ title: 'Home', headerShown: false }}/>
+    <Stack.Screen name="Home" component={MainNavigator} options={{ title: 'Home', headerShown: false }} />
     <Stack.Screen
-        name="TrasRide"
-        component={TrasrideScreen}
-        options={({ navigation }) => ({
-          title: 'TrasRide',
-          headerShown: false,
-          headerStyle: {
-            elevation: 0, // Remove elevation on Android
-            shadowOpacity: 0, // Remove shadow on iOS
-          },
-          headerShadowVisible: false,
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Ionicons name="chevron-back-outline" size={32} color="black" style={{marginRight:20}}/>
-            </TouchableOpacity>
-          ),
-        })}
-      />
-      <Stack.Screen
-        name="TrasFood"
-        component={TrasfoodScreen}
-        options={({ navigation }) => ({
-          title: 'TrasFood',
-          headerShown: true,
-          headerStyle: {
-            elevation: 0, // Remove elevation on Android
-            shadowOpacity: 0, // Remove shadow on iOS
-          },
-          headerShadowVisible: false,
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Ionicons name="chevron-back-outline" size={32} color="black" style={{marginRight:20}}/>
-            </TouchableOpacity>
-          ),
-        })}
-      />
-      <Stack.Screen
-        name="TrasRent"
-        component={TrasrentScreen}
-        options={({ navigation }) => ({
-          title: 'TrasRent',
-          headerShown: true,
-          headerStyle: {
-            elevation: 0, // Remove elevation on Android
-            shadowOpacity: 0, // Remove shadow on iOS
-          },
-          headerShadowVisible: false,
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Ionicons name="chevron-back-outline" size={32} color="black" style={{marginRight:20}}/>
-            </TouchableOpacity>
-          ),
-        })}
-      />
-      <Stack.Screen
-        name="TrasMove"
-        component={TrasmoveScreen}
-        options={({ navigation }) => ({
-          title: 'TrasMove',
-          headerShown: true,
-          headerStyle: {
-            elevation: 0, // Remove elevation on Android
-            shadowOpacity: 0, // Remove shadow on iOS
-          },
-          headerShadowVisible: false,
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Ionicons name="chevron-back-outline" size={32} color="black" style={{marginRight:20}}/>
-            </TouchableOpacity>
-          ),
-        })}
-      />
+      name="TrasRide"
+      component={TrasrideScreen}
+      options={({ navigation }) => ({
+        title: 'TrasRide',
+        headerShown: false,
+        headerStyle: {
+          elevation: 0, // Remove elevation on Android
+          shadowOpacity: 0, // Remove shadow on iOS
+        },
+        headerShadowVisible: false,
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
+          </TouchableOpacity>
+        ),
+      })}
+    />
+    <Stack.Screen
+      name="TrasFood"
+      component={TrasfoodScreen}
+      options={({ navigation }) => ({
+        title: 'TrasFood',
+        headerShown: true,
+        headerStyle: {
+          elevation: 0, // Remove elevation on Android
+          shadowOpacity: 0, // Remove shadow on iOS
+        },
+        headerShadowVisible: false,
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
+          </TouchableOpacity>
+        ),
+      })}
+    />
+    <Stack.Screen
+      name="TrasRent"
+      component={TrasrentScreen}
+      options={({ navigation }) => ({
+        title: 'TrasRent',
+        headerShown: true,
+        headerStyle: {
+          elevation: 0, // Remove elevation on Android
+          shadowOpacity: 0, // Remove shadow on iOS
+        },
+        headerShadowVisible: false,
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
+          </TouchableOpacity>
+        ),
+      })}
+    />
+    <Stack.Screen
+      name="TrasMove"
+      component={TrasmoveScreen}
+      options={({ navigation }) => ({
+        title: 'TrasMove',
+        headerShown: true,
+        headerStyle: {
+          elevation: 0, // Remove elevation on Android
+          shadowOpacity: 0, // Remove shadow on iOS
+        },
+        headerShadowVisible: false,
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
+          </TouchableOpacity>
+        ),
+      })}
+    />
   </Stack.Navigator>
 );
 
-const MainNavigator = () => (
-  <Tab.Navigator screenOptions={{
-    tabBarStyle: styles.tabBarStyle, // Custom tab bar style
-    tabBarShowLabel: true, // Hide labels (optional)
-    tabBarActiveTintColor: '#000000', // Active icon color
-    tabBarInactiveTintColor: '#00000050', // Inactive icon color
-  }}>
-    <Tab.Screen
-      name="Beranda"
-      component={HomeScreen}
-      options={{
-        tabBarActiveTintColor: '#37AFE1',  // Active text color (when focused)
-        tabBarInactiveTintColor: '#00000050',
-        tile: 'Home Page',
-        tabBarLabelPosition: "beside-icon",
-        headerShown: false,
-        color: '#fff',
-        fontFamily:'Montserrat-Regular',
-        tabBarIcon: ({ focused }) => {
-          const size = focused ? '#37AFE1' : '#00000030';
-          return (
-            <Ionicons name="car-outline" size={24} color={size}/>
-          );
-        },
-      }}
-    />
-    <Tab.Screen
-      name="Aktifitas"
-      component={AktifitasScreen}
-      options={{
-        tabBarActiveTintColor: '#37AFE1',  // Active text color (when focused)
-        tabBarInactiveTintColor: '#00000050',
-        tile: 'Aktifitas',
-        tabBarLabelPosition: "beside-icon",
-        headerShown: false,
-        color: '#fff',
-        fontFamily:'Montserrat-Regular',
-        tabBarIcon: ({ focused }) => {
-          const size = focused ? '#37AFE1' : '#00000030';
-          return (
-            <Ionicons name="flash-outline" size={24} color={size}/>
-          );
-        },
-      }}
-    />
-    <Tab.Screen
-      name="Akun"
-      component={AkunScreen}
-      options={{
-        tabBarActiveTintColor: '#37AFE1',  // Active text color (when focused)
-        tabBarInactiveTintColor: '#00000050',
-        tabBarLabelPosition: "beside-icon",
-        tile: 'Akun',
-        headerShown: false,
-        color: '#fff',
-        fontFamily:'Montserrat-Regular',
-        tabBarIcon: ({ focused }) => {
-          const size = focused ? '#37AFE1' : '#00000030';
-          return (
-            <Ionicons name="person-outline" size={18} color={size}/>
-          );
-        },
-      }}
-    />
-  </Tab.Navigator>
-);
+const MainNavigator = () => {
+  const { t } = useTranslation();
+
+  return (
+    <Tab.Navigator screenOptions={{
+      tabBarStyle: styles.tabBarStyle, // Custom tab bar style
+      tabBarShowLabel: true, // Hide labels (optional)
+      tabBarActiveTintColor: '#000000', // Active icon color
+      tabBarInactiveTintColor: '#00000050', // Inactive icon color
+    }}>
+      <Tab.Screen
+        name="Beranda"
+        component={HomeScreen}
+        options={{
+          tabBarActiveTintColor: '#37AFE1',  // Active text color (when focused)
+          tabBarInactiveTintColor: '#00000050',
+          title: t('menuBottom.beranda'),
+          tabBarLabelPosition: "beside-icon",
+          headerShown: false,
+          color: '#fff',
+          fontFamily: 'Montserrat-Regular',
+          tabBarIcon: ({ focused }) => {
+            const size = focused ? '#37AFE1' : '#00000030';
+            return (
+              <Ionicons name="car-outline" size={24} color={size} />
+            );
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Aktifitas"
+        component={AktifitasScreen}
+        options={{
+          tabBarActiveTintColor: '#37AFE1',  // Active text color (when focused)
+          tabBarInactiveTintColor: '#00000050',
+          title: t('menuBottom.action'),
+          tabBarLabelPosition: "beside-icon",
+          headerShown: false,
+          color: '#fff',
+          fontFamily: 'Montserrat-Regular',
+          tabBarIcon: ({ focused }) => {
+            const size = focused ? '#37AFE1' : '#00000030';
+            return (
+              <Ionicons name="flash-outline" size={24} color={size} />
+            );
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Akun"
+        component={AkunScreen}
+        options={{
+          tabBarActiveTintColor: '#37AFE1',  // Active text color (when focused)
+          tabBarInactiveTintColor: '#00000050',
+          tabBarLabelPosition: "beside-icon",
+          title: t('menuBottom.akun'),
+          headerShown: false,
+          color: '#fff',
+          fontFamily: 'Montserrat-Regular',
+          tabBarIcon: ({ focused }) => {
+            const size = focused ? '#37AFE1' : '#00000030';
+            return (
+              <Ionicons name="person-outline" size={18} color={size} />
+            );
+          },
+        }}
+      />
+    </Tab.Navigator>
+  )
+};
 
 const styles = StyleSheet.create({
   screen: {
@@ -177,7 +182,7 @@ const styles = StyleSheet.create({
   tabBarIconStyle: {
     justifyContent: 'center',  // Center the icon vertically within the tab
     alignItems: 'center',  // Center the icon horizontally within the tab
-    fontFamily:'Montserrat-Regular'
+    fontFamily: 'Montserrat-Regular'
   },
 });
 
