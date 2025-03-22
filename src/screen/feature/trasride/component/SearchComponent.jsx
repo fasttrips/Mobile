@@ -3,9 +3,11 @@ import { COMPONENT_STYLES } from "../../../../lib/constants"
 import { TouchableOpacity, Text, StyleSheet, Dimensions, View, Modal, PanResponder } from 'react-native';
 import DropdownSearchComponent from "../../../../component/DropdownSearchComponent";
 import { useEffect } from "react";
+import { ButtonComponent } from "../../../../component/ButtonComponent";
 
 
 const ModalSearch = ({
+    navigation,
     modalSearchBarShow,
     setmodalSearchBarShow,
     listPlace,
@@ -13,7 +15,11 @@ const ModalSearch = ({
     originChoice,
     setoriginChoice,
     destinationChoice,
-    setdestinationChoice }) => {
+    setdestinationChoice,
+
+    buttonOrigin,
+    buttonDestination
+}) => {
 
     useEffect(() => {
         if (modalSearchBarShow) {
@@ -41,6 +47,7 @@ const ModalSearch = ({
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={{ flex: 1 }}>
                         <DropdownSearchComponent
+                            trigger={(a) => buttonOrigin(a)}
                             items={listPlace}
                             value={originChoice}
                             iconNameDes={"caret-up-circle-outline"}
@@ -53,6 +60,7 @@ const ModalSearch = ({
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={{ flex: 1 }}>
                         <DropdownSearchComponent
+                            trigger={(a) => buttonDestination(a)}
                             items={listPlace2}
                             value={destinationChoice}
                             iconNameDes={"location-outline"}
@@ -60,6 +68,9 @@ const ModalSearch = ({
                         />
                     </View>
                 </View>
+            </View>
+            <View style={{ width: 50, margin: 5 }}>
+                <ButtonComponent onPress={navigation} style={{ backgroundColor: 'white', borderRadius: 100, elevation: 3 }} iconName={"arrow-back"} />
             </View>
         </Motion.View>
     )

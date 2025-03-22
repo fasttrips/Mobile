@@ -12,7 +12,6 @@ const ModalRideComponent = ({
     modalRideShow,
     setmodalRideShow,
 
-    navigation,
     options,
     selectedValue,
     setSelectedValue
@@ -71,9 +70,6 @@ const ModalRideComponent = ({
             transition={{ type: 'spring' }}
             style={styles.modalAnimate}
         >
-            <View style={{width:50,margin:5}}>
-                <ButtonComponent onPress={navigation}  style={{backgroundColor:'white',borderRadius:100,elevation:3}} iconName={"arrow-back"}/>
-            </View>
             <View style={styles.modalComponent} >
                 <View style={{ alignItems: 'center', margin: 10 }}>
                     <View style={{ width: 50, height: 3, backgroundColor: '#00000050' }} />

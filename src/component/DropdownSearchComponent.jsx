@@ -3,12 +3,13 @@ import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList, TextInput } 
 import { COLORS, FONT_SIZES, SPACING, BORDER_RADIUS, FONT_FAMILIES, COMPONENT_STYLES } from '../lib/constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const DropdownSearchComponent = ({ label, items, value, onValueChange, placeholder, iconName, iconNameDes, style, ...props }) => {
+const DropdownSearchComponent = ({ trigger,label, items, value, onValueChange, placeholder, iconName, iconNameDes, style, ...props }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSelectItem = (item) => {
-    onValueChange(item.value);
+    onValueChange(item);
+    trigger(item);
     setModalVisible(false);
   };
 

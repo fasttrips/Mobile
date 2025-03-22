@@ -51,18 +51,6 @@ const HomeScreen = ({ navigation }) => {
       Alert.alert('Permission Denied', 'Location permission is required to use this feature.');
       return;
     }
-
-    Geolocation.getCurrentPosition(
-      (position) => {
-        const data = { latitude: position.coords.latitude, longitude: position.coords.longitude };
-        console.log(data)
-        setPickupLocation(data)
-      },
-      (error) => {
-        Alert.alert('Error', `Tidak dapat menentukan lokasi, kamu bisa pilih secara manual`);
-      },
-      { enableHighAccuracy: true, timeout: 25000, maximumAge: 10000 }
-    );
   };
 
   useEffect(() => {
@@ -98,9 +86,10 @@ const HomeScreen = ({ navigation }) => {
                     Alert.alert("Info", "Feature ini segera hadir")
                   } else {
                     navigation.navigate(item.navigate,{
-                      latitude: pickupLocation.latitude,
-                      longitude: pickupLocation.longitude
-                    })
+                      latitude: 0,
+                      longitude: 0
+                    }
+                  )
                   }
                 }}>
                 <View style={styles.shape} />

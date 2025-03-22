@@ -13,13 +13,13 @@ const languageItems = [
     { label: 'Gopay', value: 'gp' },
     { label: 'ShoopePay', value: 'sp' },
     { label: 'OVO', value: 'ov' },
-  ];
-  
-  const promo = [
+];
+
+const promo = [
     { label: 'Kode Promo', value: 's' },
     { label: 'Hemat Ride', value: 'XBXDCD' },
     { label: 'Hemat Car', value: 'XBXDCDA' },
-  ];
+];
 
 const ModalPaymentComponent = ({
     modalPaymentShow,
@@ -29,7 +29,10 @@ const ModalPaymentComponent = ({
 
     const { t } = useTranslation();
     const [payment, setpayment] = useState('tn');
-    const [kodePromo, setkodePromo] = useState('s');
+    const [kodePromo, setkodePromo] = useState({ 
+        label: 'Kode Promo', 
+        value: 's' 
+    });
 
     useEffect(() => {
         if (modalPaymentShow) {
@@ -44,10 +47,10 @@ const ModalPaymentComponent = ({
 
     const handleNavigasi = () => {
         const timer = setTimeout(() => {
-          navigasi();
+            navigasi();
         }, 200); // 0.5 seconds delay
         return () => clearTimeout(timer);
-      };
+    };
 
     return (
         <Motion.View
@@ -65,9 +68,9 @@ const ModalPaymentComponent = ({
                     <View style={{ flex: 1 }}>
                         <DropdownLanguangeComponent
                             items={languageItems}
-                            value={languageItems.find((e) => e.value ===  payment).label}
+                            value={languageItems.find((e) => e.value === payment).label}
                             iconName={"chevron-forward-outline"}
-                            onValueChange={setpayment }
+                            onValueChange={setpayment}
                         />
                     </View>
                     <View style={COMPONENT_STYLES.spacer} />
@@ -78,7 +81,7 @@ const ModalPaymentComponent = ({
                     <View style={{ flex: 1 }}>
                         <DropdownSearchComponent
                             items={promo}
-                            value={kodePromo}
+                            value={kodePromo.value}
                             iconName={"pricetags-outline"}
                             onValueChange={setkodePromo}
                         />
