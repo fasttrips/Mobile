@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Dimensions, StatusBar, ScrollView, Text, Image, TouchableOpacity, Alert, Platform, PermissionsAndroid, FlatList } from 'react-native';
 import { BORDER_RADIUS, COLORS, COMPONENT_STYLES } from '../../lib/constants';
-import { requestPermissions } from '../../lib/mapFunctions';
 import Geolocation from '@react-native-community/geolocation';
 import { useTranslation } from 'react-i18next';
+import { request, PERMISSIONS } from 'react-native-permissions';
 
 
 const { width } = Dimensions.get('window');
@@ -61,12 +61,80 @@ const HomeScreen = ({ navigation }) => {
     longitude: 0,
   });
 
+  const requestPermissions = async () => {
+    try {
+      if (Platform.OS === 'android') {
+        // Request permission for Geolocation
+        const locationGranted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+        );
+  
+        // Request permission for Camera
+        const cameraGranted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA
+        );
+  
+        // Request permission for Notifications (Android 13+)
+        const notificationGranted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+        );
+  
+        if (
+          locationGranted === PermissionsAndroid.RESULTS.GRANTED &&
+          cameraGranted === PermissionsAndroid.RESULTS.GRANTED &&
+          notificationGranted === PermissionsAndroid.RESULTS.GRANTED
+        ) {
+          return true;
+        } else {
+          Alert.alert(
+            'Permission Denied',
+            'You need to grant permissions for location, camera, and notifications.'
+          );
+          return false;
+        }
+      } else if (Platform.OS === 'ios') {
+        // iOS: Request permissions using `react-native-permissions`
+        const locationPermission = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
+        const cameraPermission = await request(PERMISSIONS.IOS.CAMERA);
+        const notificationPermission = await request(PERMISSIONS.IOS.NOTIFICATIONS);
+  
+        // Check if all permissions are granted
+        if (
+          locationPermission === 'granted' &&
+          cameraPermission === 'granted' &&
+          notificationPermission === 'granted'
+        ) {
+          return true;
+        } else {
+          Alert.alert(
+            'Permission Denied',
+            'You need to grant permissions for location, camera, and notifications.'
+          );
+          return false;
+        }
+      }
+      return false; // default for unsupported platforms
+    } catch (error) {
+      console.error('Permission request failed', error);
+      return false;
+    }
+  };
+
   const getCurrentLocation = async () => {
     const hasPermission = await requestPermissions();
     if (!hasPermission) {
-      Alert.alert('Permission Denied', 'Location permission is required to use this feature.');
       return;
     }
+    Geolocation.getCurrentPosition(
+      (position) => {
+        console.log(position);
+      },
+      (error) => {
+        console.error(error);
+        // Alert.alert('Location Error', 'Failed to fetch location.');
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+    );
   };
 
   useEffect(() => {
@@ -140,8 +208,8 @@ const styles = StyleSheet.create({
     height: 140,
     borderRadius: 10, // Membuat gambar bulat
     marginRight: 10, // Jarak antar gambar
-    padding:5
-},
+    padding: 5
+  },
   imageBack: { width: width, height: 350, position: 'absolute' },
   menuContainer: {
     flexDirection: 'row',

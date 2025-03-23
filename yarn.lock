@@ -3775,6 +3775,7 @@ __metadata:
     react-native-localize: "npm:^3.4.1"
     react-native-maps: "npm:^1.20.1"
     react-native-open-maps: "npm:^0.4.3"
+    react-native-permissions: "npm:^5.3.0"
     react-native-reanimated: "npm:^3.16.7"
     react-native-safe-area-context: "npm:^5.1.0"
     react-native-screens: "npm:^4.5.0"
@@ -9200,6 +9201,20 @@ __metadata:
   dependencies:
     query-string: "npm:^7.1.0"
   checksum: 10c0/fa27fed37114ab810d963fc4fe18a0d9655db76609a224a574554f3b0021ca9c076364f610e9c5d8bdf96f7f00cbe08e6a7fa3894ec8109aaeb892d1f3f41b3a
+  languageName: node
+  linkType: hard
+
+"react-native-permissions@npm:^5.3.0":
+  version: 5.3.0
+  resolution: "react-native-permissions@npm:5.3.0"
+  peerDependencies:
+    react: ">=18.1.0"
+    react-native: ">=0.70.0"
+    react-native-windows: ">=0.70.0"
+  peerDependenciesMeta:
+    react-native-windows:
+      optional: true
+  checksum: 10c0/237aba686fe8ef59a6a1dbf76ed1105680f4717be05719c46b0950351406f9356093bf594cb2d9921e6778246f7c1810d7b886cbef2f951575688a45f0c1edc4
   languageName: node
   linkType: hard
 
