@@ -1,6 +1,6 @@
 import { Motion } from "@legendapp/motion"
 import { COMPONENT_STYLES } from "../../../../lib/constants"
-import { TouchableOpacity, Text, StyleSheet, Dimensions, View, Modal, PanResponder } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import DropdownSearchComponent from "../../../../component/DropdownSearchComponent";
 import { useEffect } from "react";
 import { ButtonComponent } from "../../../../component/ButtonComponent";

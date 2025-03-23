@@ -12,11 +12,6 @@ import ModalDown from '../../component/ModalDown';
 
 const { width } = Dimensions.get('window');
 
-const options = [
-  { label: 'WhatsApp', value: 'wa', ico: "logo-whatsapp" },
-  { label: 'SMS', value: 'sms', ico: "chatbox-ellipses-outline" }
-];
-
 const flagItems = [
   { label: 'Indonesian', value: '+62', flag: "🇮🇩" },
   { label: 'Singapore', value: '+65', flag: "🇸🇬" },

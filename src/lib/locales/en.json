@@ -29,7 +29,9 @@
   "button": {
     "batal": "Cancel",
     "pesan": "Book Now",
-    "keluar": "Log Out"
+    "keluar": "Log Out",
+     "konfirmasi": "konfirmasi",
+     "selesai": "Selesai"
   },
   "modalChoice": {
     "PilihKendaraan": "Choice"

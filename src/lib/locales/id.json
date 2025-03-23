@@ -29,7 +29,8 @@
   "button": {
     "batal": "Batal",
     "pesan": "Pesan Sekarang",
-    "keluar": "Keluar"
+    "keluar": "Keluar",
+    "konfirmasi": "konfirmasi"
   },
   "modalChoice": {
     "PilihKendaraan": "Pilih Kendaraan"

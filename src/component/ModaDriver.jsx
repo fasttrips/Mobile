@@ -28,7 +28,7 @@ const driver =
   date: '01 Januari 2021',
 }
 
-const ModalDriver = ({ title, desc, isVisible, setModalVisible, actions, call, chat }) => {
+const ModalDriver = ({ title, desc, isVisible, setModalVisible, actions, call, chat,selesai }) => {
   const { t } = useTranslation();
   const [animateModal, setAnimateModal] = useState(false);
 
@@ -67,11 +67,11 @@ const ModalDriver = ({ title, desc, isVisible, setModalVisible, actions, call, c
             <View style={{ width: 50, height: 3, backgroundColor: '#00000050' }} />
           </View>
           <View style={COMPONENT_STYLES.spacer} />
-          <View style={{ flexDirection: 'column', paddingBOttom:20}}>
+          <TouchableOpacity onPress={()=> selesai()} style={{ flexDirection: 'column', paddingBOttom:20}}>
             <View style={{ borderRadius:20,padding:10,flexDirection: 'row', justifyContent: 'space-around', backgroundColor:COLORS.primary }}>
               <Text style={[COMPONENT_STYLES.textMedium, { fontWeight: '600',color:'white',textAlign:'left' }]}>Sedang menjemput</Text>
             </View>
-          </View>
+          </TouchableOpacity>
           <View style={COMPONENT_STYLES.spacer} />
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

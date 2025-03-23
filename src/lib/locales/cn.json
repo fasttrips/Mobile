@@ -29,7 +29,8 @@
   "button": {
     "batal": "取消",
     "pesan": "立即预订",
-    "keluar": "退出"
+    "keluar": "退出",
+     "konfirmasi": "konfirmasi"
   },
   "modalChoice": {
     "PilihKendaraan": "选择车辆"

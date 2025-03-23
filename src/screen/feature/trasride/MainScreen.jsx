@@ -10,6 +10,7 @@ import LottieView from 'lottie-react-native';
 import { Motion } from '@legendapp/motion';
 import { LoadingSearchComponent } from './component/LoadingSearchComponent';
 import ModalDriver from '../../../component/ModaDriver';
+import ModalInfo from '../../../component/ModalInfo';
 
 const options = [
     {
@@ -106,6 +107,8 @@ const TrasrideScreen = ({ navigation }) => {
     const [rideModal, setrideModal] = useState(true);
     const [modalPaymentShow, setmodalPaymentShow] = useState(true);
     const [mencariDriver, setmencariDriver] = useState(false);
+    const [modalCancel, setmodalCancel] = useState(false);
+
     const [findDriver, setfindDriver] = useState(false);
     const [statusDriver, setstatusDriver] = useState(0);
 
@@ -149,6 +152,7 @@ const TrasrideScreen = ({ navigation }) => {
         setmodalPaymentShow(true)
         setmencariDriver(false)
         setfindDriver(false)
+        setmodalCancel(false)
         const paddingMap = { top: 100, right: 100, bottom: 300, left: 100 }; // Adjust padding as needed
         mapRef.current.fitToCoordinates(
             [{ latitude: pickupLocation.latitude, longitude: pickupLocation.longitude }, destinationLocation].filter(Boolean),
@@ -239,15 +243,25 @@ const TrasrideScreen = ({ navigation }) => {
                     desc={"hjk"}
                     isVisible={findDriver}
                     setModalVisible={setfindDriver}
-                    actions={() => batalMencari()}
+                    actions={() => setmodalCancel(true)}
                     call={() => navigation.navigate("Call", {
                         idDriver: 0
                     })}
                     chat={() => navigation.navigate("Chat", {
                         idDriver: 0
                     })}
+                    selesai={() => navigation.replace("Rating", {
+                        idInvoice: 'INV 123.2123'
+                    })}
                 />
             }
+            <ModalInfo 
+                isVisible={modalCancel} 
+                setModalVisible={setmodalCancel}
+                title={"Cancel Booking"}
+                desc={"kamu ingin membatalkan pesanan ?"}
+                actions={() => batalMencari()}
+            />
             <ModalSearch
                 listPlace={listPlace}
                 listPlace2={listPlace2}
