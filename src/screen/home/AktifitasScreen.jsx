@@ -34,7 +34,7 @@ const AktifitasScreen = ({ navigation }) => {
       <ScrollView contentContainerStyle={[COMPONENT_STYLES.scrollView]}>
         {transaksi.map((data, index) => {
           return (
-            <TouchableOpacity onPress={()=> navigation.navigate("Rating",{idInvoice:0})} key={index} style={styles.container}>
+            <TouchableOpacity onPress={() => navigation.navigate("Rating", { idInvoice: 0 })} key={index} style={styles.container}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Image source={data.image} style={{ width: 50, height: 50 }} />
                 <View style={COMPONENT_STYLES.spacer} />
@@ -42,26 +42,37 @@ const AktifitasScreen = ({ navigation }) => {
                   <Text style={COMPONENT_STYLES.textMedium}>{data.category}</Text>
                   <Text style={COMPONENT_STYLES.textSmall}>{data.booking}</Text>
                 </View>
-                <View style={{flex:1}}/>
-                <View style={{alignItems:'flex-end'}}>
+                <View style={{ flex: 1 }} />
+                <View style={{ alignItems: 'flex-end' }}>
                   <Text style={COMPONENT_STYLES.textMedium}>{data.status}</Text>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Text style={COMPONENT_STYLES.textSmall}>Rp {data.price.toLocaleString('id')}</Text>
-                    <Ionicons name={"ellipse"} size={10} color={COLORS.primary} style={{margin:2}}/>
+                    <Ionicons name={"ellipse"} size={10} color={COLORS.primary} style={{ margin: 2 }} />
                     <Text style={COMPONENT_STYLES.textSmall}>{data.payment}</Text>
                   </View>
                 </View>
               </View>
               <View style={COMPONENT_STYLES.spacer} />
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Ionicons name={"caret-up-circle-outline"} size={24} color={COLORS.text} />
-                <View style={COMPONENT_STYLES.spacer} />
-                <Text style={COMPONENT_STYLES.textMedium}>{data.namaOrigin}</Text>
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Ionicons name={"location-outline"} size={24} color={COLORS.text} />
-                <View style={COMPONENT_STYLES.spacer} />
-                <Text style={COMPONENT_STYLES.textMedium}>{data.namaDestinasi}</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Ionicons name={"caret-up-circle-outline"} size={24} color={COLORS.text} />
+                    <View style={COMPONENT_STYLES.spacer} />
+                    <Text style={COMPONENT_STYLES.textMedium}>{data.namaOrigin}</Text>
+                  </View>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Ionicons name={"location-outline"} size={24} color={COLORS.text} />
+                    <View style={COMPONENT_STYLES.spacer} />
+                    <Text style={COMPONENT_STYLES.textMedium}>{data.namaDestinasi}</Text>
+                  </View>
+                </View>
+                <View>
+                  <View style={{ flexDirection: 'row-reverse' }}>
+                    <TouchableOpacity onPress={()=> navigation.navigate("Chat")} style={{ padding: 10, borderRadius: 100, backgroundColor: 'white', elevation: 1 }}>
+                      <Ionicons name={"chatbubble"} size={24} color={COLORS.text} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
               </View>
             </TouchableOpacity>
           )
@@ -72,14 +83,14 @@ const AktifitasScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container:{
-    backgroundColor:'#FFFFFF',
-    padding:20,
-    borderRadius:10,
-    borderWidth:0, 
-    borderColor:COLORS.primary,
-    elevation:SHADOW_CARD.medium,
-    marginTop:20
+  container: {
+    backgroundColor: '#FFFFFF',
+    padding: 20,
+    borderRadius: 10,
+    borderWidth: 0,
+    borderColor: COLORS.primary,
+    elevation: SHADOW_CARD.medium,
+    marginTop: 20
   },
   imageBack: { width: width, height: 350, position: 'absolute' },
   menuContainer: {

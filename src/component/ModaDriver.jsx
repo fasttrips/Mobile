@@ -26,6 +26,7 @@ const driver =
   payment: 'Cash',
   invoice: 'INV/2021/01/01/001',
   date: '01 Januari 2021',
+  status:'Menuju lokasi 5 Menit'
 }
 
 const ModalDriver = ({ title, desc, isVisible, setModalVisible, actions, call, chat,selesai }) => {
@@ -69,9 +70,10 @@ const ModalDriver = ({ title, desc, isVisible, setModalVisible, actions, call, c
           <View style={COMPONENT_STYLES.spacer} />
           <TouchableOpacity onPress={()=> selesai()} style={{ flexDirection: 'column', paddingBOttom:20}}>
             <View style={{ borderRadius:20,padding:10,flexDirection: 'row', justifyContent: 'space-around', backgroundColor:COLORS.primary }}>
-              <Text style={[COMPONENT_STYLES.textMedium, { fontWeight: '600',color:'white',textAlign:'left' }]}>Sedang menjemput</Text>
+              <Text style={[COMPONENT_STYLES.textMedium, { fontWeight: '600',color:'white',textAlign:'left' }]}>Klik Selesaikan Pesanan ( simulasi )</Text>
             </View>
           </TouchableOpacity>
+          <View style={COMPONENT_STYLES.spacer} />
           <View style={COMPONENT_STYLES.spacer} />
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -93,11 +95,16 @@ const ModalDriver = ({ title, desc, isVisible, setModalVisible, actions, call, c
               <TouchableOpacity onPress={chat} style={{ padding: 20, borderRadius: 100, backgroundColor: 'white', elevation: 1 }}>
                 <Ionicons name={"chatbubble"} size={24} color={COLORS.text} />
               </TouchableOpacity>
-              <View style={COMPONENT_STYLES.spacer} />
+              {/* <View style={COMPONENT_STYLES.spacer} />
               <TouchableOpacity onPress={call} style={{ padding: 20, borderRadius: 100, backgroundColor: 'white', elevation: 1 }}>
                 <Ionicons name={"call"} size={24} color={COLORS.text} />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
+          </View>
+          <View style={COMPONENT_STYLES.spacer} />
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>Status</Text>
+            <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>{driver.status}</Text>
           </View>
           <View style={COMPONENT_STYLES.spacer} />
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
