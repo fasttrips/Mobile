@@ -28,7 +28,7 @@ const driver =
   date: '01 Januari 2021',
 }
 
-const ModalDriver = ({ title, desc, isVisible, setModalVisible, actions }) => {
+const ModalDriver = ({ title, desc, isVisible, setModalVisible, actions, call, chat }) => {
   const { t } = useTranslation();
   const [animateModal, setAnimateModal] = useState(false);
 
@@ -90,11 +90,11 @@ const ModalDriver = ({ title, desc, isVisible, setModalVisible, actions }) => {
               <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>{driver.type}</Text>
             </View>
             <View style={{ flex: 1, flexDirection: 'row-reverse' }}>
-              <TouchableOpacity style={{ padding: 20, borderRadius: 100, backgroundColor: 'white', elevation: 1 }}>
+              <TouchableOpacity onPress={chat} style={{ padding: 20, borderRadius: 100, backgroundColor: 'white', elevation: 1 }}>
                 <Ionicons name={"chatbubble"} size={24} color={COLORS.text} />
               </TouchableOpacity>
               <View style={COMPONENT_STYLES.spacer} />
-              <TouchableOpacity style={{ padding: 20, borderRadius: 100, backgroundColor: 'white', elevation: 1 }}>
+              <TouchableOpacity onPress={call} style={{ padding: 20, borderRadius: 100, backgroundColor: 'white', elevation: 1 }}>
                 <Ionicons name={"call"} size={24} color={COLORS.text} />
               </TouchableOpacity>
             </View>

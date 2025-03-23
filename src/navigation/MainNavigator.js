@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screen/home/HomeScreen';
 import TrasrideScreen from '../screen/feature/trasride/MainScreen';
@@ -11,8 +11,9 @@ import TrasmoveScreen from '../screen/feature/trasmove/MainScreen';
 import AktifitasScreen from '../screen/home/AktifitasScreen';
 import AkunScreen from '../screen/home/AkunScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { COLORS } from '../lib/constants';
 import { useTranslation } from 'react-i18next';
+import ChatScreen from '../screen/feature/trasride/ChatScreen';
+import CallScreen from '../screen/feature/trasride/CallScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -79,6 +80,42 @@ const HomeStack = () => (
       component={TrasmoveScreen}
       options={({ navigation }) => ({
         title: 'TrasMove',
+        headerShown: true,
+        headerStyle: {
+          elevation: 0, // Remove elevation on Android
+          shadowOpacity: 0, // Remove shadow on iOS
+        },
+        headerShadowVisible: false,
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
+          </TouchableOpacity>
+        ),
+      })}
+    />
+    <Stack.Screen
+      name="Chat"
+      component={ChatScreen}
+      options={({ navigation }) => ({
+        title: 'Chat',
+        headerShown: true,
+        headerStyle: {
+          elevation: 0, // Remove elevation on Android
+          shadowOpacity: 0, // Remove shadow on iOS
+        },
+        headerShadowVisible: false,
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
+          </TouchableOpacity>
+        ),
+      })}
+    />
+    <Stack.Screen
+      name="Call"
+      component={CallScreen}
+      options={({ navigation }) => ({
+        title: 'Call',
         headerShown: true,
         headerStyle: {
           elevation: 0, // Remove elevation on Android

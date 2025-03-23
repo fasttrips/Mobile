@@ -107,7 +107,7 @@ const TrasrideScreen = ({ navigation }) => {
     const [modalPaymentShow, setmodalPaymentShow] = useState(true);
     const [mencariDriver, setmencariDriver] = useState(false);
     const [findDriver, setfindDriver] = useState(false);
-    const [statusDriver, setstatusDriver] = useState(1);
+    const [statusDriver, setstatusDriver] = useState(0);
 
     const [initialSearch, setinitialSearch] = useState(false);
 
@@ -217,7 +217,7 @@ const TrasrideScreen = ({ navigation }) => {
                 {destinationLocation.latitude !== 0 && statusDriver >= 1 &&
                     <Polyline coordinates={[pickupLocation, destinationLocation]} strokeColor="#37AFE1" strokeWidth={4} />
                 }
-                {driverLocation.latitude !== 0 && statusDriver === 0 &&
+                {driverLocation.latitude !== 0 && statusDriver === 0 && findDriver &&
                     <Polyline coordinates={[pickupLocation, driverLocation]} strokeColor="#37AFE1" strokeWidth={4} />
                 }
                 {findDriver &&
@@ -240,6 +240,12 @@ const TrasrideScreen = ({ navigation }) => {
                     isVisible={findDriver}
                     setModalVisible={setfindDriver}
                     actions={() => batalMencari()}
+                    call={() => navigation.navigate("Call", {
+                        idDriver: 0
+                    })}
+                    chat={() => navigation.navigate("Chat", {
+                        idDriver: 0
+                    })}
                 />
             }
             <ModalSearch
