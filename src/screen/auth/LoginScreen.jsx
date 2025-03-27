@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Dimensions, StatusBar, ScrollView, Text, Image } from 'react-native';
+import { View, StyleSheet, Dimensions, StatusBar, ScrollView, Text, Image, Alert } from 'react-native';
 import { COLORS, COMPONENT_STYLES } from '../../lib/constants';
 import { useTranslation } from 'react-i18next';
 import { ButtonComponent } from '../../component/ButtonComponent';
@@ -8,6 +8,7 @@ import DropdownFlagComponent from '../../component/DropdownFlagComponent';
 import DropdownLanguangeComponent from '../../component/DropdownLanguangeComponent';
 import { getData } from '../../lib/transFunctions';
 import ModalDown from '../../component/ModalDown';
+import { postData } from '../../api/service';
 
 
 const { width } = Dimensions.get('window');
@@ -20,8 +21,8 @@ const flagItems = [
 
 const languageItems = [
   { label: 'Bahasa Indonesia', value: 'id' },
-  { label: 'English', value: 'en' },
-  { label: '普通话', value: 'cn' },
+  // { label: 'English', value: 'en' },
+  // { label: '普通话', value: 'cn' },
 ];
 
 const LoginScreen = ({ navigation }) => {
@@ -32,6 +33,8 @@ const LoginScreen = ({ navigation }) => {
   const [flag, setflag] = useState('🇮🇩 +62');
   const [modalVisible, setModalVisible] = useState(false);
 
+  const [data, setData] = useState(null);
+
   useEffect(() => {
     async function fetchData() {
       const response = await getData();
@@ -41,18 +44,36 @@ const LoginScreen = ({ navigation }) => {
   }, [selectedLanguage]);
 
   // handle login press (to be implemented)
-  const handleLoginPress = () => {
+  const handleLoginPress = async () => {
     if (!phone) {
       setError(t('loginScreen.emptyPhone'));
     } else {
       setError('');
-      const cleanedPhone = phone.replace(/^0/, '');
-      const string = flag + cleanedPhone;
-      const phoneNumber = string.replace(/[^\d+]/g, '');
-      console.log(phoneNumber);
       setModalVisible(true)
     }
   };
+
+  const sendViaWA = async () => {
+      const cleanedPhone = phone.replace(/^0/, '');
+      if (cleanedPhone.startsWith(flag.replace(/[^\d+]/g, ''))) {
+        return Alert.alert('Peringatan', 'Nomor tidak boleh diawali dengan ' + flag.replace(/[^\d+]/g, ''));
+      }
+      const string = flag + cleanedPhone;
+      const phoneNumber = string.replace(/[^\d+]/g, '');
+
+      const formData = { 
+        phonenumber: phoneNumber 
+      };
+      
+      try {
+        await postData('otp/sendWA', formData);
+        navigation.navigate("Verifikasi",{
+          phonenumber : phoneNumber
+        })
+      } catch (error) {
+        console.error(error);
+      }
+  }
 
 
 
@@ -107,7 +128,7 @@ const LoginScreen = ({ navigation }) => {
         <View style={COMPONENT_STYLES.spacer} />
         <View style={COMPONENT_STYLES.spacer} />
       </ScrollView>
-      <ModalDown isVisible={modalVisible} setModalVisible={setModalVisible} navigasi={() => navigation.navigate("Verifikasi")} />
+      <ModalDown isVisible={modalVisible} setModalVisible={setModalVisible} navigasi={() => sendViaWA()} />
     </View>
   );
 };

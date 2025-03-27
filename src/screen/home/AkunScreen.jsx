@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import ModalInfo from '../../component/ModalInfo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTranslation } from 'react-i18next';
+import { getData } from '../../api/service';
 
 
 
@@ -14,6 +15,30 @@ const AkunScreen = ({ navigation }) => {
   const { t } = useTranslation();
 
   const [modalVisible, setModalVisible] = useState(false);
+
+  const [user, setUser] = useState({
+    balance: 0,
+    email: "",
+    fcm: "",
+    fullName: "",
+    id: "",
+    image: "",
+    phone: "",
+    point: 0
+  });
+
+  const getProfileUser = async () => {
+    try {
+      const response = await getData('auth/verifySessions');
+      setUser(response.data)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getProfileUser();
+  }, []);
 
   const menu = [
     {
@@ -39,7 +64,7 @@ const AkunScreen = ({ navigation }) => {
     {
       name: t('menuAkun.keluar'),
       iconName: "log-out-outline",
-      action: ()=> setModalVisible(true)
+      action: () => setModalVisible(true)
     }
   ]
 
@@ -54,13 +79,13 @@ const AkunScreen = ({ navigation }) => {
       <ScrollView contentContainerStyle={[COMPONENT_STYLES.scrollView]}>
         <View>
           <Text style={[COMPONENT_STYLES.textMedium]}>
-            Hilyathul Wahid
+            {user.fullName}
           </Text>
           <Text style={[COMPONENT_STYLES.textSmall]}>
-            081310531713
+            {user.phone}
           </Text>
           <Text style={[COMPONENT_STYLES.textSmall]}>
-            hilmanzutech@gmail.com
+            {user.email}
           </Text>
         </View>
         <View style={COMPONENT_STYLES.spacer} />
@@ -76,7 +101,7 @@ const AkunScreen = ({ navigation }) => {
               Traspay
             </Text>
             <Text style={[COMPONENT_STYLES.textMedium, { color: 'white' }]}>
-              Rp 20.000
+              Rp {user.balance.toLocaleString('id')}
             </Text>
           </View>
         </TouchableOpacity>

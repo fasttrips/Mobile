@@ -4,6 +4,7 @@ import { BORDER_RADIUS, COLORS, COMPONENT_STYLES } from '../../lib/constants';
 import Geolocation from '@react-native-community/geolocation';
 import { useTranslation } from 'react-i18next';
 import { request, PERMISSIONS } from 'react-native-permissions';
+import { getData } from '../../api/service';
 
 
 const { width } = Dimensions.get('window');
@@ -60,6 +61,16 @@ const HomeScreen = ({ navigation }) => {
     latitude: 0,
     longitude: 0,
   });
+  const [user, setUser] = useState({
+    balance: 0, 
+    email: "", 
+    fcm: "", 
+    fullName: "", 
+    id: "", 
+    image: "", 
+    phone: "", 
+    point: 0
+  });
 
   const requestPermissions = async () => {
     try {
@@ -68,17 +79,17 @@ const HomeScreen = ({ navigation }) => {
         const locationGranted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
         );
-  
+
         // Request permission for Camera
         const cameraGranted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.CAMERA
         );
-  
+
         // Request permission for Notifications (Android 13+)
         const notificationGranted = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
         );
-  
+
         if (
           locationGranted === PermissionsAndroid.RESULTS.GRANTED &&
           cameraGranted === PermissionsAndroid.RESULTS.GRANTED &&
@@ -97,7 +108,7 @@ const HomeScreen = ({ navigation }) => {
         const locationPermission = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
         const cameraPermission = await request(PERMISSIONS.IOS.CAMERA);
         const notificationPermission = await request(PERMISSIONS.IOS.NOTIFICATIONS);
-  
+
         // Check if all permissions are granted
         if (
           locationPermission === 'granted' &&
@@ -137,8 +148,22 @@ const HomeScreen = ({ navigation }) => {
     );
   };
 
+  const getProfileUser = async () => {
+    try {
+      const response = await getData('auth/verifySessions');
+      setUser(response.data)
+      if(response.data.fullName === "")
+      {
+        navigation.navigate("UpdateProfile")
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     getCurrentLocation();
+    getProfileUser();
   }, []);
 
 
@@ -151,11 +176,11 @@ const HomeScreen = ({ navigation }) => {
           <Image source={require("../../assets/logo3.png")} style={{ width: 100, height: 100 }} />
         </View>
         <Text style={[COMPONENT_STYLES.textLarge, { color: 'white' }]}>{t("menuHome.selamat")}</Text>
-        <Text style={[COMPONENT_STYLES.textLarge, { color: 'white' }]}>Hilyathul Wahid</Text>
+        <Text style={[COMPONENT_STYLES.textLarge, { color: 'white' }]}>{user.fullName}</Text>
         <View style={styles.balanceBar}>
           <View>
             <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: 600 }]}>TrasPoint</Text>
-            <Text style={[COMPONENT_STYLES.textMedium, { fontWeight: 600 }]}>0 PTS</Text>
+            <Text style={[COMPONENT_STYLES.textMedium, { fontWeight: 600 }]}>{user.point.toLocaleString('id')} PTS</Text>
           </View>
           <View style={{ alignItems: 'center' }}>
             <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: 600 }]}>Level</Text>

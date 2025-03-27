@@ -26,11 +26,23 @@
     "emptyEmail": "Email tidak boleh kosong",
     "otpTitle": "Bagaimana Anda ingin menerima OTP?"
   },
+  "updateScreen": {
+    "header": "Update",
+    "title": "Masukkan kode verifikasi yang kami kirimkan ke nomor telepon Anda",
+    "kodeverifikasi": "Kode Verifikasi",
+    "placeholderkode": "Masukkan kode verifikasi",
+    "kirimulang": "Kirim Ulang",
+    "verifikasiButton": "Konfirmasi",
+    "emptyPhone": "Nomor telepon tidak boleh kosong",
+    "emptyEmail": "Email tidak boleh kosong",
+    "otpTitle": "Bagaimana Anda ingin menerima OTP?"
+  },
   "button": {
     "batal": "Batal",
     "pesan": "Pesan Sekarang",
     "keluar": "Keluar",
-    "konfirmasi": "konfirmasi"
+    "konfirmasi": "konfirmasi",
+    "tutup":"Tutup"
   },
   "modalChoice": {
     "PilihKendaraan": "Pilih Kendaraan"

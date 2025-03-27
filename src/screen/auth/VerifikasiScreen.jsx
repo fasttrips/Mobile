@@ -8,21 +8,24 @@ import TextInputStandardComponent from '../../component/TextInputStandardCompone
 import DropdownFlagComponent from '../../component/DropdownFlagComponent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getData } from '../../lib/transFunctions';
+import { postData } from '../../api/service';
+import ModalWarning from '../../component/ModalWaring';
 
 const { width } = Dimensions.get('window');
 
-const VerifikasiScreen = () => {
+const VerifikasiScreen = ({ route }) => {
+  const { phonenumber } = route.params
+  const intervalRef = useRef(null);
   const { t } = useTranslation();
-  const [selectedLanguage, setSelectedLanguage] = useState('id');
+
   const [error, setError] = useState('');
   const [timer, setTimer] = useState(60); // 20 minutes in seconds
-  const intervalRef = useRef(null);
+  const [modalWarning, setmodalWarning] = useState(false)
+  const [warning, setwarning] = useState('')
+
 
   const [form, setForm] = useState({
-    nama: '',
-    phone: '',
-    email: '',
-    kodereferal: ''
+    otp: '',
   })
 
   const handleInputChange = (name, value) => {
@@ -31,19 +34,6 @@ const VerifikasiScreen = () => {
       [name]: value
     }));
   };
-
-  useEffect(() => {
-    async function fetchData() {
-      const response = await getData();
-      setSelectedLanguage(response);
-
-      const storedTimer = await AsyncStorage.getItem('verificationTimer');
-      if (storedTimer) {
-        setTimer(parseInt(storedTimer, 10));
-      }
-    }
-    fetchData();
-  }, [selectedLanguage]);
 
   useEffect(() => {
     if (timer > 0) {
@@ -61,20 +51,38 @@ const VerifikasiScreen = () => {
   }, [timer]);
 
   // handle login press (to be implemented)
-  const handleRegisterPress = async () => {
-    const user = await AsyncStorage.setItem('accessTokens', "asd");
+  const handlePress = async () => {
+    const formData = {
+      phonenumber: phonenumber,
+      code: form.otp
+    };
+    try {
+      const response = await postData('otp/validateWA', formData);
+      await AsyncStorage.setItem('accessTokens', response.message.accessToken);
+    } catch (error) {
+      setmodalWarning(true)
+      setwarning(error.response.data.message)
+    }
   };
+
+  const handleResendPress = async () => {
+    const formData = {
+      phonenumber: phonenumber
+    };
+    try {
+      await postData('otp/sendWA', formData);
+      setTimer(60);
+      await AsyncStorage.setItem('verificationTimer', '60');
+    } catch (error) {
+      setmodalWarning(true)
+      setwarning(error.message)
+    }
+  };
+
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-  };
-
-  const handleResendPress = async () => {
-    // Reset the timer to 20 minutes
-    setTimer(60);
-    await AsyncStorage.setItem('verificationTimer', '60');
-    // Add your resend OTP logic here
   };
 
   return (
@@ -92,8 +100,8 @@ const VerifikasiScreen = () => {
         <TextInputStandardComponent
           label={t('verifikasiScreen.kodeverifikasi')}
           placeholder={t('verifikasiScreen.placeholderkode')}
-          value={form.phone}
-          onChangeText={(value) => handleInputChange('phone', value)}
+          value={form.otp}
+          onChangeText={(value) => handleInputChange('otp', value)}
           keyboardType="numeric"
           errorMessage={error}
         />
@@ -112,12 +120,17 @@ const VerifikasiScreen = () => {
         <View style={COMPONENT_STYLES.spacer} />
         <ButtonComponent
           title={t('verifikasiScreen.verifikasiButton')}
-          onPress={handleRegisterPress}
+          onPress={handlePress}
         />
         <View style={COMPONENT_STYLES.spacer} />
         <View style={COMPONENT_STYLES.spacer} />
         <View style={COMPONENT_STYLES.spacer} />
       </ScrollView>
+      <ModalWarning
+        isVisible={modalWarning}
+        setmodalWarning={setmodalWarning}
+        title={warning}
+      />
     </View>
   );
 };

@@ -26,12 +26,27 @@
     "emptyEmail": "Email cannot be empty",
     "otpTitle": "How would you like to receive the OTP?"
   },
+  "updateScreen": {
+    "header": "Update",
+    "title": "Yuk update data kamu untuk menikmati layanan trasgo",
+    "fullName": "Nama Lengkap",
+    "placeholderfullName": "Masukkan Nama Lengkap",
+    "email": "Email",
+    "placeholderemail": "Masukkan Email",
+    "kirimulang": "Kirim Ulang",
+    "verifikasiButton": "Konfirmasi",
+    "emptyPhone": "Nomor telepon tidak boleh kosong",
+    "emptyEmail": "Email tidak boleh kosong",
+    "otpTitle": "Bagaimana Anda ingin menerima OTP?"
+  },
   "button": {
     "batal": "Cancel",
     "pesan": "Book Now",
     "keluar": "Log Out",
-     "konfirmasi": "konfirmasi",
-     "selesai": "Selesai"
+    "konfirmasi": "konfirmasi",
+    "selesai": "Selesai",
+    "simpan": "Simpan",
+    "tutup":"Tutup"
   },
   "modalChoice": {
     "PilihKendaraan": "Choice"

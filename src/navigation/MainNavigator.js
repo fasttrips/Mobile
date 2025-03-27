@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import ChatScreen from '../screen/feature/trasride/ChatScreen';
 import CallScreen from '../screen/feature/trasride/CallScreen';
 import RatingScreen from '../screen/feature/trasride/RatingScreen';
+import UpdateScreen from '../screen/home/UpdateScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -135,6 +136,24 @@ const HomeStack = () => (
       component={RatingScreen}
       options={({ navigation }) => ({
         title: 'Rating',
+        headerShown: true,
+        headerStyle: {
+          elevation: 0, // Remove elevation on Android
+          shadowOpacity: 0, // Remove shadow on iOS
+        },
+        headerShadowVisible: false,
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="close-outline" size={32} color="black" style={{ marginRight: 20 }} />
+          </TouchableOpacity>
+        ),
+      })}
+    />
+    <Stack.Screen
+      name="UpdateProfile"
+      component={UpdateScreen}
+      options={({ navigation }) => ({
+        title: 'Update Akun',
         headerShown: true,
         headerStyle: {
           elevation: 0, // Remove elevation on Android
