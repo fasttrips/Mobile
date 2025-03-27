@@ -64,7 +64,7 @@ const UpdateScreen = ({navigation}) => {
   
     try {
       const response = await postData('auth/updateProfile', form);
-      navigation.goBack();
+      navigation.replace('Home');
     } catch (error) {
       setmodalWarning(true);
       setwarning(error.response?.data?.message || 'Terjadi kesalahan.');

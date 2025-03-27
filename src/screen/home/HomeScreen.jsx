@@ -194,6 +194,8 @@ const HomeScreen = ({ navigation }) => {
                 onPress={() => {
                   if (item.status === false) {
                     Alert.alert("Info", "Feature ini segera hadir")
+                  }else if (user.fullName === "") {
+                    navigation.navigate('UpdateProfile')
                   } else {
                     navigation.navigate(item.navigate, {
                       latitude: 0,

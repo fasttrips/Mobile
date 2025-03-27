@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unstable-nested-components */
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '../screen/home/HomeScreen';
 import TrasrideScreen from '../screen/feature/trasride/MainScreen';
@@ -20,7 +20,9 @@ import UpdateScreen from '../screen/home/UpdateScreen';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const HomeStack = () => (
+const HomeStack = () => {
+  const { t } = useTranslation();
+  return(
   <Stack.Navigator initialRouteName="Home">
     <Stack.Screen name="Home" component={MainNavigator} options={{ title: 'Home', headerShown: false }} />
     <Stack.Screen
@@ -153,7 +155,7 @@ const HomeStack = () => (
       name="UpdateProfile"
       component={UpdateScreen}
       options={({ navigation }) => ({
-        title: 'Update Akun',
+        title: t('updateScreen.header'),
         headerShown: true,
         headerStyle: {
           elevation: 0, // Remove elevation on Android
@@ -161,14 +163,15 @@ const HomeStack = () => (
         },
         headerShadowVisible: false,
         headerLeft: () => (
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="close-outline" size={32} color="black" style={{ marginRight: 20 }} />
-          </TouchableOpacity>
+          <View>
+            <Ionicons name="person-outline" size={24} color="black" style={{ marginRight: 20 }} />
+          </View>
         ),
       })}
     />
   </Stack.Navigator>
-);
+  )
+};
 
 const MainNavigator = () => {
   const { t } = useTranslation();
