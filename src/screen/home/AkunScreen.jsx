@@ -44,7 +44,6 @@ const AkunScreen = ({ navigation }) => {
     {
       name: t('menuAkun.profile'),
       iconName: "person-circle-outline",
-      action:() => navigation.navigate("UpdateProfile")
     },
     {
       name: t('menuAkun.referal'),
