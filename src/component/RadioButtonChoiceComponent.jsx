@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { COMPONENT_STYLES } from '../lib/constants';
+import { COLORS, COMPONENT_STYLES } from '../lib/constants';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const RadioButtonChoiceGroup = ({ options, selectedValue, onSelect }) => {
 
@@ -41,13 +42,15 @@ const RadioButtonChoiceGroup = ({ options, selectedValue, onSelect }) => {
             <View style={COMPONENT_STYLES.spacer} />
             <View>
               <Text style={[COMPONENT_STYLES.textMedium, { fontWeight: '700' }]}>{option.name}</Text>
-              <Text style={[COMPONENT_STYLES.textSmall]}>{option.time}</Text>
+            <Text style={[COMPONENT_STYLES.textSmall]}>{option.penumpang} <Ionicons name={"person"} size={10} color={COLORS.text} /></Text>
               <Text style={[COMPONENT_STYLES.textSmall, { fontSize: 10 }]}>{option.desc}</Text>
 
             </View>
           </View>
           <View>
-            <Text style={[COMPONENT_STYLES.textMedium, { textAlign: 'right' }]}>Rp {(option ? 0 : option.harga).toLocaleString('id')}</Text>
+            <Text style={[COMPONENT_STYLES.textMedium, { textAlign: 'right' }]}>Rp {option.harga}</Text>
+              <Text style={[COMPONENT_STYLES.textSmall, { textAlign: 'right' }]}>{Math.ceil(parseInt(option.durasi)/60)} Menit</Text>
+
             {/* {option.discount !== 0 &&
             } */}
           </View>
