@@ -11,32 +11,45 @@ const RadioButtonChoiceGroup = ({ options, selectedValue, onSelect }) => {
       {sortedOptions.map((option, index) => (
         <TouchableOpacity
           key={index}
-          style={[styles.radioButton,{
+          style={[styles.radioButton, {
             backgroundColor: selectedValue === option ? "#37AFE110" : "#FFFFFF",
-            borderWidth:1,
-            borderRadius:10,
+            borderWidth: 1,
+            borderRadius: 10,
             borderColor: selectedValue === option ? "#37AFE1" : "#00000020",
-            padding:20,
+            padding: 20,
           }]}
           onPress={() => onSelect(option)}
         >
-          <View style={{ flex: 1, flexDirection: 'row',alignItems:'center' }}>
-            <View style={{width:50,height:40}}>
-              <Image source={option.icon} style={[styles.icon, { width: '100%', height: '100%' }]} />
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ width: 50, height: 40 }}>
+              {option.icon === '1' &&
+                <Image source={require("../assets/trasride/motor.png")} style={[styles.icon, { width: '100%', height: '100%' }]} />
+              }
+              {option.icon === '2' &&
+                <Image source={require("../assets/trasride/motorxl.png")} style={[styles.icon, { width: '100%', height: '100%' }]} />
+              }
+              {option.icon === '3' &&
+                <Image source={require("../assets/trasride/mobil.png")} style={[styles.icon, { width: '100%', height: '100%' }]} />
+              }
+              {option.icon === '4' &&
+                <Image source={require("../assets/trasride/mobilxl.png")} style={[styles.icon, { width: '100%', height: '100%' }]} />
+              }
+              {option.icon === '5' &&
+                <Image source={require("../assets/trasride/mobilxl.png")} style={[styles.icon, { width: '100%', height: '100%' }]} />
+              }
             </View>
             <View style={COMPONENT_STYLES.spacer} />
             <View>
-              <Text style={[COMPONENT_STYLES.textMedium, { fontWeight: '700' }]}>{option.label}</Text>
+              <Text style={[COMPONENT_STYLES.textMedium, { fontWeight: '700' }]}>{option.name}</Text>
               <Text style={[COMPONENT_STYLES.textSmall]}>{option.time}</Text>
-              <Text style={[COMPONENT_STYLES.textSmall, {fontSize:10}]}>{option.desc}</Text>
+              <Text style={[COMPONENT_STYLES.textSmall, { fontSize: 10 }]}>{option.desc}</Text>
 
             </View>
           </View>
           <View>
-            {option.discount !== 0 &&
-            <Text style={[COMPONENT_STYLES.textMedium, { textAlign:'right' }]}>Rp {(option.price - option.discount).toLocaleString('id')}</Text>
-            }
-            <Text style={[COMPONENT_STYLES.textSmall, { textDecorationLine: option.discount === 0 ? '' : 'line-through', textAlign:'right' }]}>Rp {(option.price).toLocaleString('id')}</Text>
+            <Text style={[COMPONENT_STYLES.textMedium, { textAlign: 'right' }]}>Rp {(option ? 0 : option.harga).toLocaleString('id')}</Text>
+            {/* {option.discount !== 0 &&
+            } */}
           </View>
         </TouchableOpacity>
       ))}
@@ -76,7 +89,7 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: 16,
   },
-  icon:{
+  icon: {
     resizeMode: 'stretch'
   }
 });

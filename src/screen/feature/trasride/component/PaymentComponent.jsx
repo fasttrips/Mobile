@@ -94,7 +94,7 @@ const ModalPaymentComponent = ({
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={{ flex: 1 }}>
                         <ButtonComponent
-                            title={t('button.pesan') + " Rp " +(selectedValue.price - selectedValue.discount).toLocaleString('id')}
+                            title={t('button.pesan')}
                             onPress={handleNavigasi}
                         />
                     </View>

@@ -22,6 +22,8 @@ const VerifikasiScreen = ({ route }) => {
   const [timer, setTimer] = useState(60); // 20 minutes in seconds
   const [modalWarning, setmodalWarning] = useState(false)
   const [warning, setwarning] = useState('')
+  const [loading, setloading] = useState(false)
+
 
 
   const [form, setForm] = useState({
@@ -52,6 +54,7 @@ const VerifikasiScreen = ({ route }) => {
 
   // handle login press (to be implemented)
   const handlePress = async () => {
+    setloading(true)
     const formData = {
       phonenumber: phonenumber,
       code: form.otp
@@ -59,9 +62,11 @@ const VerifikasiScreen = ({ route }) => {
     try {
       const response = await postData('otp/validateWA', formData);
       await AsyncStorage.setItem('accessTokens', response.message.accessToken);
+      setloading(false)
     } catch (error) {
       setmodalWarning(true)
       setwarning(error.response.data.message)
+      setloading(false)
     }
   };
 
@@ -121,6 +126,7 @@ const VerifikasiScreen = ({ route }) => {
         <ButtonComponent
           title={t('verifikasiScreen.verifikasiButton')}
           onPress={handlePress}
+          isLoading={loading}
         />
         <View style={COMPONENT_STYLES.spacer} />
         <View style={COMPONENT_STYLES.spacer} />

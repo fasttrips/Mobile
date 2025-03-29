@@ -20,6 +20,7 @@ const ModalRideComponent = ({
     const { t } = useTranslation();
 
     useEffect(() => {
+        console.log(options)
         if (modalRideShow) {
             const timer = setTimeout(() => {
                 setmodalRideShow(true);

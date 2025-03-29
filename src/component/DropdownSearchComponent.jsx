@@ -1,19 +1,49 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList, TextInput, ActivityIndicator } from 'react-native';
 import { COLORS, FONT_SIZES, SPACING, BORDER_RADIUS, FONT_FAMILIES, COMPONENT_STYLES } from '../lib/constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { postData } from '../api/service';
 
-const DropdownSearchComponent = ({ trigger,label, items, value, onValueChange, placeholder, iconName, iconNameDes, style, ...props }) => {
+const DropdownSearchComponent = ({ trigger, label, items, value, onValueChange, placeholder, iconName, iconNameDes, style, ...props }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedValue, setselectedValue] = useState('');
+  const [result, setResult] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [typingTimeout, setTypingTimeout] = useState(null);
 
   const handleSelectItem = (item) => {
+    setselectedValue(item.description)
     onValueChange(item);
     trigger(item);
     setModalVisible(false);
   };
 
-  const filteredItems = items.filter(item => item.label.toLowerCase().includes(searchQuery.toLowerCase()));
+  const checkResult = async () => {
+    if (searchQuery.length === 0) return;
+    setLoading(true);
+    const formData = {
+      nameSearch: searchQuery
+    };
+    try {
+      const response = await postData('maps/getSearchLocation', formData);
+      setResult(response?.data || []);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (typingTimeout) clearTimeout(typingTimeout);
+    const timeout = setTimeout(() => {
+      checkResult();
+    }, 1000); // 1 detik delay
+
+    setTypingTimeout(timeout);
+    return () => clearTimeout(timeout);
+  }, [searchQuery]);
 
   return (
     <View style={[styles.container, style]}>
@@ -23,8 +53,8 @@ const DropdownSearchComponent = ({ trigger,label, items, value, onValueChange, p
           <Ionicons name={iconNameDes} size={24} color={COLORS.text} />
         )}
         <View style={COMPONENT_STYLES.spacer} />
-        <Text style={styles.dropdownText}>
-          {value ? items.find(item => item.value === value)?.label : placeholder?.label}
+        <Text style={styles.dropdownText} numberOfLines={2} ellipsizeMode="tail">
+          {selectedValue === "" ? items.find(item => item.value === value)?.label : selectedValue}
         </Text>
         <View style={{ flex: 1 }}></View>
         {iconName && (
@@ -45,15 +75,19 @@ const DropdownSearchComponent = ({ trigger,label, items, value, onValueChange, p
               value={searchQuery}
               onChangeText={setSearchQuery}
             />
-            <FlatList
-              data={filteredItems}
-              keyExtractor={(item) => item.value}
-              renderItem={({ item }) => (
-                <TouchableOpacity style={styles.item} onPress={() => handleSelectItem(item)}>
-                  <Text style={styles.itemText}>{item.label}</Text>
-                </TouchableOpacity>
-              )}
-            />
+            {loading ? (
+              <ActivityIndicator size="small" color={COLORS.primary} />
+            ) : (
+              <FlatList
+                data={result}
+                keyExtractor={(item) => item.label}
+                renderItem={({ item }) => (
+                  <TouchableOpacity style={styles.item} onPress={() => handleSelectItem(item)}>
+                    <Text style={styles.itemText}>{item.description}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+            )}
           </View>
         </View>
       </Modal>
@@ -62,8 +96,7 @@ const DropdownSearchComponent = ({ trigger,label, items, value, onValueChange, p
 };
 
 const styles = StyleSheet.create({
-  container: {
-  },
+  container: {},
   label: {
     fontSize: FONT_SIZES.medium,
     color: COLORS.text,
@@ -86,7 +119,6 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    height: 50,
     justifyContent: 'center',
     padding: 20
   },

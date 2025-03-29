@@ -1,16 +1,22 @@
 // filepath: /Users/hilmanzu/Documents/mobileReact/Trasgo/src/component/ButtonComponent.jsx
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import { COLORS, FONT_SIZES, SPACING, BORDER_RADIUS, FONT_FAMILIES } from '../lib/constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const ButtonComponent = ({ title, onPress, iconName, iconSize = 24, iconColor = COLORS.text, style }) => {
+const ButtonComponent = ({ title, onPress, iconName, iconSize = 24, iconColor = COLORS.text, style, isLoading = false }) => {
   return (
-    <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
-      {iconName && (
-        <Ionicons name={iconName} size={iconSize} color={iconColor} style={styles.icon} />
+    <TouchableOpacity disabled={isLoading} style={[styles.button, style]} onPress={onPress}>
+      {isLoading ? (
+        <ActivityIndicator color={COLORS.background} />
+      ) : (
+        <>
+          {iconName && (
+            <Ionicons name={iconName} size={iconSize} color={iconColor} style={styles.icon} />
+          )}
+          <Text style={styles.buttonText}>{title}</Text>
+        </>
       )}
-      <Text style={styles.buttonText}>{title}</Text>
     </TouchableOpacity>
   );
 };

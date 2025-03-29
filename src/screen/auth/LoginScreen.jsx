@@ -32,6 +32,8 @@ const LoginScreen = ({ navigation }) => {
   const [error, setError] = useState('');
   const [flag, setflag] = useState('🇮🇩 +62');
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setloading] = useState(false);
+
 
   const [data, setData] = useState(null);
 
@@ -54,25 +56,28 @@ const LoginScreen = ({ navigation }) => {
   };
 
   const sendViaWA = async () => {
-      const cleanedPhone = phone.replace(/^0/, '');
-      if (cleanedPhone.startsWith(flag.replace(/[^\d+]/g, ''))) {
-        return Alert.alert('Peringatan', 'Nomor tidak boleh diawali dengan ' + flag.replace(/[^\d+]/g, ''));
-      }
-      const string = flag + cleanedPhone;
-      const phoneNumber = string.replace(/[^\d+]/g, '');
+    setloading(true)
+    const cleanedPhone = phone.replace(/^0/, '');
+    if (cleanedPhone.startsWith(flag.replace(/[^\d+]/g, ''))) {
+      return Alert.alert('Peringatan', 'Nomor tidak boleh diawali dengan ' + flag.replace(/[^\d+]/g, ''));
+    }
+    const string = flag + cleanedPhone;
+    const phoneNumber = string.replace(/[^\d+]/g, '');
 
-      const formData = { 
-        phonenumber: phoneNumber 
-      };
-      
-      try {
-        await postData('otp/sendWA', formData);
-        navigation.navigate("Verifikasi",{
-          phonenumber : phoneNumber
-        })
-      } catch (error) {
-        console.error(error);
-      }
+    const formData = {
+      phonenumber: phoneNumber
+    };
+
+    try {
+      await postData('otp/sendWA', formData);
+      navigation.navigate("Verifikasi", {
+        phonenumber: phoneNumber
+      })
+      setloading(false)
+    } catch (error) {
+      console.error(error);
+      setloading(false)
+    }
   }
 
 
@@ -123,6 +128,7 @@ const LoginScreen = ({ navigation }) => {
         <ButtonComponent
           title={t('loginScreen.loginButton')}
           onPress={handleLoginPress}
+          isLoading={loading}
         />
         <View style={COMPONENT_STYLES.spacer} />
         <View style={COMPONENT_STYLES.spacer} />

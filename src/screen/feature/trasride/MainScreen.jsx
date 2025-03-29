@@ -11,47 +11,8 @@ import { Motion } from '@legendapp/motion';
 import { LoadingSearchComponent } from './component/LoadingSearchComponent';
 import ModalDriver from '../../../component/ModaDriver';
 import ModalInfo from '../../../component/ModalInfo';
+import { postData } from '../../../api/service';
 
-const options = [
-    {
-        label: 'TrasRide',
-        value: 'TR',
-        icon: require("../../../assets/trasride/motor.png"),
-        time: '20 min',
-        price: 15000,
-        discount: 1000,
-        desc: 'cepat sampai tujuan'
-    },
-    {
-        label: 'TrasRide XL',
-        value: 'TRX',
-        icon: require("../../../assets/trasride/motorxl.png"),
-        time: '20 min',
-        price: 18000,
-        discount: 0,
-        desc: 'jok besar yang bikin nyaman'
-    },
-    {
-        label: 'TrasCar',
-        value: 'TC',
-        icon: require("../../../assets/trasride/mobil.png"),
-        time: '20 min',
-        price: 24000,
-        discount: 3000,
-        desc: 'gak kehujanan hati senang'
-    },
-    {
-        label: 'TrasCar XL',
-        value: 'TCX',
-        icon: require("../../../assets/trasride/mobilxl.png"),
-        time: '20 min',
-        price: 32000,
-        discount: 0,
-        desc: 'bisa muat banyak'
-    }
-];
-
-const GOOGLE_API_KEY = 'AIzaSyDXQXYXToGvd4HQoP5XHYwwQBAbvnpaLNQ';
 const { width, height } = Dimensions.get('window');
 
 const TrasrideScreen = ({ navigation }) => {
@@ -71,21 +32,56 @@ const TrasrideScreen = ({ navigation }) => {
         longitude: 106.71610817076616,
     });
 
+    const [options, setoptions] = useState([
+        {
+            label: 'TrasRide',
+            value: 'TR',
+            icon: require("../../../assets/trasride/motor.png"),
+            time: '20 min',
+            price: 15000,
+            discount: 1000,
+            desc: 'cepat sampai tujuan',
+            icon:'1'
+        },
+        {
+            label: 'TrasRide XL',
+            value: 'TRX',
+            icon: require("../../../assets/trasride/motorxl.png"),
+            time: '20 min',
+            price: 18000,
+            discount: 0,
+            desc: 'jok besar yang bikin nyaman',
+            icon:'2'
+        },
+        {
+            label: 'TrasRide XL',
+            value: 'TRX',
+            icon: require("../../../assets/trasride/motorxl.png"),
+            time: '20 min',
+            price: 18000,
+            discount: 0,
+            desc: 'jok besar yang bikin nyaman',
+            icon:'3'
+        },
+        {
+            label: 'TrasRide XL',
+            value: 'TRX',
+            icon: require("../../../assets/trasride/motorxl.png"),
+            time: '20 min',
+            price: 18000,
+            discount: 0,
+            desc: 'jok besar yang bikin nyaman',
+            icon:'4'
+        }
+    ])
+
     const [listPlace, setlistPlace] = useState([
         { label: 'Lokasi Kamu', value: '1', latitude: 0, longitude: 0 },
-        { label: 'RS Ananda Tambun', value: 'a', latitude: -6.270965403411115, longitude: 107.0259369540338 },
-        { label: 'Tiptop Tambun', value: 'b', latitude: -6.279923623321473, longitude: 107.03889738708703 },
-        { label: 'Colombus WaterPark', value: 'c', latitude: -6.285725054950756, longitude: 107.03082930293469 },
     ]);
 
     const [listPlace2, setlistPlace2] = useState([
         { label: 'Tujuan Kamu', value: '1', latitude: 0, longitude: 0 },
-        { label: 'RS Ananda Tambun', value: 'a', latitude: -6.270965403411115, longitude: 107.0259369540338 },
-        { label: 'Tiptop Tambun', value: 'b', latitude: -6.279923623321473, longitude: 107.03889738708703 },
-        { label: 'Colombus WaterPark', value: 'c', latitude: -6.285725054950756, longitude: 107.03082930293469 },
     ]);
-
-    const [modalChoice, setmodalChoice] = useState(false);
 
     const [originChoice, setoriginChoice] = useState({
         label: 'Lokasi Kamu',
@@ -101,7 +97,7 @@ const TrasrideScreen = ({ navigation }) => {
     });
     const [coordinates, setCoordinates] = useState([]);
 
-    const [selectedValue, setSelectedValue] = useState(options[0]);
+    const [selectedValue, setSelectedValue] = useState([options[0]]);
     const [modalSearchBarShow, setmodalSearchBarShow] = useState(true);
     const [modalRideShow, setmodalRideShow] = useState(false);
     const [rideModal, setrideModal] = useState(true);
@@ -113,11 +109,6 @@ const TrasrideScreen = ({ navigation }) => {
     const [statusDriver, setstatusDriver] = useState(0);
 
     const [initialSearch, setinitialSearch] = useState(false);
-
-    // const handleMapPress = (e) => {
-    //     const coordinates = e.nativeEvent.coordinate;
-    //     console.log(coordinates)
-    // }
 
     const bookingNow = () => {
         setmodalSearchBarShow(false)
@@ -173,29 +164,74 @@ const TrasrideScreen = ({ navigation }) => {
 
     const paddingMap = { top: 100, right: 100, bottom: 300, left: 100 }
 
-    const buttonPickup = (a) => {
-        setTimeout(() => {
-            setPickupLocation({
-                latitude: a.latitude,
-                longitude: a.longitude
-            });
-            mapRef.current.fitToCoordinates([{ latitude: a.latitude, longitude: a.longitude }, destinationLocation].filter(Boolean), {
-                edgePadding: paddingMap,
-                animated: true,
-            });
-        }, 1000); // 1000 ms delay
+    const buttonPickup = async (a) => {
+        const formData = {
+            nameSearch: a.placeId
+        };
+        try {
+            const response = await postData('maps/getPlaceLocation', formData);
+            setTimeout(async () => {
+                setPickupLocation({
+                    latitude: parseFloat(response.data.latitude),
+                    longitude: parseFloat(response.data.longitude)
+                });
+                mapRef.current.fitToCoordinates([{ latitude: parseFloat(response.data.latitude), longitude: parseFloat(response.data.longitude) }, destinationLocation].filter(Boolean), {
+                    edgePadding: paddingMap,
+                    animated: true,
+                });
+                const formData2 = {
+                    originLat: parseFloat(response.data.latitude),
+                    originLon: parseFloat(response.data.longitude),
+                    destinationLat: destinationLocation.latitude,
+                    destinationLon: destinationLocation.longitude,
+                };
+                try {
+                    const responseFinal = await postData('maps/getDirections', formData2);
+                    setCoordinates(responseFinal.coordinate)
+                } catch (error) {
+
+                }
+            }, 1000); // 1000 ms delay
+        } catch (error) {
+            setLoading(false);
+        } finally {
+            setLoading(false);
+        }
     };
-    const buttonDestination = (a) => {
-        setTimeout(() => {
-            setDestinationLocation({
-                latitude: a.latitude,
-                longitude: a.longitude
-            });
-            mapRef.current.fitToCoordinates([pickupLocation, { latitude: a.latitude, longitude: a.longitude }].filter(Boolean), {
-                edgePadding: paddingMap,
-                animated: true,
-            });
-        }, 1000); // 1000 ms delay
+    const buttonDestination = async (a) => {
+        const formData = {
+            nameSearch: a.placeId
+        };
+        try {
+            const response = await postData('maps/getPlaceLocation', formData);
+            setTimeout(async () => {
+                setDestinationLocation({
+                    latitude: parseFloat(response.data.latitude),
+                    longitude: parseFloat(response.data.longitude)
+                });
+                mapRef.current.fitToCoordinates([pickupLocation, { latitude: parseFloat(response.data.latitude), longitude: parseFloat(response.data.longitude) }].filter(Boolean), {
+                    edgePadding: paddingMap,
+                    animated: true,
+                });
+                const formData2 = {
+                    originLat: pickupLocation.latitude,
+                    originLon: pickupLocation.longitude,
+                    destinationLat: parseFloat(response.data.latitude),
+                    destinationLon: parseFloat(response.data.longitude)
+                };
+                try {
+                    const responseFinal = await postData('maps/getDirections', formData2);
+                    setCoordinates(responseFinal.coordinate)
+                    setoptions(responseFinal.listLayanan)
+                } catch (error) {
+
+                }
+            }, 1000);
+        } catch (error) {
+            setLoading(false);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -218,9 +254,7 @@ const TrasrideScreen = ({ navigation }) => {
             >
                 <Marker coordinate={pickupLocation} pinColor='red' title='Origin' />
                 <Marker coordinate={destinationLocation} pinColor='green' title='Destination' />
-                {destinationLocation.latitude !== 0 && statusDriver >= 1 &&
-                    <Polyline coordinates={[pickupLocation, destinationLocation]} strokeColor="#37AFE1" strokeWidth={4} />
-                }
+                <Polyline coordinates={coordinates} strokeColor="#37AFE1" strokeWidth={4} />
                 {driverLocation.latitude !== 0 && statusDriver === 0 && findDriver &&
                     <Polyline coordinates={[pickupLocation, driverLocation]} strokeColor="#37AFE1" strokeWidth={4} />
                 }
@@ -255,8 +289,8 @@ const TrasrideScreen = ({ navigation }) => {
                     })}
                 />
             }
-            <ModalInfo 
-                isVisible={modalCancel} 
+            <ModalInfo
+                isVisible={modalCancel}
                 setModalVisible={setmodalCancel}
                 title={"Cancel Booking"}
                 desc={"kamu ingin membatalkan pesanan ?"}
