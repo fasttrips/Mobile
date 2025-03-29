@@ -42,7 +42,8 @@
     "pesan": "Pesan Sekarang",
     "keluar": "Keluar",
     "konfirmasi": "konfirmasi",
-    "tutup":"Tutup"
+    "tutup":"Tutup",
+    "pilihkendaraan":"pilihkendaraan"
   },
   "modalChoice": {
     "PilihKendaraan": "Pilih Kendaraan"

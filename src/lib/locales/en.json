@@ -46,7 +46,8 @@
     "konfirmasi": "Confirm",
     "selesai": "Done",
     "simpan": "Save",
-    "tutup": "Close"
+    "tutup": "Close",
+    "pilihkendaraan":"Pilih Kendaraan"
   },
   "modalChoice": {
     "PilihKendaraan": "Choice"

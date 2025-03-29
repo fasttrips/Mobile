@@ -1,5 +1,5 @@
 import { Motion } from "@legendapp/motion"
-import { COMPONENT_STYLES } from "../../../../lib/constants"
+import { COMPONENT_STYLES, formatRupiah } from "../../../../lib/constants"
 import { TouchableOpacity, Text, StyleSheet, Dimensions, View, Modal, PanResponder } from 'react-native';
 import DropdownSearchComponent from "../../../../component/DropdownSearchComponent";
 import { useEffect, useState } from "react";
@@ -30,9 +30,9 @@ const ModalPaymentComponent = ({
 
     const { t } = useTranslation();
     const [payment, setpayment] = useState('tn');
-    const [kodePromo, setkodePromo] = useState({ 
-        label: 'Kode Promo', 
-        value: 's' 
+    const [kodePromo, setkodePromo] = useState({
+        label: 'Kode Promo',
+        value: 's'
     });
 
     useEffect(() => {
@@ -85,7 +85,7 @@ const ModalPaymentComponent = ({
                             value={kodePromo.value}
                             iconName={"pricetags-outline"}
                             onValueChange={setkodePromo}
-                            trigger={(a)=> ""}
+                            trigger={(a) => ""}
                         />
                     </View>
                 </View>
@@ -93,10 +93,17 @@ const ModalPaymentComponent = ({
                 <View style={COMPONENT_STYLES.spacer} />
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={{ flex: 1 }}>
-                        <ButtonComponent
-                            title={t('button.pesan')}
-                            onPress={handleNavigasi}
-                        />
+                        {selectedValue.harga !== undefined &&
+                            <ButtonComponent
+                                title={t('button.pesan') + " Rp " + formatRupiah(selectedValue.harga)}
+                                onPress={handleNavigasi}
+                            />
+                        }
+                        {selectedValue.harga === undefined &&
+                            <ButtonComponent
+                                title={t('button.pilihkendaraan')}
+                            />
+                        }
                     </View>
                 </View>
             </View>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { COLORS, COMPONENT_STYLES } from '../lib/constants';
+import { COLORS, COMPONENT_STYLES, formatRupiah } from '../lib/constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const RadioButtonChoiceGroup = ({ options, selectedValue, onSelect }) => {
@@ -48,11 +48,8 @@ const RadioButtonChoiceGroup = ({ options, selectedValue, onSelect }) => {
             </View>
           </View>
           <View>
-            <Text style={[COMPONENT_STYLES.textMedium, { textAlign: 'right' }]}>Rp {option.harga}</Text>
+            <Text style={[COMPONENT_STYLES.textMedium, { textAlign: 'right' }]}>Rp {formatRupiah(option.harga)}</Text>
               <Text style={[COMPONENT_STYLES.textSmall, { textAlign: 'right' }]}>{Math.ceil(parseInt(option.durasi)/60)} Menit</Text>
-
-            {/* {option.discount !== 0 &&
-            } */}
           </View>
         </TouchableOpacity>
       ))}

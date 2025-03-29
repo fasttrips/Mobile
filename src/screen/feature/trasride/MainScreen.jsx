@@ -188,6 +188,8 @@ const TrasrideScreen = ({ navigation }) => {
                 try {
                     const responseFinal = await postData('maps/getDirections', formData2);
                     setCoordinates(responseFinal.coordinate)
+                    setoptions(responseFinal.listLayanan)
+                    setSelectedValue("")
                 } catch (error) {
 
                 }
@@ -223,6 +225,7 @@ const TrasrideScreen = ({ navigation }) => {
                     const responseFinal = await postData('maps/getDirections', formData2);
                     setCoordinates(responseFinal.coordinate)
                     setoptions(responseFinal.listLayanan)
+                    setSelectedValue("")
                 } catch (error) {
 
                 }

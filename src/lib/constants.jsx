@@ -76,3 +76,10 @@ export const COMPONENT_STYLES = {
     margin: SPACING.small,
   },
 };
+
+export const formatRupiah = (angka) => {
+  if (typeof angka !== 'number') {
+    angka = parseInt(angka);
+  }
+  return angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};

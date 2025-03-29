@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList, TextInput, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList, TextInput, ActivityIndicator, Dimensions } from 'react-native';
 import { COLORS, FONT_SIZES, SPACING, BORDER_RADIUS, FONT_FAMILIES, COMPONENT_STYLES } from '../lib/constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { postData } from '../api/service';
+
+
+const { width, height } = Dimensions.get('window');
 
 const DropdownSearchComponent = ({ trigger, label, items, value, onValueChange, placeholder, iconName, iconNameDes, style, ...props }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -115,6 +118,7 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZES.small,
     color: COLORS.text,
     fontFamily: FONT_FAMILIES.regular,
+    width: width - 150
   },
   modalContainer: {
     flex: 1,
