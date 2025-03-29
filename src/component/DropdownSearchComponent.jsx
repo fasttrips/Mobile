@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Modal, FlatList, TextInput, A
 import { COLORS, FONT_SIZES, SPACING, BORDER_RADIUS, FONT_FAMILIES, COMPONENT_STYLES } from '../lib/constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { postData } from '../api/service';
+import { ButtonComponent } from './ButtonComponent';
 
 
 const { width, height } = Dimensions.get('window');
@@ -19,6 +20,10 @@ const DropdownSearchComponent = ({ trigger, label, items, value, onValueChange, 
     setselectedValue(item.description)
     onValueChange(item);
     trigger(item);
+    setModalVisible(false);
+  };
+
+  const handleChoiceMapItem = (item) => {
     setModalVisible(false);
   };
 
@@ -92,6 +97,8 @@ const DropdownSearchComponent = ({ trigger, label, items, value, onValueChange, 
               />
             )}
           </View>
+          <View style={COMPONENT_STYLES.spacer} />
+          <ButtonComponent title={"Cari Lewat Peta"} onPress={()=> handleChoiceMapItem()}/>
         </View>
       </Modal>
     </View>
