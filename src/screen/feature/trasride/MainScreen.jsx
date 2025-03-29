@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, StyleSheet, Dimensions, StatusBar, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
-import { COLORS, COMPONENT_STYLES } from '../../../lib/constants';
+import { BORDER_RADIUS, COLORS, COMPONENT_STYLES } from '../../../lib/constants';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import { ModalSearch } from './component/SearchComponent';
 import { ModalRideComponent } from './component/ListRideComponent';
@@ -32,48 +32,7 @@ const TrasrideScreen = ({ navigation }) => {
         longitude: 106.71610817076616,
     });
 
-    const [options, setoptions] = useState([
-        {
-            label: 'TrasRide',
-            value: 'TR',
-            icon: require("../../../assets/trasride/motor.png"),
-            time: '20 min',
-            price: 15000,
-            discount: 1000,
-            desc: 'cepat sampai tujuan',
-            icon:'1'
-        },
-        {
-            label: 'TrasRide XL',
-            value: 'TRX',
-            icon: require("../../../assets/trasride/motorxl.png"),
-            time: '20 min',
-            price: 18000,
-            discount: 0,
-            desc: 'jok besar yang bikin nyaman',
-            icon:'2'
-        },
-        {
-            label: 'TrasRide XL',
-            value: 'TRX',
-            icon: require("../../../assets/trasride/motorxl.png"),
-            time: '20 min',
-            price: 18000,
-            discount: 0,
-            desc: 'jok besar yang bikin nyaman',
-            icon:'3'
-        },
-        {
-            label: 'TrasRide XL',
-            value: 'TRX',
-            icon: require("../../../assets/trasride/motorxl.png"),
-            time: '20 min',
-            price: 18000,
-            discount: 0,
-            desc: 'jok besar yang bikin nyaman',
-            icon:'4'
-        }
-    ])
+    const [options, setoptions] = useState([])
 
     const [listPlace, setlistPlace] = useState([
         { label: 'Lokasi Kamu', value: '1', latitude: 0, longitude: 0 },
@@ -98,10 +57,18 @@ const TrasrideScreen = ({ navigation }) => {
     const [coordinates, setCoordinates] = useState([]);
 
     const [selectedValue, setSelectedValue] = useState([options[0]]);
+    const [rideModal, setrideModal] = useState(true);
+
     const [modalSearchBarShow, setmodalSearchBarShow] = useState(true);
     const [modalRideShow, setmodalRideShow] = useState(false);
-    const [rideModal, setrideModal] = useState(true);
     const [modalPaymentShow, setmodalPaymentShow] = useState(true);
+
+    const [searchLocationonMapMode, setsearchLocationonMapMode] = useState(false);
+    const [locationStatus, setlocationStatus] = useState(false);
+    const [focus, setfocus] = useState('');
+
+
+
     const [mencariDriver, setmencariDriver] = useState(false);
     const [modalCancel, setmodalCancel] = useState(false);
 
@@ -190,6 +157,7 @@ const TrasrideScreen = ({ navigation }) => {
                     setCoordinates(responseFinal.coordinate)
                     setoptions(responseFinal.listLayanan)
                     setSelectedValue("")
+                    setlocationStatus(true)
                 } catch (error) {
 
                 }
@@ -226,6 +194,7 @@ const TrasrideScreen = ({ navigation }) => {
                     setCoordinates(responseFinal.coordinate)
                     setoptions(responseFinal.listLayanan)
                     setSelectedValue("")
+                    setlocationStatus(true)
                 } catch (error) {
 
                 }
@@ -251,7 +220,21 @@ const TrasrideScreen = ({ navigation }) => {
                     longitudeDelta: 0.0121,
                 }}
                 onUserLocationChange={handleUserLocationChange}
-                // onRegionChangeComplete={(data) => console.log(data)}
+                onRegionChangeComplete={(data) => {
+                    if (searchLocationonMapMode) {
+                        if (focus === "origin") {
+                            setPickupLocation({
+                                latitude: data.latitude,
+                                longitude: data.longitude,
+                            })
+                        } else {
+                            setDestinationLocation({
+                                latitude: data.latitude,
+                                longitude: data.longitude,
+                            })
+                        }
+                    }
+                }}
                 // onPress={handleMapPress}
                 showsUserLocation={true}
             >
@@ -299,20 +282,55 @@ const TrasrideScreen = ({ navigation }) => {
                 desc={"kamu ingin membatalkan pesanan ?"}
                 actions={() => batalMencari()}
             />
-            <ModalSearch
-                listPlace={listPlace}
-                listPlace2={listPlace2}
-                modalSearchBarShow={modalSearchBarShow}
-                setmodalSearchBarShow={setmodalSearchBarShow}
-                originChoice={originChoice.value}
-                setoriginChoice={setoriginChoice}
-                destinationChoice={destinationChoice.value}
-                setdestinationChoice={setdestinationChoice}
-                buttonOrigin={(a) => buttonPickup(a)}
-                buttonDestination={(a) => buttonDestination(a)}
-                navigation={() => navigation.goBack()}
-            />
-            {destinationLocation.latitude !== 0 &&
+            {!searchLocationonMapMode &&
+                <ModalSearch
+                    listPlace={listPlace}
+                    listPlace2={listPlace2}
+                    modalSearchBarShow={modalSearchBarShow}
+                    setmodalSearchBarShow={setmodalSearchBarShow}
+                    originChoice={originChoice.value}
+                    setoriginChoice={setoriginChoice}
+                    destinationChoice={destinationChoice.value}
+                    setdestinationChoice={setdestinationChoice}
+                    buttonOrigin={(a) => buttonPickup(a)}
+                    buttonDestination={(a) => buttonDestination(a)}
+                    setsearchLocationonMapMode={setsearchLocationonMapMode}
+                    setfocus={setfocus}
+                    setlocationStatus={setlocationStatus}
+                    navigation={() => navigation.goBack()}
+                />
+            }
+            {searchLocationonMapMode &&
+                <>
+                    <View style={styles.modalAnimateBottom}>
+                        <Text style={[COMPONENT_STYLES.textMedium, { textAlign: 'center', margin: 20, backgroundColor: COLORS.primary, color: 'white', borderRadius: BORDER_RADIUS.medium }]}>Geser Map Untuk Menentukan</Text>
+                        <ButtonComponent style={{ backgroundColor: COLORS.secondary }} title={"Selesai"} onPress={async () => {
+                            if (destinationLocation.latitude !== 0) {
+                                try {
+                                    const formData2 = {
+                                        originLat: pickupLocation.latitude,
+                                        originLon: pickupLocation.longitude,
+                                        destinationLat: destinationLocation.latitude,
+                                        destinationLon: destinationLocation.longitude,
+                                    };
+
+                                    const responseFinal = await postData('maps/getDirections', formData2);
+                                    setCoordinates(responseFinal.coordinate)
+                                    setoptions(responseFinal.listLayanan)
+                                    setSelectedValue("")
+                                    setsearchLocationonMapMode(false)
+                                    setlocationStatus(true)
+                                } catch (error) {
+
+                                }
+                            }else{
+                                setsearchLocationonMapMode(false)
+                            }
+                        }} />
+                    </View>
+                </>
+            }
+            {locationStatus &&
                 <>
                     {rideModal &&
                         <ModalRideComponent

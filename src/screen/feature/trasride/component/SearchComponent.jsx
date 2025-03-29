@@ -17,6 +17,9 @@ const ModalSearch = ({
     destinationChoice,
     setdestinationChoice,
 
+    setsearchLocationonMapMode,
+    setlocationStatus,
+    setfocus,
     buttonOrigin,
     buttonDestination
 }) => {
@@ -52,7 +55,11 @@ const ModalSearch = ({
                             value={originChoice}
                             iconNameDes={"caret-up-circle-outline"}
                             iconName={"locate-outline"}
+                            setsearchLocationonMapMode={setsearchLocationonMapMode}
+                            setfocus={setfocus}
+                            focus={'origin'}
                             onValueChange={setoriginChoice}
+                            setlocationStatus={setlocationStatus}
                         />
                     </View>
                 </View>
@@ -64,7 +71,11 @@ const ModalSearch = ({
                             items={listPlace2}
                             value={destinationChoice}
                             iconNameDes={"location-outline"}
+                            setsearchLocationonMapMode={setsearchLocationonMapMode}
+                            setfocus={setfocus}
+                            focus={'destination'}
                             onValueChange={setdestinationChoice}
+                            setlocationStatus={setlocationStatus}
                         />
                     </View>
                 </View>

@@ -8,7 +8,7 @@ import { ButtonComponent } from './ButtonComponent';
 
 const { width, height } = Dimensions.get('window');
 
-const DropdownSearchComponent = ({ trigger, label, items, value, onValueChange, placeholder, iconName, iconNameDes, style, ...props }) => {
+const DropdownSearchComponent = ({ setlocationStatus, focus, setfocus, setsearchLocationonMapMode, trigger, label, items, value, onValueChange, placeholder, iconName, iconNameDes, style, ...props }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedValue, setselectedValue] = useState('');
@@ -25,6 +25,9 @@ const DropdownSearchComponent = ({ trigger, label, items, value, onValueChange, 
 
   const handleChoiceMapItem = (item) => {
     setModalVisible(false);
+    setsearchLocationonMapMode(true)
+    setlocationStatus(false)
+    setfocus(focus)
   };
 
   const checkResult = async () => {
