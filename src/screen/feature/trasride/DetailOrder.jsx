@@ -6,10 +6,11 @@ import { ButtonComponent, ButtonSecondaryComponent } from '../../../component/Bu
 import { useTranslation } from 'react-i18next';
 import MapView, { AnimatedRegion, Marker, Polyline } from 'react-native-maps';
 import { getData } from '../../../api/service';
+import { LoadingSearchComponent } from './component/LoadingSearchComponent';
 
 
 
-const { width } = Dimensions.get('window');
+const { width,height } = Dimensions.get('window');
 
 const getBearing = (start, end) => {
     const y = Math.sin(end.lng - start.lng) * Math.cos(end.lat);
@@ -43,6 +44,7 @@ const DetailOrder = ({ route, navigation }) => {
         longitude: 106.71610817076616,
     });
     const [coordinates, setCoordinates] = useState([]);
+    const [mencariDriver, setmencariDriver] = useState(false);
 
     const getProfileUser = async () => {
         try {
@@ -59,6 +61,7 @@ const DetailOrder = ({ route, navigation }) => {
             }
 
             if (response.data.status === 0) {
+                setmencariDriver(true)
                 const paddingMap = { top: 100, right: 100, bottom: 300, left: 100 };
                 mapRef.current.fitToCoordinates(
                     [response.data.pickupLocation].filter(Boolean),
@@ -67,6 +70,8 @@ const DetailOrder = ({ route, navigation }) => {
                         animated: true, // Animate the map transition
                     }
                 );
+            } else {
+                setmencariDriver(false)
             }
 
             if (response.data.status === 1) {
@@ -102,6 +107,17 @@ const DetailOrder = ({ route, navigation }) => {
         }, 10000);
         return () => { clearInterval(intervalId) };
     }, []);
+
+    const batalMencari = async () => {
+
+        try {
+            const response = await getData('order/CancelOrderByUser/' + idInvoice);
+            setmencariDriver(false)
+            navigation.goBack()
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     return (
         <View style={[COMPONENT_STYLES.container, { padding: 0 }]}>
@@ -140,6 +156,15 @@ const DetailOrder = ({ route, navigation }) => {
                     <Polyline coordinates={coordinates} strokeColor="#37AFE1" strokeWidth={4} />
                 }
             </MapView>
+            {mencariDriver &&
+                <>
+                    <View style={styles.modalAnimatebackground} />
+                    <View style={styles.modalAnimateBottom}>
+                        <ButtonComponent style={{ backgroundColor: COLORS.secondary }} title={"Batal Mencari"} onPress={() => batalMencari()} />
+                    </View>
+                    <LoadingSearchComponent />
+                </>
+            }
         </View>
     );
 };
@@ -163,6 +188,29 @@ const styles = StyleSheet.create({
     },
     map: {
         flex: 1
+    },
+    modalAnimatebackground: {
+        position: 'absolute',
+        backgroundColor: '#00000090',
+        width: width,
+        height: height
+    },
+    modalAnimateCenter: {
+        position: 'absolute',
+        top: height / 3, // Position it at the bottom
+        left: 50,
+        right: 50,
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 20,
+        elevation: 5
+    },
+    modalAnimateBottom: {
+        position: 'absolute',
+        bottom: 10, // Position it at the bottom
+        left: 10,
+        right: 10,
+
     },
 });
 

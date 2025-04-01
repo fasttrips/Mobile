@@ -76,19 +76,14 @@ const TrasrideScreen = ({ navigation }) => {
     const [initialSearch, setinitialSearch] = useState(false);
 
     const bookingNow = async () => {
-        setmodalSearchBarShow(false)
-        setmodalRideShow(false)
-        setrideModal(false)
-        setmodalPaymentShow(false)
-        setmencariDriver(true)
-        const paddingMap = { top: 100, right: 100, bottom: 200, left: 100 }; // Adjust padding as needed
-        mapRef.current.fitToCoordinates(
-            [{ latitude: pickupLocation.latitude, longitude: pickupLocation.longitude }].filter(Boolean),
-            {
-                edgePadding: paddingMap, // Set padding for map zoom level
-                animated: true, // Animate the map transition
-            }
-        );
+        // const paddingMap = { top: 100, right: 100, bottom: 200, left: 100 }; // Adjust padding as needed
+        // mapRef.current.fitToCoordinates(
+        //     [{ latitude: pickupLocation.latitude, longitude: pickupLocation.longitude }].filter(Boolean),
+        //     {
+        //         edgePadding: paddingMap, // Set padding for map zoom level
+        //         animated: true, // Animate the map transition
+        //     }
+        // );
         // setTimeout(() => {
         //     mapRef.current.fitToCoordinates([pickupLocation, driverLocation].filter(Boolean), {
         //         edgePadding: paddingMap,
@@ -142,7 +137,7 @@ const TrasrideScreen = ({ navigation }) => {
             };
             try {
                 const response = await postData('order/ride', formData);
-                navigation.replace("Home")
+                navigation.navigate("DetailOrder", { idInvoice: response.idOrder })
             } catch (error) {
 
             }
