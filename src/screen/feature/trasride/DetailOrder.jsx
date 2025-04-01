@@ -1,123 +1,113 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, Dimensions, StatusBar, ScrollView, Text, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { View, StyleSheet, Dimensions, StatusBar, Image } from 'react-native';
 import { COLORS, COMPONENT_STYLES } from '../../../lib/constants';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { ButtonComponent, ButtonSecondaryComponent } from '../../../component/ButtonComponent';
-import { useTranslation } from 'react-i18next';
-import MapView, { AnimatedRegion, Marker, Polyline } from 'react-native-maps';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 import { getData } from '../../../api/service';
+import { ButtonComponent } from '../../../component/ButtonComponent';
 import { LoadingSearchComponent } from './component/LoadingSearchComponent';
+import ModalDriver from '../../../component/ModaDriver';
 
-
-
-const { width,height } = Dimensions.get('window');
-
-const getBearing = (start, end) => {
-    const y = Math.sin(end.lng - start.lng) * Math.cos(end.lat);
-    const x = Math.cos(start.lat) * Math.sin(end.lat) -
-        Math.sin(start.lat) * Math.cos(end.lat) * Math.cos(end.lng - start.lng);
-    return (Math.atan2(y, x) * 180) / Math.PI; // Konversi ke derajat
-};
+const { width, height } = Dimensions.get('window');
 
 const DetailOrder = ({ route, navigation }) => {
-    const { idInvoice } = route.params
     const mapRef = useRef(null);
+    const isMounted = useRef(true); // Untuk mengecek apakah komponen masih mounted
+    const { idInvoice } = route.params;
 
-    const { t } = useTranslation();
-    const [rating, setRating] = useState(0)
-    const [tip, setTip] = useState(0)
-    const [data, setdata] = useState("")
-    const [status, setstatus] = useState(0)
-
-
-
-    const [destinationLocation, setDestinationLocation] = useState({
-        latitude: -6.206699626040456,
-        longitude: 106.71610817076616,
-    });
-    const [driverLocation, setdriverLocation] = useState({
-        latitude: -6.206699626040456,
-        longitude: 106.71610817076616,
-    });
-    const [pickupLocation, setPickupLocation] = useState({
-        latitude: -6.206699626040456,
-        longitude: 106.71610817076616,
-    });
+    const [status, setStatus] = useState(0);
+    const [data, setData] = useState(null);
+    const [destinationLocation, setDestinationLocation] = useState(null);
+    const [driverLocation, setDriverLocation] = useState(null);
+    const [pickupLocation, setPickupLocation] = useState(null);
     const [coordinates, setCoordinates] = useState([]);
-    const [mencariDriver, setmencariDriver] = useState(false);
+    const [mencariDriver, setMencariDriver] = useState(false);
+    const [findDriver, setfindDriver] = useState(false);
 
-    const getProfileUser = async () => {
+    // Fungsi untuk mengambil data pesanan
+    const getProfileUser = useCallback(async () => {
         try {
-            const response = await getData('order/GetOrder/Detail/' + idInvoice);
-            setdata(response)
-            setstatus(response.data.status)
-            setdriverLocation(response.locationDriver)
-            setPickupLocation(response.data.pickupLocation)
-            setDestinationLocation(response.data.destinationLocation)
-            setCoordinates(response.data.coordinates)
+            const response = await getData(`order/GetOrder/Detail/${idInvoice}`);
+            if (!isMounted.current) return;
 
-            if (response.data.status === 4) {
-                navigation.goBack()
+            setData(response);
+            setStatus(response?.data?.status || 0);
+            setDriverLocation(response?.locationDriver || null);
+            setPickupLocation(response?.data?.pickupLocation || null);
+            setDestinationLocation(response?.data?.destinationLocation || null);
+            setCoordinates(response?.data?.coordinates || []);
+
+            if (response?.data?.status === 4) {
+                navigation.goBack();
             }
 
-            if (response.data.status === 0) {
-                setmencariDriver(true)
-                const paddingMap = { top: 100, right: 100, bottom: 300, left: 100 };
-                mapRef.current.fitToCoordinates(
-                    [response.data.pickupLocation].filter(Boolean),
-                    {
-                        edgePadding: paddingMap, // Set padding for map zoom level
-                        animated: true, // Animate the map transition
-                    }
-                );
-            } else {
-                setmencariDriver(false)
+            if(response.data.status != 0){
+                setfindDriver(true)
             }
 
-            if (response.data.status === 1) {
-                const paddingMap = { top: 100, right: 100, bottom: 300, left: 100 };
-                mapRef.current.fitToCoordinates(
-                    [response.data.pickupLocation, response.locationDriver].filter(Boolean),
-                    {
-                        edgePadding: paddingMap, // Set padding for map zoom level
-                        animated: true, // Animate the map transition
-                    }
-                );
+            if(response.data.status === 0){
+                setfindDriver(false)
             }
 
-            if (response.data.status >= 2) {
-                const paddingMap = { top: 100, right: 100, bottom: 300, left: 100 };
-                mapRef.current.fitToCoordinates(
-                    [response.locationDriver, response.data.destinationLocation].filter(Boolean),
-                    {
-                        edgePadding: paddingMap, // Set padding for map zoom level
-                        animated: true, // Animate the map transition
-                    }
-                );
+
+            const paddingMap = { top: 100, right: 100, bottom: 300, left: 100 };
+
+            if (mapRef.current) {
+                let locations = [];
+
+                if (response?.data?.status === 0) {
+                    setMencariDriver(true);
+                    locations = [response?.data?.pickupLocation];
+                } else {
+                    setMencariDriver(false);
+                }
+
+                if (response?.data?.status === 1) {
+                    locations = [response?.data?.pickupLocation, response?.locationDriver];
+                }
+
+                if (response?.data?.status >= 2) {
+                    locations = [response?.locationDriver, response?.data?.destinationLocation];
+                }
+
+                // Filter lokasi yang valid sebelum di-set ke peta
+                const validLocations = locations.filter(Boolean);
+                if (validLocations.length > 0) {
+                    mapRef.current.fitToCoordinates(validLocations, {
+                        edgePadding: paddingMap,
+                        animated: true,
+                    });
+                }
             }
         } catch (error) {
-            console.error(error);
+            console.error("Error fetching order details:", error);
         }
-    };
+    }, [idInvoice, navigation]);
 
+    // useEffect untuk mengambil data awal dan polling setiap 10 detik
     useEffect(() => {
+        isMounted.current = true;
         getProfileUser();
+
         const intervalId = setInterval(() => {
             getProfileUser();
         }, 10000);
-        return () => { clearInterval(intervalId) };
-    }, []);
 
+        return () => {
+            isMounted.current = false;
+            clearInterval(intervalId);
+        };
+    }, [getProfileUser]);
+
+    // Fungsi untuk membatalkan pencarian driver
     const batalMencari = async () => {
-
         try {
-            const response = await getData('order/CancelOrderByUser/' + idInvoice);
-            setmencariDriver(false)
-            navigation.goBack()
+            const response = await getData(`order/cancelOrderByUser/${idInvoice}`);
+            setMencariDriver(false);
+            navigation.goBack();
         } catch (error) {
-            console.error(error);
+            console.error("Error cancelling order:", error);
         }
-    }
+    };
 
     return (
         <View style={[COMPONENT_STYLES.container, { padding: 0 }]}>
@@ -127,90 +117,92 @@ const DetailOrder = ({ route, navigation }) => {
                 style={styles.map}
                 pitch={30}
                 region={{
-                    latitude: pickupLocation.latitude,
-                    longitude: pickupLocation.longitude,
+                    latitude: pickupLocation?.latitude || -6.2067,
+                    longitude: pickupLocation?.longitude || 106.7161,
                     latitudeDelta: 0.015,
                     longitudeDelta: 0.0121,
                 }}
             >
-                <Marker coordinate={pickupLocation} pinColor='red' title='Origin' />
-                <Marker coordinate={destinationLocation}>
-                    <View style={{ backgroundColor: 'white', borderRadius: 100 }}>
-                        <Image
-                            source={require("../../../assets/logo.png")}
-                            style={{ width: 40, height: 40 }}
-                        />
-                    </View>
-                </Marker>
-                {status > 0 && driverLocation !== null &&
+                {pickupLocation && <Marker coordinate={pickupLocation} pinColor="red" title="Origin" />}
+                {destinationLocation && (
+                    <Marker coordinate={destinationLocation} pinColor="green" title="Origin" />
+                )}
+                {status > 0 && driverLocation && (
                     <Marker coordinate={driverLocation} anchor={{ x: 0.5, y: 0.5 }}>
-                        <View style={{ backgroundColor: 'black', borderRadius: 100 }}>
-                            <Image
-                                source={require("../../../assets/logo.png")}
-                                style={{ width: 40, height: 40 }}
-                            />
+                        <View style={[styles.markerContainer,{backgroundColor:'white'}]}>
+                            <Image source={require("../../../assets/logo.png")} style={styles.markerImage} />
                         </View>
                     </Marker>
-                }
-                {coordinates !== null &&
+                )}
+                {coordinates.length > 0 && (
                     <Polyline coordinates={coordinates} strokeColor="#37AFE1" strokeWidth={4} />
-                }
+                )}
             </MapView>
-            {mencariDriver &&
+
+            {mencariDriver && (
                 <>
-                    <View style={styles.modalAnimatebackground} />
-                    <View style={styles.modalAnimateBottom}>
-                        <ButtonComponent style={{ backgroundColor: COLORS.secondary }} title={"Batal Mencari"} onPress={() => batalMencari()} />
+                    <View style={styles.modalBackground} />
+                    <View style={styles.modalBottom}>
+                        <ButtonComponent
+                            style={{ backgroundColor: COLORS.secondary }}
+                            title="Batal Mencari"
+                            onPress={batalMencari}
+                        />
                     </View>
                     <LoadingSearchComponent />
                 </>
+            )}
+
+            {findDriver &&
+                <ModalDriver
+                    title={"asd"}
+                    desc={"hjk"}
+                    isVisible={findDriver}
+                    setModalVisible={setfindDriver}
+                    actions={() => batalMencari()}
+                    call={() => navigation.navigate("Call", {
+                        idDriver: 0
+                    })}
+                    chat={() => navigation.navigate("Chat", {
+                        idDriver: data.data.idDriver,
+                        idOrder : data.data.id,
+                        idUser: data.data.idUser
+                    })}
+                    selesai={() => navigation.replace("Rating", {
+                        idInvoice: 'INV 123.2123'
+                    })}
+                    status={status}
+                    data={data}
+                />
             }
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    barRating: { padding: 20, borderRadius: 10, flexDirection: "row", justifyContent: 'center', alignItems: 'center', backgroundColor: COLORS.primary },
-    barTips: {
-        padding: 20,
-        borderRadius: 10,
-        flexDirection: "row",
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    elevation: 2,
-    subPay: {
-        padding: 10,
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 5,
-        margin: 10
-    },
     map: {
-        flex: 1
+        flex: 1,
     },
-    modalAnimatebackground: {
+    modalBackground: {
         position: 'absolute',
         backgroundColor: '#00000090',
         width: width,
-        height: height
+        height: height,
     },
-    modalAnimateCenter: {
+    modalBottom: {
         position: 'absolute',
-        top: height / 3, // Position it at the bottom
-        left: 50,
-        right: 50,
-        backgroundColor: 'white',
-        padding: 20,
-        borderRadius: 20,
-        elevation: 5
-    },
-    modalAnimateBottom: {
-        position: 'absolute',
-        bottom: 10, // Position it at the bottom
+        bottom: 10,
         left: 10,
         right: 10,
-
+    },
+    markerContainer: {
+        backgroundColor: 'white',
+        borderRadius: 100,
+        padding: 5,
+    },
+    markerImage: {
+        width: 40,
+        height: 40,
     },
 });
 

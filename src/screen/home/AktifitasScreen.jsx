@@ -134,7 +134,11 @@ const AktifitasScreen = ({ navigation }) => {
                 <View>
                   <View style={{ flexDirection: 'row-reverse' }}>
                     {data.idDriver === "" &&
-                      <TouchableOpacity onPress={() => navigation.navigate("Chat")} style={{ padding: 10, borderRadius: 100, backgroundColor: 'white', elevation: 1 }}>
+                      <TouchableOpacity onPress={() => navigation.navigate("Chat",{
+                        idDriver: data.idDriver,
+                        idOrder : data.id,
+                        idUser: data.idUser
+                      })} style={{ padding: 10, borderRadius: 100, backgroundColor: 'white', elevation: 1 }}>
                         <Ionicons name={"chatbubble"} size={24} color={COLORS.text} />
                       </TouchableOpacity>
                     }

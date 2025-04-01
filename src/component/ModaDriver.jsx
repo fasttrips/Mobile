@@ -26,15 +26,16 @@ const driver =
   payment: 'Cash',
   invoice: 'INV/2021/01/01/001',
   date: '01 Januari 2021',
-  status:'Menuju lokasi 5 Menit'
+  status: 'Menuju lokasi 5 Menit'
 }
 
-const ModalDriver = ({ title, desc, isVisible, setModalVisible, actions, call, chat,selesai }) => {
+const ModalDriver = ({ title, desc, isVisible, setModalVisible, actions, call, chat, selesai, data, status }) => {
   const { t } = useTranslation();
   const [animateModal, setAnimateModal] = useState(false);
 
   // Trigger the animation 0.5 seconds after the modal becomes visible
   useEffect(() => {
+    console.log(data)
     if (isVisible) {
       const timer = setTimeout(() => {
         setAnimateModal(true);
@@ -68,28 +69,21 @@ const ModalDriver = ({ title, desc, isVisible, setModalVisible, actions, call, c
             <View style={{ width: 50, height: 3, backgroundColor: '#00000050' }} />
           </View>
           <View style={COMPONENT_STYLES.spacer} />
-          <TouchableOpacity onPress={()=> selesai()} style={{ flexDirection: 'column', paddingBOttom:20}}>
-            <View style={{ borderRadius:20,padding:10,flexDirection: 'row', justifyContent: 'space-around', backgroundColor:COLORS.primary }}>
-              <Text style={[COMPONENT_STYLES.textMedium, { fontWeight: '600',color:'white',textAlign:'left' }]}>Klik Selesaikan Pesanan ( simulasi )</Text>
-            </View>
-          </TouchableOpacity>
-          <View style={COMPONENT_STYLES.spacer} />
-          <View style={COMPONENT_STYLES.spacer} />
 
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'column' }}>
-              <Image source={{ uri: driver.image }} style={{ width: 40, height: 40, borderRadius: 100 }} />
+              <Image source={{ uri: data.driver.image }} style={{ width: 40, height: 40, borderRadius: 100 }} />
               <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                 <Ionicons name={"star"} size={16} color={COLORS.text} />
-                <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>{driver.rating}</Text>
+                <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>{data.locationDriver.rating}</Text>
               </View>
             </View>
             <View style={COMPONENT_STYLES.spacer} />
             <View style={COMPONENT_STYLES.spacer} />
             <View style={{ flexDirection: 'column' }}>
-              <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>{driver.driverName}</Text>
-              <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>{driver.plat}</Text>
-              <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>{driver.type}</Text>
+              <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>{data.driver.fullName}</Text>
+              <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>{data.locationDriver.plat}</Text>
+              <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>{data.locationDriver.namaKendaraan}</Text>
             </View>
             <View style={{ flex: 1, flexDirection: 'row-reverse' }}>
               <TouchableOpacity onPress={chat} style={{ padding: 20, borderRadius: 100, backgroundColor: 'white', elevation: 1 }}>
@@ -104,35 +98,44 @@ const ModalDriver = ({ title, desc, isVisible, setModalVisible, actions, call, c
           <View style={COMPONENT_STYLES.spacer} />
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>Status</Text>
-            <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>{driver.status}</Text>
+            {status === 1 &&
+              <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>Menuju Lokasi Penjemputan</Text>
+            }
+            {status === 2 &&
+              <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>Sedang mengantar kamu</Text>
+            }
+            {status === 3 &&
+              <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>Pengantaran Berhasil</Text>
+            }
           </View>
           <View style={COMPONENT_STYLES.spacer} />
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>Biaya</Text>
-            <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>Rp {driver.biaya.toLocaleString('id')}</Text>
+            <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>Rp {data.data.hargaLayanan.toLocaleString('id')}</Text>
           </View>
           <View style={COMPONENT_STYLES.spacer} />
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>Metoda Pembayaran</Text>
-            <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>{driver.payment}</Text>
+            <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>{data.data.payment}</Text>
           </View>
           <View style={COMPONENT_STYLES.spacer} />
           <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>Invoice</Text>
-            <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>{driver.invoice}</Text>
+            <Text style={[COMPONENT_STYLES.textSmall, { fontWeight: '600' }]}>{data.data.id}</Text>
           </View>
           <View style={COMPONENT_STYLES.spacer} />
           <View style={COMPONENT_STYLES.spacer} />
           <View style={COMPONENT_STYLES.spacer} />
-
-          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-            <View style={{ flex: 1 }}>
-              <ButtonSecondaryComponent
-                title={t('button.batal')}
-                onPress={()=> actions()}
-              />
+          {status === 1 &&
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+              <View style={{ flex: 1 }}>
+                <ButtonSecondaryComponent
+                  title={t('button.batal')}
+                  onPress={() => actions()}
+                />
+              </View>
             </View>
-          </View>
+          }
         </View>
       </Motion.View>
     </View>

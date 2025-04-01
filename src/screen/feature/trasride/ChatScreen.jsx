@@ -5,7 +5,8 @@ import { COLORS, COMPONENT_STYLES } from '../../../lib/constants';
 
 const { width } = Dimensions.get('window');
 
-const ChatScreen = () => {
+const ChatScreen = ({route}) => {
+  const {idDriver,idOrder,idUser} = route.params
   const [message, setMessage] = useState(''); // Untuk mengontrol input pesan
   const [messages, setMessages] = useState([
     { id: 1, text: 'Halo! Titik jemput sesuai aplikasi ?', sender: 'other' },
@@ -26,6 +27,7 @@ const ChatScreen = () => {
   // Gunakan useEffect untuk scroll otomatis ke bawah setiap kali ada perubahan pada pesan
   useEffect(() => {
     scrollViewRef.current?.scrollToEnd({ animated: true });
+    console.log(idDriver,idOrder,idUser)
   }, [messages]); // Akan dijalankan setiap kali pesan berubah
 
   return (
