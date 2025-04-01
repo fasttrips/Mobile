@@ -9,7 +9,7 @@ const ChatScreen = ({route}) => {
   const {idDriver,idOrder,idUser} = route.params
   const [message, setMessage] = useState(''); // Untuk mengontrol input pesan
   const [messages, setMessages] = useState([
-    { id: 1, text: 'Halo! Titik jemput sesuai aplikasi ?', sender: 'other' },
+    // { id: 1, text: 'Halo! Titik jemput sesuai aplikasi ?', sender: 'other' },
   ]);
   
   // Referensi ScrollView untuk memanipulasi scroll

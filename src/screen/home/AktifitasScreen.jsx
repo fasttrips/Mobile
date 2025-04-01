@@ -133,7 +133,7 @@ const AktifitasScreen = ({ navigation }) => {
                 </View>
                 <View>
                   <View style={{ flexDirection: 'row-reverse' }}>
-                    {data.idDriver === "" &&
+                    {data.idDriver != "" &&
                       <TouchableOpacity onPress={() => navigation.navigate("Chat",{
                         idDriver: data.idDriver,
                         idOrder : data.id,
