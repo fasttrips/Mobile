@@ -82,26 +82,37 @@ const DropdownSearchComponent = ({ setlocationStatus, focus, setfocus, setsearch
           <View style={styles.modalContent}>
             <TextInput
               style={styles.searchInput}
-              placeholder="Search..."
+              placeholder="Cari Lokasi..."
               value={searchQuery}
               onChangeText={setSearchQuery}
             />
             {loading ? (
-              <ActivityIndicator size="small" color={COLORS.primary} />
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" color={COLORS.primary} />
+              </View>
             ) : (
-              <FlatList
-                data={result}
-                keyExtractor={(item) => item.label}
-                renderItem={({ item }) => (
-                  <TouchableOpacity style={styles.item} onPress={() => handleSelectItem(item)}>
-                    <Text style={styles.itemText}>{item.description}</Text>
-                  </TouchableOpacity>
-                )}
-              />
+              <View>
+                {result.length === 0 &&
+                   <View style={{ marginTop: height/6, justifyContent: 'center', alignItems: 'center', flexDirection:'row' }}>
+                    <Text style={styles.itemText}>Klik Cari Lokasi untuk mencari alamat</Text>
+                  </View>
+                }
+                {result.length > 0 &&
+                  <FlatList
+                    data={result}
+                    keyExtractor={(item) => item.label}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity style={styles.item} onPress={() => handleSelectItem(item)}>
+                        <Text style={styles.itemText}>{item.description}</Text>
+                      </TouchableOpacity>
+                    )}
+                  />
+                }
+              </View>
             )}
           </View>
           <View style={COMPONENT_STYLES.spacer} />
-          <ButtonComponent title={"Cari Lewat Peta"} onPress={()=> handleChoiceMapItem()}/>
+          <ButtonComponent title={"Cari Lewat Peta"} onPress={() => handleChoiceMapItem()} />
         </View>
       </Modal>
     </View>
@@ -149,7 +160,7 @@ const styles = StyleSheet.create({
     borderRadius: BORDER_RADIUS.small,
     padding: SPACING.small,
     marginBottom: SPACING.small,
-    fontSize: FONT_SIZES.medium,
+    fontSize: FONT_SIZES.small,
     color: COLORS.text,
     fontFamily: FONT_FAMILIES.regular,
   },

@@ -100,40 +100,50 @@ const TrasrideScreen = ({ navigation }) => {
         //     setfindDriver(true)
         // }, 2000);
 
-        const formData = {
-            "createdAt": new Date().toISOString(),
-            "updatedAt": new Date().toISOString(),
-            "isActive": true,
-            "isVerification": false,
-            "pickupLocation": {
-                "latitude": pickupLocation.latitude,
-                "longitude": pickupLocation.longitude,
-                "address": originChoice.label
-            },
-            "destinationLocation": {
-                "latitude": destinationLocation.latitude,
-                "longitude": destinationLocation.longitude,
-                "address": destinationChoice.label
-            },
-            "idDriver": "",
-            "idMitra": "",
-            "status": 0,
-            "type": selectedValue.name,
-            "service": selectedValue.name,
-            "isDeclinebyUser": null,
-            "notesDecline": "",
-            "hargaLayanan": selectedValue.harga,
-            "hargaPotonganDriver": selectedValue.potongan1,
-            "hargaPotonganMitra": 0,
-            "hargaKenaikan": selectedValue.kenaikanHarga,
-            "diskon": 0,
-            "jarak": selectedValue.durasi,
-            "payment": ""
+        const formData2 = {
+            originLat: pickupLocation.latitude,
+            originLon: pickupLocation.longitude,
+            destinationLat: destinationLocation.latitude,
+            destinationLon: destinationLocation.longitude,
         };
         try {
-            const response = await postData('order/ride', formData);
-            console.log(response)
-            navigation.replace("Home")
+            const responseFinal = await postData('maps/getDirections', formData2);
+            const formData = {
+                "createdAt": new Date().toISOString(),
+                "updatedAt": new Date().toISOString(),
+                "isActive": true,
+                "isVerification": false,
+                "pickupLocation": {
+                    "latitude": pickupLocation.latitude,
+                    "longitude": pickupLocation.longitude,
+                    "address": responseFinal.asal
+                },
+                "destinationLocation": {
+                    "latitude": destinationLocation.latitude,
+                    "longitude": destinationLocation.longitude,
+                    "address": responseFinal.tujuan
+                },
+                "idDriver": "",
+                "idMitra": "",
+                "status": 0,
+                "type": selectedValue.name,
+                "service": selectedValue.name,
+                "isDeclinebyUser": null,
+                "notesDecline": "",
+                "hargaLayanan": selectedValue.harga,
+                "hargaPotonganDriver": selectedValue.potongan1,
+                "hargaPotonganMitra": 0,
+                "hargaKenaikan": selectedValue.kenaikanHarga,
+                "diskon": 0,
+                "jarak": selectedValue.durasi,
+                "payment": ""
+            };
+            try {
+                const response = await postData('order/ride', formData);
+                navigation.replace("Home")
+            } catch (error) {
+
+            }
         } catch (error) {
 
         }
@@ -192,6 +202,8 @@ const TrasrideScreen = ({ navigation }) => {
                     const responseFinal = await postData('maps/getDirections', formData2);
                     setCoordinates(responseFinal.coordinate)
                     setoptions(responseFinal.listLayanan)
+                    setdestinationChoice({ label: responseFinal.tujuan })
+                    setoriginChoice({ label: responseFinal.asal })
                     setSelectedValue("")
                     setlocationStatus(true)
                 } catch (error) {
@@ -229,6 +241,8 @@ const TrasrideScreen = ({ navigation }) => {
                     const responseFinal = await postData('maps/getDirections', formData2);
                     setCoordinates(responseFinal.coordinate)
                     setoptions(responseFinal.listLayanan)
+                    setdestinationChoice({ label: responseFinal.tujuan })
+                    setoriginChoice({ label: responseFinal.asal })
                     setSelectedValue("")
                     setlocationStatus(true)
                 } catch (error) {

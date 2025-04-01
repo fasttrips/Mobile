@@ -29,7 +29,8 @@ const AktifitasScreen = ({ navigation }) => {
   const getProfileUser = async () => {
     try {
       const response = await getData('order/GetOrder');
-      setdata(response.data)
+      const sortedData = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setdata(sortedData)
     } catch (error) {
       console.error(error);
     }
@@ -121,17 +122,17 @@ const AktifitasScreen = ({ navigation }) => {
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Ionicons name={"caret-up-circle-outline"} size={24} color={COLORS.text} />
                     <View style={COMPONENT_STYLES.spacer} />
-                    <Text style={COMPONENT_STYLES.textMedium}>{data.pickupLocation.address}</Text>
+                    <Text style={[COMPONENT_STYLES.textMedium,{width: width - 180}]} numberOfLines={2} ellipsizeMode="tail">{data.pickupLocation.address}</Text>
                   </View>
                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Ionicons name={"location-outline"} size={24} color={COLORS.text} />
                     <View style={COMPONENT_STYLES.spacer} />
-                    <Text style={COMPONENT_STYLES.textMedium}>{data.destinationLocation.address}</Text>
+                    <Text style={[COMPONENT_STYLES.textMedium,{width: width - 180}]} numberOfLines={2} ellipsizeMode="tail">{data.destinationLocation.address}</Text>
                   </View>
                 </View>
                 <View>
                   <View style={{ flexDirection: 'row-reverse' }}>
-                    {data.idDriver !== "" &&
+                    {data.idDriver === "" &&
                       <TouchableOpacity onPress={() => navigation.navigate("Chat")} style={{ padding: 10, borderRadius: 100, backgroundColor: 'white', elevation: 1 }}>
                         <Ionicons name={"chatbubble"} size={24} color={COLORS.text} />
                       </TouchableOpacity>
