@@ -4,6 +4,7 @@ import { BORDER_RADIUS, COLORS, COMPONENT_STYLES } from '../../lib/constants';
 import Geolocation from '@react-native-community/geolocation';
 import { useTranslation } from 'react-i18next';
 import { request, PERMISSIONS } from 'react-native-permissions';
+import messaging from '@react-native-firebase/messaging';
 import { getData } from '../../api/service';
 
 
@@ -62,13 +63,13 @@ const HomeScreen = ({ navigation }) => {
     longitude: 0,
   });
   const [user, setUser] = useState({
-    balance: 0, 
-    email: "", 
-    fcm: "", 
-    fullName: "", 
-    id: "", 
-    image: "", 
-    phone: "", 
+    balance: 0,
+    email: "",
+    fcm: "",
+    fullName: "",
+    id: "",
+    image: "",
+    phone: "",
     point: 0
   });
 
@@ -152,8 +153,7 @@ const HomeScreen = ({ navigation }) => {
     try {
       const response = await getData('auth/verifySessions');
       setUser(response.data)
-      if(response.data.fullName === "")
-      {
+      if (response.data.fullName === "") {
         navigation.navigate("UpdateProfile")
       }
     } catch (error) {
@@ -161,9 +161,20 @@ const HomeScreen = ({ navigation }) => {
     }
   };
 
+  const getFCM = async () => {
+    const fcmToken = await messaging().getToken();
+    console.log(fcmToken)
+  }
+
   useEffect(() => {
     getCurrentLocation();
     getProfileUser();
+    getFCM();
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log(remoteMessage)
+      Alert.alert('Pesan Baru!', JSON.stringify(remoteMessage.notification));
+    });
+    return unsubscribe;
   }, []);
 
 
@@ -194,7 +205,7 @@ const HomeScreen = ({ navigation }) => {
                 onPress={() => {
                   if (item.status === false) {
                     Alert.alert("Info", "Feature ini segera hadir")
-                  }else if (user.fullName === "") {
+                  } else if (user.fullName === "") {
                     navigation.navigate('UpdateProfile')
                   } else {
                     navigation.navigate(item.navigate, {
