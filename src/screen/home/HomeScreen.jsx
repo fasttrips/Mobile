@@ -5,7 +5,10 @@ import Geolocation from '@react-native-community/geolocation';
 import { useTranslation } from 'react-i18next';
 import { request, PERMISSIONS } from 'react-native-permissions';
 import messaging from '@react-native-firebase/messaging';
-import { getData } from '../../api/service';
+import { getData, postData } from '../../api/service';
+import ModalInfo from '../../component/ModalInfo';
+import ModalWarning from '../../component/ModalWaring';
+import ModalNotifikasi from '../../component/ModalNotifikasi';
 
 
 const { width } = Dimensions.get('window');
@@ -161,20 +164,9 @@ const HomeScreen = ({ navigation }) => {
     }
   };
 
-  const getFCM = async () => {
-    const fcmToken = await messaging().getToken();
-    console.log(fcmToken)
-  }
-
   useEffect(() => {
     getCurrentLocation();
     getProfileUser();
-    getFCM();
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log(remoteMessage)
-      Alert.alert('Pesan Baru!', JSON.stringify(remoteMessage.notification));
-    });
-    return unsubscribe;
   }, []);
 
 

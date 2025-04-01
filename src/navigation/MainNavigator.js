@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unstable-nested-components */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -16,160 +16,182 @@ import ChatScreen from '../screen/feature/trasride/ChatScreen';
 import CallScreen from '../screen/feature/trasride/CallScreen';
 import RatingScreen from '../screen/feature/trasride/RatingScreen';
 import UpdateScreen from '../screen/home/UpdateScreen';
+import ModalNotifikasi from '../component/ModalNotifikasi';
+import messaging from '@react-native-firebase/messaging';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const HomeStack = () => {
   const { t } = useTranslation();
-  return(
-  <Stack.Navigator initialRouteName="Home">
-    <Stack.Screen name="Home" component={MainNavigator} options={{ title: 'Home', headerShown: false }} />
-    <Stack.Screen
-      name="TrasRide"
-      component={TrasrideScreen}
-      options={({ navigation }) => ({
-        title: 'TrasRide',
-        headerShown: false,
-        headerStyle: {
-          elevation: 0, // Remove elevation on Android
-          shadowOpacity: 0, // Remove shadow on iOS
-        },
-        headerShadowVisible: false,
-        headerLeft: () => (
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
-          </TouchableOpacity>
-        ),
-      })}
-    />
-    <Stack.Screen
-      name="TrasFood"
-      component={TrasfoodScreen}
-      options={({ navigation }) => ({
-        title: 'TrasFood',
-        headerShown: true,
-        headerStyle: {
-          elevation: 0, // Remove elevation on Android
-          shadowOpacity: 0, // Remove shadow on iOS
-        },
-        headerShadowVisible: false,
-        headerLeft: () => (
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
-          </TouchableOpacity>
-        ),
-      })}
-    />
-    <Stack.Screen
-      name="TrasRent"
-      component={TrasrentScreen}
-      options={({ navigation }) => ({
-        title: 'TrasRent',
-        headerShown: true,
-        headerStyle: {
-          elevation: 0, // Remove elevation on Android
-          shadowOpacity: 0, // Remove shadow on iOS
-        },
-        headerShadowVisible: false,
-        headerLeft: () => (
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
-          </TouchableOpacity>
-        ),
-      })}
-    />
-    <Stack.Screen
-      name="TrasMove"
-      component={TrasmoveScreen}
-      options={({ navigation }) => ({
-        title: 'TrasMove',
-        headerShown: true,
-        headerStyle: {
-          elevation: 0, // Remove elevation on Android
-          shadowOpacity: 0, // Remove shadow on iOS
-        },
-        headerShadowVisible: false,
-        headerLeft: () => (
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
-          </TouchableOpacity>
-        ),
-      })}
-    />
-    <Stack.Screen
-      name="Chat"
-      component={ChatScreen}
-      options={({ navigation }) => ({
-        title: 'Chat',
-        headerShown: true,
-        headerStyle: {
-          elevation: 0, // Remove elevation on Android
-          shadowOpacity: 0, // Remove shadow on iOS
-        },
-        headerShadowVisible: false,
-        headerLeft: () => (
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
-          </TouchableOpacity>
-        ),
-      })}
-    />
-    <Stack.Screen
-      name="Call"
-      component={CallScreen}
-      options={({ navigation }) => ({
-        title: 'Call',
-        headerShown: true,
-        headerStyle: {
-          elevation: 0, // Remove elevation on Android
-          shadowOpacity: 0, // Remove shadow on iOS
-        },
-        headerShadowVisible: false,
-        headerLeft: () => (
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
-          </TouchableOpacity>
-        ),
-      })}
-    />
-    <Stack.Screen
-      name="Rating"
-      component={RatingScreen}
-      options={({ navigation }) => ({
-        title: 'Rating',
-        headerShown: true,
-        headerStyle: {
-          elevation: 0, // Remove elevation on Android
-          shadowOpacity: 0, // Remove shadow on iOS
-        },
-        headerShadowVisible: false,
-        headerLeft: () => (
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="close-outline" size={32} color="black" style={{ marginRight: 20 }} />
-          </TouchableOpacity>
-        ),
-      })}
-    />
-    <Stack.Screen
-      name="UpdateProfile"
-      component={UpdateScreen}
-      options={({ navigation }) => ({
-        title: t('updateScreen.header'),
-        headerShown: true,
-        headerStyle: {
-          elevation: 0, // Remove elevation on Android
-          shadowOpacity: 0, // Remove shadow on iOS
-        },
-        headerShadowVisible: false,
-        headerLeft: () => (
-          <View>
-            <Ionicons name="person-outline" size={24} color="black" style={{ marginRight: 20 }} />
-          </View>
-        ),
-      })}
-    />
-  </Stack.Navigator>
+  const [modalInfo, setmodalInfo] = useState(false);
+    const [titleInfo, settitleInfo] = useState(false);
+    const [bodyInfo, setbodyInfo] = useState(false);
+
+  const getFCM = async () => {
+      const fcmToken = await messaging().getToken();
+      const form = {
+        fcm: fcmToken,
+      };
+      await postData('auth/updateFCMUser', form);
+    }
+
+  useEffect(() => {
+    getFCM();
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log(remoteMessage)
+      setmodalInfo(true)
+      settitleInfo(remoteMessage.notification.title)
+      setbodyInfo(remoteMessage.notification.body)
+      // Alert.alert('Pesan Baru!', JSON.stringify(remoteMessage.notification));
+    });
+    return unsubscribe;
+  }, []);
+
+  return (
+      <><ModalNotifikasi
+      isVisible={modalInfo}
+      setModalVisible={setmodalInfo}
+      title={titleInfo}
+      desc={bodyInfo} /><Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={MainNavigator} options={{ title: 'Home', headerShown: false }} />
+        <Stack.Screen
+          name="TrasRide"
+          component={TrasrideScreen}
+          options={({ navigation }) => ({
+            title: 'TrasRide',
+            headerShown: false,
+            headerStyle: {
+              elevation: 0, // Remove elevation on Android
+              shadowOpacity: 0, // Remove shadow on iOS
+            },
+            headerShadowVisible: false,
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
+              </TouchableOpacity>
+            ),
+          })} />
+        <Stack.Screen
+          name="TrasFood"
+          component={TrasfoodScreen}
+          options={({ navigation }) => ({
+            title: 'TrasFood',
+            headerShown: true,
+            headerStyle: {
+              elevation: 0, // Remove elevation on Android
+              shadowOpacity: 0, // Remove shadow on iOS
+            },
+            headerShadowVisible: false,
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
+              </TouchableOpacity>
+            ),
+          })} />
+        <Stack.Screen
+          name="TrasRent"
+          component={TrasrentScreen}
+          options={({ navigation }) => ({
+            title: 'TrasRent',
+            headerShown: true,
+            headerStyle: {
+              elevation: 0, // Remove elevation on Android
+              shadowOpacity: 0, // Remove shadow on iOS
+            },
+            headerShadowVisible: false,
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
+              </TouchableOpacity>
+            ),
+          })} />
+        <Stack.Screen
+          name="TrasMove"
+          component={TrasmoveScreen}
+          options={({ navigation }) => ({
+            title: 'TrasMove',
+            headerShown: true,
+            headerStyle: {
+              elevation: 0, // Remove elevation on Android
+              shadowOpacity: 0, // Remove shadow on iOS
+            },
+            headerShadowVisible: false,
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
+              </TouchableOpacity>
+            ),
+          })} />
+        <Stack.Screen
+          name="Chat"
+          component={ChatScreen}
+          options={({ navigation }) => ({
+            title: 'Chat',
+            headerShown: true,
+            headerStyle: {
+              elevation: 0, // Remove elevation on Android
+              shadowOpacity: 0, // Remove shadow on iOS
+            },
+            headerShadowVisible: false,
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
+              </TouchableOpacity>
+            ),
+          })} />
+        <Stack.Screen
+          name="Call"
+          component={CallScreen}
+          options={({ navigation }) => ({
+            title: 'Call',
+            headerShown: true,
+            headerStyle: {
+              elevation: 0, // Remove elevation on Android
+              shadowOpacity: 0, // Remove shadow on iOS
+            },
+            headerShadowVisible: false,
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
+              </TouchableOpacity>
+            ),
+          })} />
+        <Stack.Screen
+          name="Rating"
+          component={RatingScreen}
+          options={({ navigation }) => ({
+            title: 'Rating',
+            headerShown: true,
+            headerStyle: {
+              elevation: 0, // Remove elevation on Android
+              shadowOpacity: 0, // Remove shadow on iOS
+            },
+            headerShadowVisible: false,
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons name="close-outline" size={32} color="black" style={{ marginRight: 20 }} />
+              </TouchableOpacity>
+            ),
+          })} />
+        <Stack.Screen
+          name="UpdateProfile"
+          component={UpdateScreen}
+          options={({ navigation }) => ({
+            title: t('updateScreen.header'),
+            headerShown: true,
+            headerStyle: {
+              elevation: 0, // Remove elevation on Android
+              shadowOpacity: 0, // Remove shadow on iOS
+            },
+            headerShadowVisible: false,
+            headerLeft: () => (
+              <View>
+                <Ionicons name="person-outline" size={24} color="black" style={{ marginRight: 20 }} />
+              </View>
+            ),
+          })} />
+      </Stack.Navigator></>
   )
 };
 
