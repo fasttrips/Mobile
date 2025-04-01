@@ -67,8 +67,6 @@ const TrasrideScreen = ({ navigation }) => {
     const [locationStatus, setlocationStatus] = useState(false);
     const [focus, setfocus] = useState('');
 
-
-
     const [mencariDriver, setmencariDriver] = useState(false);
     const [modalCancel, setmodalCancel] = useState(false);
 
@@ -77,7 +75,7 @@ const TrasrideScreen = ({ navigation }) => {
 
     const [initialSearch, setinitialSearch] = useState(false);
 
-    const bookingNow = () => {
+    const bookingNow = async () => {
         setmodalSearchBarShow(false)
         setmodalRideShow(false)
         setrideModal(false)
@@ -91,16 +89,54 @@ const TrasrideScreen = ({ navigation }) => {
                 animated: true, // Animate the map transition
             }
         );
-        setTimeout(() => {
-            mapRef.current.fitToCoordinates([pickupLocation, driverLocation].filter(Boolean), {
-                edgePadding: paddingMap,
-                animated: true,
-            });
-            setmodalSearchBarShow(true)
-            setrideModal(false)
-            setmencariDriver(false)
-            setfindDriver(true)
-        }, 2000);
+        // setTimeout(() => {
+        //     mapRef.current.fitToCoordinates([pickupLocation, driverLocation].filter(Boolean), {
+        //         edgePadding: paddingMap,
+        //         animated: true,
+        //     });
+        //     setmodalSearchBarShow(true)
+        //     setrideModal(false)
+        //     setmencariDriver(false)
+        //     setfindDriver(true)
+        // }, 2000);
+
+        const formData = {
+            "createdAt": new Date().toISOString(),
+            "updatedAt": new Date().toISOString(),
+            "isActive": true,
+            "isVerification": false,
+            "pickupLocation": {
+                "latitude": pickupLocation.latitude,
+                "longitude": pickupLocation.longitude,
+                "address": originChoice.label
+            },
+            "destinationLocation": {
+                "latitude": destinationLocation.latitude,
+                "longitude": destinationLocation.longitude,
+                "address": destinationChoice.label
+            },
+            "idDriver": "",
+            "idMitra": "",
+            "status": 0,
+            "type": selectedValue.name,
+            "service": selectedValue.name,
+            "isDeclinebyUser": null,
+            "notesDecline": "",
+            "hargaLayanan": selectedValue.harga,
+            "hargaPotonganDriver": selectedValue.potongan1,
+            "hargaPotonganMitra": 0,
+            "hargaKenaikan": selectedValue.kenaikanHarga,
+            "diskon": 0,
+            "jarak": selectedValue.durasi,
+            "payment": ""
+        };
+        try {
+            const response = await postData('order/ride', formData);
+            console.log(response)
+            navigation.replace("Home")
+        } catch (error) {
+
+        }
     }
 
     const batalMencari = () => {
@@ -323,7 +359,7 @@ const TrasrideScreen = ({ navigation }) => {
                                 } catch (error) {
 
                                 }
-                            }else{
+                            } else {
                                 setsearchLocationonMapMode(false)
                             }
                         }} />
