@@ -18,6 +18,7 @@ import RatingScreen from '../screen/feature/trasride/RatingScreen';
 import UpdateScreen from '../screen/home/UpdateScreen';
 import ModalNotifikasi from '../component/ModalNotifikasi';
 import messaging from '@react-native-firebase/messaging';
+import DetailOrder from '../screen/feature/trasride/DetailOrder';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -39,7 +40,6 @@ const HomeStack = () => {
   useEffect(() => {
     getFCM();
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log(remoteMessage)
       setmodalInfo(true)
       settitleInfo(remoteMessage.notification.title)
       setbodyInfo(remoteMessage.notification.body)
@@ -171,6 +171,23 @@ const HomeStack = () => {
             headerLeft: () => (
               <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Ionicons name="close-outline" size={32} color="black" style={{ marginRight: 20 }} />
+              </TouchableOpacity>
+            ),
+          })} />
+        <Stack.Screen
+          name="DetailOrder"
+          component={DetailOrder}
+          options={({ navigation }) => ({
+            title: 'Detail Order',
+            headerShown: true,
+            headerStyle: {
+              elevation: 0, // Remove elevation on Android
+              shadowOpacity: 0, // Remove shadow on iOS
+            },
+            headerShadowVisible: false,
+            headerLeft: () => (
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Ionicons name="chevron-back-outline" size={32} color="black" style={{ marginRight: 20 }} />
               </TouchableOpacity>
             ),
           })} />

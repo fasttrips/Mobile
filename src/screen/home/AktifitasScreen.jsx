@@ -29,7 +29,8 @@ const AktifitasScreen = ({ navigation }) => {
   const getProfileUser = async () => {
     try {
       const response = await getData('order/GetOrder');
-      const sortedData = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      const filtered = response.data.filter((a)=> a.status <= 3)
+      const sortedData = filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       setdata(sortedData)
     } catch (error) {
       console.error(error);
@@ -70,7 +71,7 @@ const AktifitasScreen = ({ navigation }) => {
       <ScrollView contentContainerStyle={[COMPONENT_STYLES.scrollView]}>
         {data.map((data, index) => {
           return (
-            <TouchableOpacity onPress={() => navigation.navigate("Rating", { idInvoice: 0 })} key={index} style={styles.container}>
+            <TouchableOpacity onPress={() => navigation.navigate("DetailOrder", { idInvoice: data.id })} key={index} style={styles.container}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 {data.service == "TrasRide" &&
                   <Image source={require("../../assets/trasride/motor.png")} style={{ width: 50, height: 50 }} />

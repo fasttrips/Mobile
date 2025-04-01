@@ -107,6 +107,7 @@ const TrasrideScreen = ({ navigation }) => {
             destinationLon: destinationLocation.longitude,
         };
         try {
+            console.log(coordinates)
             const responseFinal = await postData('maps/getDirections', formData2);
             const formData = {
                 "createdAt": new Date().toISOString(),
@@ -136,7 +137,8 @@ const TrasrideScreen = ({ navigation }) => {
                 "hargaKenaikan": selectedValue.kenaikanHarga,
                 "diskon": 0,
                 "jarak": selectedValue.durasi,
-                "payment": ""
+                "payment": "",
+                "coordinates": coordinates
             };
             try {
                 const response = await postData('order/ride', formData);
